@@ -1,0 +1,10 @@
+@media screen and (max-width : 650px){
+    /*Display 'show menu' link*/
+  .show-menu {
+    display: block;
+  }
+
+  #nav-bar{
+  	display:none;
+  }
+}
