@@ -8,18 +8,24 @@ body{
   right: 0;
   z-index: 10000;
   width: 100%;
-  background: rgba(255, 255, 255, 1);
+  height: 80px;
+  line-height: 112px;
+  background: rgba(255, 255, 255, .9);
   box-shadow: 0 0 0.15em 0 rgba(0,0,0,0.1);
 }
 
 :target{
-  padding-top:50px;
+  padding-top: 90px;
+}
+
+#media:target{
+  padding-top: 90px;
 }
 
 
-#intro:target{
+/*#intro:target{
   padding-top:20px;
-}
+}*/
 
 /* Navigation Bar */
 
@@ -27,69 +33,65 @@ body{
 .show-menu {
   text-decoration: none;
   text-align: center;
-  padding: 10px 0;
+  /*padding: 10px 0;*/
   display: none;
 }
 
-nav {
-  margin: 0;
+/*nav {
+  margin: 50 px;
   overflow: hidden;
+}*/
+
+.umm {
+    float: right;
+    margin: 10px 35px 0px 40px;
 }
 
-nav .umm{
-    margin: 0;
-    padding: 0;
-}
-nav .umm p {
-    display: inline-block;
-    list-style-type: none;
-    vertical-align: 50px;
-}
 
-nav > .umm > p > a {
-    display: block;
-    padding: 0.5em 0.5em;
-    text-decoration: none;
-    font-family: salon_6medium;
-    color: #000;
-    font-size: 3.5vw;
-}
-
-#nav-bar p:hover a {
-  color: #008080;
-}
 
 /* end of nav bar */
-#logo{
+.logo{
   display: inline-block;
 
 }
-#logo:hover img:first-child{
+.logo:hover img:first-child{
   display:none;
 }
 
-#logo img:first-child{
+.logo img:first-child{
   display:inline-block;
 }
 
-#logo:hover img:nth-child(2){
+.logo:hover img:nth-child(2){
   display:inline-block;
 }
 
-#logo img:nth-child(2){
+.logo img:nth-child(2){
   display:none;
+}
+
+h2{
+  text-align: center;
+}
+
+.salon_logo{
+  background: rgba(255, 255, 255, 1);
+  /*border: 1px solid green;*/
+  height: 100px;
+  margin: -7px 25px;
 }
 
 #intro-pic {
-  margin-top: 50px;
+  /*margin-top: 50px;*/
   background-image: url("images/salonathon1.jpg");
   background-size: cover;
-  background-attachment: fixed;
-  background-position: 30% -40%;
+  /*background-attachment: fixed;*/
+  background-position: top;
   background-repeat: no-repeat;
   overflow-x: hidden;
   width: 100%;
-  height: 600px;
+  height: 670px;
+  /*position: relative;*/
 }
 
 .main{
@@ -115,12 +117,6 @@ h4{
   text-align: center;
 }
 
-
-
-header{
-  text-align: center;
-}
-
 .about-spiel{
   padding: 5px;
   text-align: center;
@@ -131,7 +127,9 @@ header{
   border: 1px solid white;
   color: white;
   background-color: rgba(255, 255, 255, .4);
-  margin: 450px auto;
+  margin-top: 495px;
+  margin-left: 30%;
+  position: absolute;
 }
 
 /*.image-gallery{
@@ -204,7 +202,7 @@ section{
 .btn {
   display: inline-block;
   float: right;
-  width: 50%;
+  width: 100px;
   padding: 6px 12px;
   margin-bottom: 0;
   font-size: 14px;
@@ -212,7 +210,7 @@ section{
   line-height: 1.42857143;
   text-align: center;
   white-space: nowrap;
-  vertical-align: middle;
+  /*vertical-align: middle;*/
   cursor: pointer;
   background-color: #008080;
   border: 1px solid transparent;
@@ -220,9 +218,7 @@ section{
 }
 
 .asd{
-  width: 90%;
-  border: 1px solid gold;
-  overflow: auto;
+  width: 60%;
   margin: auto;
 }
 
@@ -263,6 +259,13 @@ h2{
   font-family: salon_6medium;
   font-size: 44px;
   margin: 10px;
+}
+
+.asd p{
+  font-family: salon_5medium;
+  font-size: 34px;
+  margin: 225px 10px;
+  display: inline;
 }
 
 .lool{
