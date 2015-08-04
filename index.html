@@ -6,10 +6,12 @@
 	<meta name="keywords" content="" />
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="fonts/stylesheet.css" />
-	<link rel="stylesheet" href="more-hex-styles.css" />
+	<link rel="stylesheet" href="fonts/ostrich/stylesheet.css" />
+	<link rel="stylesheet" href="imgcarousel.css" />
 	<link rel="stylesheet" media="(max-width: 705px)" href="small-style.css" />
-	<link rel="stylesheet" href="hex-style.css" />
-	<link rel="stylesheet" href="owlcarousel/assets/owl.carousel.css" />
+	<link rel="stylesheet" href="animation.css" />
+	<link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+	<link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
 </head>
@@ -20,8 +22,8 @@
 		<label for="show-menu" media="(max-width: 705px)" class="show-menu">
 			 <div class="logo">
 					<a href="#intro">
-						<img class="logo-still"src="images/stills/logo_still.png" width="200px" height="100px">
-						<img class="logo-gif"src="images//gifs/salonathon_logo.gif" width="200px" height="100px">
+						<img class="logo-still"src="images/stills/logo_still.png" width="250px" height="100px">
+						<img class="logo-gif"src="images//gifs/salonathon_logo.gif" width="250px" height="100px">
 					</a>
 				</div> 
 		</label>
@@ -29,8 +31,8 @@
 		<nav id="nav-bar">
 				<div class="logo salon_logo">
 					<a href="#intro">
-						<img class="logo-still" src="images/stills/logo_still.png" width="200px" height="100px">
-						<img class="logo-gif" src="images//gifs/salonathon_logo.gif" width="200px" height="100px">
+						<img class="logo-still" src="images/stills/logo_still.png" width="250px" height="100px">
+						<img class="logo-gif" src="images//gifs/salonathon_logo.gif" width="250px" height="100px">
 					</a>
 				</div>
 			<div class="umm">
@@ -101,28 +103,36 @@
 				<h2>Media</h2>
 			</header>
 
-			<div class="owl-carousel">
-			    <img class="owl-lazy" data-src="images/salon13.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon10.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon16.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon14.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon20.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon9.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon18.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon3.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salon7.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/sall.jpg" width="400" height="150" alt="">
-			    <img class="owl-lazy" data-src="images/salonthon1.jpg" width="400" height="150" alt="">
+			<div class="responsive">
+			    <div><img src="images/salon13.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon10.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon16.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon14.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon20.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon9.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon18.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon3.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salon7.jpg" height="200px" alt=""></div>
+			    <div><img src="images/sall.jpg" height="200px" alt=""></div>
+			    <div><img src="images/salonthon1.jpg" height="200px" alt=""></div>
 			</div>
 			<br><br>
-			<div class="carousel-wrapper">
-				<div class="video-carousel">
-				    <a class="owl-video" href="https://vimeo.com/76612670"></a>
-				    <a class="owl-video" href="https://vimeo.com/130063436"></a>
-				    <a class="owl-video" href="https://vimeo.com/128450421"></a>
-				    <a class="owl-video" href="https://vimeo.com/79464882"></a>
-				    <a class="owl-video" href="https://vimeo.com/75438910"></a>
-				</div>
+			<div class="video">
+			    <div>
+			    	<iframe src="https://player.vimeo.com/video/130063436" width="500px" height="281px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+			    </div>
+			    <div>
+			    	<iframe src="https://player.vimeo.com/video/128450421" width="500px" height="281px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+			    </div>
+			    <div>
+			    	<iframe src="https://player.vimeo.com/video/111902952" width="500px" height="281px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+			    </div>
+			    <div>
+			    	<iframe src="https://player.vimeo.com/video/71611079" width="500px" height="281px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+			    </div>
+			    <div>
+			    	<iframe src="https://player.vimeo.com/video/130063438" width="500px" height="281px" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+			    </div>
 			</div>
 			
 		</section>
@@ -133,15 +143,8 @@
 				<h2>Calendar</h2>
 			</header>
 			<div class="calendar-wrapper">
-				<div class="weekly-event last-week">
-					EVENT 1
-				</div>
-				<div class="weekly-event this-week">
-					EVENT 2
-				</div>
-				<div class="weekly-event next-week">
-					EVENT 3
-				</div>
+				<p>Salonathon happens every Monday night at Beauty Bar (1444 W Chicago Ave) </p><br>
+				<p> Salonathon also happens in bursts and fits and spurts all around the city, please checkout out our <a href="https://www.facebook.com/Salonathon" target="_blank"> Facebook page</a> to keep up to date with all our events!</p>
 			</div>
 		</section>
 
@@ -153,16 +156,24 @@
 			<header>
 				<h2>Beyond Beauty Bar</h2>
 			</header>
-			<div class="calendar-wrapper">
-				<div class="weekly-event last-week">
-					Camp Salondawega
-				</div>
-				<div class="weekly-event this-week">
-					Infiltration
-				</div>
-				<div class="weekly-event next-week">
-					Chicago Performance Lab
-				</div>
+			<div class="beyond-wrapper">
+				<ul>
+					<li class="beyond-item">
+						<img src="images/salondawega.jpg" width="300px" height="210px">
+						<!-- <p>Camp Salondawega</p> -->
+					</li>
+					<li class="beyond-item">
+						<img src="images/chicago-performance-lab.jpg" width="300px" height="210px">
+						<!-- <p>Infiltration</p> -->
+					</li>
+					<li class="beyond-item">
+						<img src="images/infiltration.jpg" width="300px" height="210px">
+						<!-- <p>Chicago Performance Lab</p> -->
+					</li>
+				</ul>
+			</div>
+			<div class="more-beyond">
+				More . . .
 			</div>
 		</section>
 
@@ -171,61 +182,102 @@
 				<header>
 					<h2>About</h2>
 				</header>
+
 			<div class="no-margin-nor-padding smaller-wrapper">
+				
+
 				<ul id="categories" class="clr">
 					<li>
-						<div>
-							<img src="http://investmentwatchblog.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" alt=""/>
-							<h1>Jane Beachy</h1>
-							<p>Founder and Artistic Director</p>
+						<div class="container">
+						    <article class="caption">
+						        <img class="caption__media" src="http://tinyurl.com/qgu9fej"  width="200px" height="200px"/>
+						        <div class="caption__overlay">
+						            <h1 class="caption__overlay__title">Jane Beachy</h1>
+						            <p class="caption__overlay__content">
+						                Founder and Artistic Director
+						            </p>
+						        </div>
+						    </article>
 						</div>
 					</li>
 					<li>
-						<div>
-							<img src="http://investmentwatchblog.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" alt=""/>
-							<h1>Joe Varisco</h1>
-							<p>Associate Curator</p>
+						<div class="container">
+						    <article class="caption">
+						        <img class="caption__media" src="http://tinyurl.com/qgu9fej"  width="200px" height="200px"/>
+						        <div class="caption__overlay">
+						            <h1 class="caption__overlay__title">Joe Varisco</h1>
+						            <p class="caption__overlay__content">
+						                Associate Curator
+						            </p>
+						        </div>
+						    </article>
 						</div>
 					</li>
 					<li>
-						<div>
-							<img src="http://investmentwatchblog.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" alt=""/>
-							<h1>Will Von Vogt</h1>
-							<p>Associate Curator</p>
+						<div class="container">
+						    <article class="caption">
+						        <img class="caption__media" src="http://tinyurl.com/qgu9fej"  width="200px" height="200px"/>
+						        <div class="caption__overlay">
+						            <h1 class="caption__overlay__title">Will Von Vogt</h1>
+						            <p class="caption__overlay__content">
+						                Associate Curator
+						            </p>
+						        </div>
+						    </article>
 						</div>
 					</li>
 					<li>
-						<div>
-							<img src="http://investmentwatchblog.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" alt=""/>
-							<h1>Maggie Vaughn</h1>
-							<p>Operations Assisstant</p>
-						</div>
-					</li>
-					<li class="pusher"></li>
-
-					<li>
-						<div>
-							<img src="http://investmentwatchblog.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" alt=""/>
-							<h1>JM</h1>
-							<p>position position position</p>
+						<div class="container">
+						    <article class="caption">
+						        <img class="caption__media" src="http://tinyurl.com/qgu9fej"  width="200px" height="200px"/>
+						        <div class="caption__overlay">
+						            <h1 class="caption__overlay__title">Maggie Vaughn</h1>
+						            <p class="caption__overlay__content">
+						                Operations Assisstant
+						            </p>
+						        </div>
+						    </article>
 						</div>
 					</li>
 					<li>
-						<div>
-							<img src="http://investmentwatchblog.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" alt=""/>
-							<h1>Danny Leroy</h1>
-							<p>Resident DJ</p>
+						<div class="container">
+						    <article class="caption">
+						        <img class="caption__media" src="http://tinyurl.com/qgu9fej"  width="200px" height="200px"/>
+						        <div class="caption__overlay">
+						            <h1 class="caption__overlay__title">Justin Mitchell</h1>
+						            <p class="caption__overlay__content">
+						                Resident DJ
+						            </p>
+						        </div>
+						    </article>
 						</div>
 					</li>
 					<li>
-						<div>
-							<img src="http://investmentwatchblog.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png" alt=""/>
-							<h1>MaryBeth Stanton</h1>
-							<p>Photographer</p>
+						<div class="container">
+						    <article class="caption">
+						        <img class="caption__media" src="http://tinyurl.com/qgu9fej"  width="200px" height="200px"/>
+						        <div class="caption__overlay">
+						            <h1 class="caption__overlay__title">Danny Leroy</h1>
+						            <p class="caption__overlay__content">
+						                Resident DJ
+						            </p>
+						        </div>
+						    </article>
 						</div>
 					</li>
-
-
+					<li>
+						<div class="container">
+						    <article class="caption">
+						        <img class="caption__media" src="http://tinyurl.com/qgu9fej"  width="200px" height="200px"/>
+						        <div class="caption__overlay">
+						            <h1 class="caption__overlay__title">MaryBeth Stanton</h1>
+						            <p class="caption__overlay__content">
+						                Photographer
+						            </p>
+						        </div>
+						    </article>
+						</div>
+					</li>
 				</ul>
 			</div>
 
@@ -257,47 +309,95 @@
 				</div>
 			</section>
 
-				<!-- Contact -->
-			<section id="contact" class="main">
-				
-				<div class="asd">
-					<p>Have questions? Interested in performing?</p>
-					<span class="btn"> Email Us <span>
-				</div>
-
-			</section>
 		
 
 			<!-- Footer -->
 			<footer id="footer">
 
-				
-				<ul class="actions">
-					<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-					<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-				</ul>
+				<!-- Contact -->
+				<div id="contact">
+					
+					<div class="asd">
+						<p>Have questions? Interested in performing?</p>
+						<span class="btn"> Email Us <span>
+					</div>
 
+				</div>
+					
+				<div class="fotter-wrapper"
+					<ul class="actions">
+						<li>
+							<a href="https://twitter.com/salonathon" target="_blank" class="icon fa-twitter"><img src="images/icons/twitter22.svg" width="60px" height="60px"/></a>
+						</li>
+						<li>
+							<a href="https://www.facebook.com/Salonathon" target="_blank" class="icon fa-facebook"><img src="images/icons/facebook32.svg" width="60px" height="60px"/></a>
+						</li>
+						<li>
+							<a href="http://salonathon.tumblr.com/" target="_blank" class="icon fa-facebook"><img src="images/icons/tumblr21.svg" width="60px" height="60px"/></a>
+						</li>
+						<li>
+							<a href="https://vimeo.com/channels/599994" target="_blank" class="icon fa-facebook"><img src="images/icons/vimeo13.svg" width="60px" height="60px"/></a>
+						</li>
+					</ul>
+				</div>
+
+
+
+
+				<!-- Scripts -->
 				<script src="jquery.min.js"></script>
-				<script src="owlcarousel/owl.carousel.min.js"></script>
+				<script type="text/javascript" src="slick/slick.min.js"></script>
+
 				<script>
-					$('.owl-carousel').owlCarousel({
-					    items:4,
-					    lazyLoad:true,
-					    loop:true,
-					    margin:10,
-					    navigation:true,
-					    scrollPerPage:true
+					$(document).ready(function(){
+					  $('.responsive').slick({
+					    dots: true,
+					    infinite: true,
+					    speed: 300,
+					    slidesToShow: 4,
+					    slidesToScroll: 4,
+					    lazyLoad: 'ondemand',
+					    variableWidth: true,
+					    responsive: [
+					      {
+					        breakpoint: 1024,
+					        settings: {
+					          slidesToShow: 3,
+					          slidesToScroll: 3,
+					          infinite: true,
+					          dots: true
+					        }
+					      },
+					      {
+					        breakpoint: 600,
+					        settings: {
+					          slidesToShow: 2,
+					          slidesToScroll: 2
+					        }
+					      },
+					      {
+				            breakpoint: 480,
+				            settings: {
+				              slidesToShow: 1,
+				              slidesToScroll: 1
+				            }
+				          }
+				        ]
+				      });
 					});
 
-					$('.video-carousel').owlCarousel({
-					    items:3,
-					    lazyLoad:true,
-					    loop:true,
-					    margin:10,
-					    video: true,
+					$(document).ready(function(){
+					  $('.video').slick({
+					    dots: true,
+					    speed: 300,
+					    slidesToShow: 1,
+					    slidesToScroll: 1,
+					    lazyLoad: 'ondemand'
+				      });
 					});
+
+
 				</script>
-
 			</footer>
 
 		</body>
