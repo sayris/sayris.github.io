@@ -1,6 +1,30 @@
 /*
  * Housekeeping
  */
+#about{
+         column-count: 2;
+      it-column-count: 2;
+    -moz-column-count: 2;
+           column-gap: 1px; 
+      -moz-column-gap: 1px;
+   -webkit-column-gap: 1px;
+
+   margin: 0px 60px;
+
+}
+
+.meet_staff{
+  margin: 90px 60px;
+  float: left;
+  clear: right;
+  height: 100%;
+}
+
+.smaller-wrapper img{
+/*  width: 60%;
+  margin: auto;*/
+  float: right;
+}
 
 #categories li{
     list-style: none;
@@ -19,7 +43,7 @@
 }
 
 #categories p{
-    font-family: 'Roboto';
+    font-family: "Proxima Nova", sans-serif;
 }
 
 #categories .container {

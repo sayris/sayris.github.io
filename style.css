@@ -1,6 +1,6 @@
-body{
+/*body{
     background: #f6f7f0;
-}
+}*/
 
 #header {
   position: fixed;
@@ -90,13 +90,15 @@ h2{
 }
 
 #intro-pic {
-  background-image: url("images/salonathon1.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-image: url("images/blue_overlay.png"), url("images/salonathon1.jpg");
+  background-size: 670px 670px, cover;
+  background-attachment: fixed, fixed;
+  background-position: top left, bottom center;
+  background-repeat: repeat no-repeat;
   overflow-x: hidden;
   width: 100%;
-  height: 670px;
-  margin-top: -20px;
+  height: 625px;
+  /*margin-top: -20px;*/
 }
 
 .main{
@@ -106,7 +108,7 @@ h2{
 }
 
 .body{
-  margin-top: 20px;
+  /*margin-top: 20px;*/
 }
 .temp-text{
   margin-left: 50%;
@@ -153,11 +155,6 @@ h4{
 */
 
 .calendar-wrapper{
-  width: 80%;
-  list-style: none;
-  background-color: rgba(255, 255, 255, .6);
-  border: 2px solid white;
-  color: #262626;
   padding: 15px;
   margin: 20px auto;
 }
@@ -198,20 +195,32 @@ h4{
 
 
 section{
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 15px;
+  margin: 0px;
+/*  margin-top: 20px;
+  margin-bottom: 20px;*/
+  /*padding: 15px;*/
+}
+
+.blue-cross{
+  width: 100%;
+  background-image: url("images/background/blue_x_background.png");
+  background-size: cover;
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  overflow-x:hidden;
+  background-color: #ffffff;
+  padding: 10px;
 }
 
 .about-statement{
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
   margin: 25px auto;
   padding: 20px;
   width: 60%;
-  border: 3px solid white;
-  background-color:rgba(255, 255, 255, 0.3);
+  /*border: 3px solid white;*/
   text-align: center;
-  line-height: 25px;
+  line-height: 40px;
+  font-size: 18px;
 }
 
 .text-portion:{
@@ -251,10 +260,6 @@ section{
   vertical-align: center;
 }
 
-.smaller-wrapper{
-  width: 70%;
-  margin: auto;
-}
 
 h4{
   font-family: salon_5medium;
@@ -263,33 +268,27 @@ h4{
 }
 
 h2{
-  /*font-family: salon_6medium;*/
-  font-family: 'ostrich_sans_roundedmedium';
-  font-size: 54px;
-  margin: 10px;
-}
-
-.asd p{
   font-family: salon_5medium;
-  font-size: 34px;
-  margin: 225px 10px;
-  display: inline;
+  font-size: 54px;
+  margin: 0px;
+  padding-top: 25px;
 }
-
-.lool{
-  width: 98%;
-  margin: auto;
-}
-
 
 .beyond-wrapper{
   margin: auto;
-  width: 90%;
-  list-style: none;
+  width: 100%;
+  line-height: 0px;
+  -webkit-column-count: 3;
+  -moz-column-count:    3;
+  column-count:         3;
+  -webkit-column-gap:   15px;
+  -moz-column-gap:      15px;
+  column-gap:           15px; 
 }
 
-.beyond-wrapper ul{
-  margin: auto;
+.beyond-wrapper > img{
+  width: 100%;
+  height: auto;
 }
 
 .beyond-item{
@@ -304,55 +303,234 @@ h2{
 }
 
 
-#footer {
-  background-color: #262626;
-  height: 250px;
-  padding: 60px 10px;
+#media{
+  background-image: url('images/background/purple_background.png');
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
+  width: 100%;
+  /*padding-bottom: 25px;*/
+  /*height: 50%;*/
 }
 
-#footer li{
-  list-style: none;
-  display: inline-block;
-  margin: 20px;
+
+#media {
+   margin: 0;
+   /*padding: 0;*/
 }
+.wrap {
+   overflow: hidden;
+   margin: 10px;
+}
+.box {
+   display: inline-block;
+   float: left;
+   position: relative;
+   width: 20%;
+   padding-bottom: 20%;
+}
+.boxInner {
+   position: absolute;
+   left: 10px;
+   right: 10px;
+   top: 10px;
+   bottom: 0px;
+   overflow: hidden;
+}
+.boxInner img {
+   width: 100%;
+}
+
+body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
+   margin-bottom: 0;
+}
+@media only screen and (max-width : 480px) {
+   /* Smartphone view: 1 tile */
+   .box {
+      width: 100%;
+      /*padding-bottom: 10%;*/
+   }
+}
+@media only screen and (max-width : 650px) and (min-width : 481px) {
+   /* Tablet view: 2 tiles */
+   .box {
+      width: 50%;
+      /*padding-bottom: 50%;*/
+   }
+}
+@media only screen and (max-width : 1050px) and (min-width : 651px) {
+   /* Small desktop / ipad view: 3 tiles */
+   .box {
+      width: 33.3%;
+      /*padding-bottom: 33.3%;*/
+   }
+}
+@media only screen and (max-width : 1290px) and (min-width : 1051px) {
+   /* Medium desktop: 4 tiles */
+   .box {
+      width: 25%;
+      /*padding-bottom: 25%;*/
+   }
+}
+
+.more_button{
+  display: block;
+  background-image: url('images/icons/salonathon_icons.png');
+  background-repeat: no-repeat;
+  background-position: -220px 0px;
+  width: 150px;
+  height: 70px;
+  float: right;
+  margin-bottom: 40px;
+}
+
+.movie{
+  width: 100%;
+  text-align: left;
+  clear: right;
+  /*float: left;  */
+}
+
+.movie p {
+  font-family: 'salon_5medium', sans-serif;
+  font-size: 25px;
+  display: inline-block;
+  margin-left: 30px;
+  /*width: 45%;*/
+}
+
+.movie > iframe{
+  margin: 30px auto;
+  display: block;
+  width: 95%;
+  height: 75%;
+}
+
+#calendar{
+  margin-top: 40px;
+}
+
+.calendar-wrapper {
+  /*float: center;*/
+  overflow: hidden;
+  width: 95%;
+  height: 80%;
+  margin: 10px auto;
+  /*background: rgba(255, 255, 255, .8);*/
+  /*border: 1px solid white;*/
+}
+.calendar-wrapper > div {
+  float: left;
+  overflow: hidden;
+  margin: 2px auto;
+  cursor: pointer;
+}
+.calendar-wrapper > div > img{
+  /*width: 100%;*/
+  height: auto;
+}
+.calendar-wrapper > div + div{
+  display: block;
+  float: none;
+  overflow: hidden;
+  width: 43%;
+  margin: 60px auto;
+}
+.calendar-wrapper > div > h4 {
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 30px;
+}
+.calendar-wrapper > div > p {
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 20px;
+}
+.arrow{
+  position: absolute;
+  z-index: 4;
+  left: 15%;
+  margin-top: -268px;
+}
+
+#beyond-beauty-bar{
+  margin-top: 30px;
+  background-color: #279dff;
+}
+
+#beyond-beauty-bar > header > h2{
+  margin-bottom: 20px;
+  color: white;
+}
+.txt{
+/*  position: absoulte;
+  top: 50%;
+  height: 10em;
+  margin-top: -5em;*/
+  vertical-align: middle;
+
+}
+.contact{
+  width: 100%;
+  height: 110px;
+  background-color: #9dd4ee;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 30px;
+  position: relative;
+  padding: 15px;
+}
+
+.contact > img{
+  vertical-align: middle;
+  margin-left: -50px;
+}
+
+.email{
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+
+}
+
+.email > a {
+  text-decoration: none;
+}
+
 
 .fotter-wrapper{
-  margin: 40px auto;
-  display: table;
-  
+  background-color: #3f3f3f;
+  height: 300px;
+  width: 100%;
+  overflow: hidden;
+  list-style: none;
+  color: white;
 }
 
-.more-beyond{
-  text-align: center;
-  width: 250px;
-  font-size: 25px;
-  height: 45px;
-  line-height: 45px;
-  margin: 10px auto;
-  border: 2px solid white;
-  color: #262626;
-  background-color: rgba(255, 255, 255, .7);
-  border-radius: 4px;
-  font-family: 'salon_6medium';
-}
-
-.btn {
+.fotter-wrapper li{
   display: inline-block;
-  float: right;
-  width: 100px;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 18px;
-  font-weight: normal;
-  line-height: 1.42857143;
-  text-align: center;
-  white-space: nowrap;
-  /*vertical-align: middle;*/
-  cursor: pointer;
-  background-color: rgba(255, 255, 255, .7);
-  border: 2px solid white;
-  border-radius: 4px;
-  font-family: 'salon_6medium';
-    color: #262626;
 }
 
+.icon{
+  width: 70px;
+  height: 70px;
+  background-image: url("images/icons/salonathon_icons.png");
+  float: right;
+}
+
+.fa-twitter{
+  background-position: -165px -5px;
+}
+
+.fa-facebook{
+  background-position: 10px -5px;
+}
+.fa-vimeo{
+  background-position: -100px -5px;
+}
+.fa-instagram{
+  background-position: -43px -5px;
+}
+
+
+
+*{
+  overflow-x: hidden;
+}
