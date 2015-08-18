@@ -1,6 +1,29 @@
-/*body{
-    background: #f6f7f0;
-}*/
+/*
+Theme Name: Salonathon
+Theme URI: http://salonathonpresents.com
+Author: Sayri Suarez and MaryBeth Stanton
+Author URI: http://rachelmccollin.co.uk
+Description: Salonathon Presents!
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+@font-face {
+  font-family: 'salon5';
+  src: url('fonts/salon_5-webfont.woff2') format('woff2'),
+  url('fonts/salon_5-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'salon6';
+  src: url('fonts/salon_6-webfont.woff2') format('woff2'),
+  url('fonts/salon_6-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
 #header {
   position: fixed;
@@ -12,6 +35,11 @@
   line-height: 112px;
   background: rgba(255, 255, 255, .9);
   box-shadow: 0 0 0.15em 0 rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+* {
+  font-family: 'Proxima Nova', sans-serif;
 }
 
 :target{
@@ -30,6 +58,10 @@
   padding-top: 0px;
 }
 
+#about-statement:target{
+  padding-top: 100px;
+}
+
 
 /* Navigation Bar */
 
@@ -44,99 +76,119 @@
 /*nav {
   margin: 50 px;
   overflow: hidden;
-}*/
+  }*/
 
-.umm {
+  .umm {
     float: right;
     /*clear: left;*/
     margin: 20px 35px;
     /*padding: 0px 30px;*/
+  }
+
+
+
+  /* end of nav bar */
+  .logo{
+    display: inline-block;
+
+  }
+  .logo:hover img:first-child{
+    display:none;
+  }
+
+  .logo img:first-child{
+    display:inline-block;
+  }
+
+  .logo:hover img:nth-child(2){
+    display:inline-block;
+  }
+
+  .logo img:nth-child(2){
+    display:none;
+  }
+
+  h2{
+    text-align: center;
+  }
+
+  .salon_logo{
+    float: left;
+    /*background: rgba(255, 255, 255, 1);*/
+    /*border: 1px solid green;*/
+    /*height: 100px;*/
+    margin: -5px 35px 0px 15px;
+    padding: 5px;
+  }
+
+  #intro-pic {
+    background-image: url("images/blue_overlay.png"), url("images/background/salon_background.jpg");
+    background-size: 670px 670px, cover;
+    background-attachment: fixed, fixed;
+    background-position: top left, bottom center;
+    background-repeat: repeat, no-repeat;
+    overflow-x: hidden;
+    width: 100%;
+    height: 625px;
+    /*margin-top: -20px;*/
+  }
+
+  .main{
+    /*position: relative;*/
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  .body{
+    /*margin-top: 20px;*/
+  }
+  .temp-text{
+    margin-left: 50%;
+    text-align: center;
+  }
+
+  h4{
+    text-align: center;
+    line-height: 1em;
+    letter-spacing: 2px;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .about-spiel{
+    padding: 5px;
+    text-align: center;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 25px;
+    width: 500px;
+    text-align: left;
+    color: white;
+    margin-top: 100px;
+    margin-left: 8%;
+    position: absolute;
+  }
+
+  #down_button{
+    position: absolute;
+    margin-top: 550px;
+    margin-left: 370px;
+    display: block;
+    background-position: -50px -46px;
+    background-size: 250px;
+    width: 50px;
+    height: 50px;
 }
 
-
-
-/* end of nav bar */
-.logo{
-  display: inline-block;
-
-}
-.logo:hover img:first-child{
-  display:none;
-}
-
-.logo img:first-child{
-  display:inline-block;
-}
-
-.logo:hover img:nth-child(2){
-  display:inline-block;
-}
-
-.logo img:nth-child(2){
-  display:none;
-}
-
-h2{
-  text-align: center;
-}
-
-.salon_logo{
-  float: left;
-  /*background: rgba(255, 255, 255, 1);*/
-  /*border: 1px solid green;*/
-  /*height: 100px;*/
-  margin: -5px 35px 0px 15px;
-  padding: 5px;
-}
-
-#intro-pic {
-  background-image: url("images/blue_overlay.png"), url("images/salonathon1.jpg");
-  background-size: 670px 670px, cover;
-  background-attachment: fixed, fixed;
-  background-position: top left, bottom center;
-  background-repeat: repeat no-repeat;
-  overflow-x: hidden;
-  width: 100%;
-  height: 625px;
-  /*margin-top: -20px;*/
-}
-
-.main{
-  /*position: relative;*/
-  margin: 0;
-  overflow-x: hidden;
-}
-
-.body{
-  /*margin-top: 20px;*/
-}
-.temp-text{
-  margin-left: 50%;
-  text-align: center;
-}
-
-h4{
-  text-align: center;
-  line-height: 1em;
-}
-
-.center {
-  text-align: center;
-}
-
-.about-spiel{
-  padding: 5px;
-  text-align: center;
-  font-family: 'salon_5medium';
-  font-size: 35px;
-  width: 400px;
-  text-align: center;
-  border: 1px solid white;
-  color: white;
-  background-color: rgba(255, 255, 255, .4);
-  margin-top: 495px;
-  margin-left: 30%;
+.more{
+  font-family: salon6;
+  font-size: 44px;
+  color: #fff;
+  margin-left: 370px;
+  margin-top: 510px;
   position: absolute;
+  display: block;
 }
 
 /*.image-gallery{
@@ -160,12 +212,9 @@ h4{
 }
 
 .cal{
-  /*width: 45%;*/
   text-align: center;
-  /*margin: -10px auto;*/
-  font-family: 'salon_6medium', sans-serif;
+  font-family: 'salon6', sans-serif;
   font-size: 70px;
-  /*left: 27%;*/
   border: 2px solid blue;
 }
 
@@ -197,8 +246,8 @@ h4{
 section{
   margin: 0px;
 /*  margin-top: 20px;
-  margin-bottom: 20px;*/
-  /*padding: 15px;*/
+margin-bottom: 20px;*/
+/*padding: 15px;*/
 }
 
 .blue-cross{
@@ -212,7 +261,7 @@ section{
   padding: 10px;
 }
 
-.about-statement{
+#about-statement{
   font-family: 'Proxima Nova', sans-serif;
   margin: 25px auto;
   padding: 20px;
@@ -262,16 +311,18 @@ section{
 
 
 h4{
-  font-family: salon_5medium;
+  letter-spacing: 2px;
+  font-family: salon6;
   font-size: 24px;
   margin: 15px;
 }
 
 h2{
-  font-family: salon_5medium;
+  font-family: salon5;
   font-size: 54px;
   margin: 0px;
   padding-top: 25px;
+  letter-spacing: 4px;
 }
 
 .beyond-wrapper{
@@ -304,10 +355,6 @@ h2{
 
 
 #media{
-  background-image: url('images/background/purple_background.png');
-  background-size: cover;
-  background-repeat: repeat;
-  background-position: center;
   width: 100%;
   /*padding-bottom: 25px;*/
   /*height: 50%;*/
@@ -315,62 +362,62 @@ h2{
 
 
 #media {
-   margin: 0;
-   /*padding: 0;*/
+ margin: 0;
+ /*padding: 0;*/
 }
 .wrap {
-   overflow: hidden;
-   margin: 10px;
+ overflow: hidden;
+ margin: 10px;
 }
 .box {
-   display: inline-block;
-   float: left;
-   position: relative;
-   width: 20%;
-   padding-bottom: 20%;
+ display: inline-block;
+ float: left;
+ position: relative;
+ width: 20%;
+ padding-bottom: 20%;
 }
 .boxInner {
-   position: absolute;
-   left: 10px;
-   right: 10px;
-   top: 10px;
-   bottom: 0px;
-   overflow: hidden;
+ position: absolute;
+ left: 10px;
+ right: 10px;
+ top: 10px;
+ bottom: 0px;
+ overflow: hidden;
 }
 .boxInner img {
-   width: 100%;
+ width: 100%;
 }
 
 body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
-   margin-bottom: 0;
+ margin-bottom: 0;
 }
 @media only screen and (max-width : 480px) {
-   /* Smartphone view: 1 tile */
-   .box {
-      width: 100%;
-      /*padding-bottom: 10%;*/
-   }
+ /* Smartphone view: 1 tile */
+ .box {
+  width: 100%;
+  /*padding-bottom: 10%;*/
+}
 }
 @media only screen and (max-width : 650px) and (min-width : 481px) {
-   /* Tablet view: 2 tiles */
-   .box {
-      width: 50%;
-      /*padding-bottom: 50%;*/
-   }
+ /* Tablet view: 2 tiles */
+ .box {
+  width: 50%;
+  /*padding-bottom: 50%;*/
+}
 }
 @media only screen and (max-width : 1050px) and (min-width : 651px) {
-   /* Small desktop / ipad view: 3 tiles */
-   .box {
-      width: 33.3%;
-      /*padding-bottom: 33.3%;*/
-   }
+ /* Small desktop / ipad view: 3 tiles */
+ .box {
+  width: 33.3%;
+  /*padding-bottom: 33.3%;*/
+}
 }
 @media only screen and (max-width : 1290px) and (min-width : 1051px) {
-   /* Medium desktop: 4 tiles */
-   .box {
-      width: 25%;
-      /*padding-bottom: 25%;*/
-   }
+ /* Medium desktop: 4 tiles */
+ .box {
+  width: 25%;
+  /*padding-bottom: 25%;*/
+}
 }
 
 .more_button{
@@ -392,7 +439,7 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
 }
 
 .movie p {
-  font-family: 'salon_5medium', sans-serif;
+  font-family: 'salon5', sans-serif;
   font-size: 25px;
   display: inline-block;
   margin-left: 30px;
@@ -406,6 +453,7 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   height: 75%;
 }
 
+/* Calendar */
 #calendar{
   margin-top: 40px;
 }
@@ -414,27 +462,34 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   /*float: center;*/
   overflow: hidden;
   width: 95%;
-  height: 80%;
   margin: 10px auto;
-  /*background: rgba(255, 255, 255, .8);*/
-  /*border: 1px solid white;*/
+}
+
+#cal_img{
+  background-image: url('http://salonathonpresents.com/wp-content/uploads/2015/08/salonextras.png');
+  background-size: 670px 300px;
+  background-repeat: no-repeat;
+  background-position: 0px -5px;
+  width: 270px;
+  height: 250px;
+  display: inline-block;
 }
 .calendar-wrapper > div {
   float: left;
   overflow: hidden;
   margin: 2px auto;
   cursor: pointer;
-}
-.calendar-wrapper > div > img{
-  /*width: 100%;*/
-  height: auto;
+  margin-left: 10%;
+  width: 285px;
+
 }
 .calendar-wrapper > div + div{
   display: block;
-  float: none;
+  float: right;
   overflow: hidden;
   width: 43%;
-  margin: 60px auto;
+  margin: 0px auto;
+  margin-right: 10%;
 }
 .calendar-wrapper > div > h4 {
   font-family: "Proxima Nova", sans-serif;
@@ -444,11 +499,36 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   font-family: "Proxima Nova", sans-serif;
   font-size: 20px;
 }
+
 .arrow{
-  position: absolute;
   z-index: 4;
-  left: 15%;
-  margin-top: -268px;
+  margin-left: 15%;
+  margin-top: -7%;
+}
+
+@media only screen and (max-width : 840px) and (min-width : 640px){
+ .calendar-wrapper > div + div{
+  margin-right: 4%;
+}
+.calendar-wrapper > div {
+  margin-left: 4%;
+}
+
+}
+
+@media only screen and (max-width : 640px){
+ .calendar-wrapper > div + div{
+  float: none;
+  margin: 0px auto;
+}
+.calendar-wrapper > div {
+  float: none;
+  margin: 0px auto;
+}
+.arrow{
+  display: none;
+}
+
 }
 
 #beyond-beauty-bar{
@@ -460,33 +540,33 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   margin-bottom: 20px;
   color: white;
 }
-.txt{
-/*  position: absoulte;
-  top: 50%;
-  height: 10em;
-  margin-top: -5em;*/
-  vertical-align: middle;
 
+/* Contact Us */
+.txt{
+  font-size: 3vw;
+  font-family: "Proxima Nova", sans-serif;
+  vertical-align: middle;
 }
-.contact{
+
+#contact{
   width: 100%;
-  height: 110px;
   background-color: #9dd4ee;
   font-family: "Proxima Nova", sans-serif;
-  font-size: 30px;
+  font-size: 3vw;
   position: relative;
   padding: 15px;
 }
 
-.contact > img{
+#contact > img{
   vertical-align: middle;
-  margin-left: -50px;
+  margin-left: -30px;
 }
 
 .email{
   display: inline-block;
   text-align: center;
   vertical-align: middle;
+  /*font-size: 24px;*/
 
 }
 
@@ -494,9 +574,14 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   text-decoration: none;
 }
 
+/* Footer Section */
 
-.fotter-wrapper{
-  background-color: #3f3f3f;
+#footer{
+  height: 230px;
+  overflow: hidden;
+}
+.footer-wrapper{
+  background-color: #282d49;
   height: 300px;
   width: 100%;
   overflow: hidden;
@@ -504,15 +589,101 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   color: white;
 }
 
-.fotter-wrapper li{
+.word-list{
+  text-transform: lowercase;
+  line-height: 40px;
+}
+
+.footer-list{
+  padding: 0px;
+  margin: 0px auto;
+  width: 250px;
+}
+
+.footer-list li{
   display: inline-block;
+  margin: -8px;
+}
+
+.footer-left{
+  width: 25%;
+  float: left;
+}
+
+.footer-middle{
+  width: 56%;
+  padding: 0px;
+}
+
+.footer-middle li {
+  line-height: 2px;
+}
+
+.footer-middle li div{
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.footer-middle h4{
+  width: 300px;
+}
+
+.footer-middle > li{
+  margin-left: 30%;
+}
+
+.footer-middle > li + li {
+  margin-left: 10%;
+}
+
+.footer-middle > li + li + li{
+  margin-left: 20%;
+}
+
+input[type='text']{
+  background-color: #778feb;
+  color: #fff;
+  padding: 4px;
+  font-family: salon6;
+  font-size: 25px;
+  width: 150px;
+  height: 30px;
+  border: none;
+  vertical-align: middle;
+}
+
+input[type='submit']{
+  width: 50px;
+  height: 30px;
+  border: none;
+  background-color: #fff;
+  vertical-align: middle;
+  margin-left: -10px;
+  cursor: pointer;
+}
+
+
+.icon-list{
+  float: right;
+  width: 30%;
+  margin-top: -130px;
+}
+
+.footer h4{
+  font-size: 34px;
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: -16px;
+  display: block;
 }
 
 .icon{
   width: 70px;
   height: 70px;
-  background-image: url("images/icons/salonathon_icons.png");
+  background-image: url("http://salonathonpresents.com/wp-content/uploads/2015/08/salonathon_icons.png");
   float: right;
+  background-repeat: none;
 }
 
 .fa-twitter{
@@ -529,8 +700,147 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
   background-position: -43px -5px;
 }
 
+#up_button{
+    margin-top: 15px;
+    display: block;
+    background-position: 0px -46px;
+    background-size: 250px;
+    width: 50px;
+    height: 50px;
+}
 
 
-*{
+.mb_stanton{
+  margin-left: 40px;
+}
+
+
+
+/*
+ * Staff Section
+ */
+
+.meet_staff{
+  margin-top: 140px;
+  float: left;
+  margin-left: 3%;
+}
+
+#staff_img{
+  background-image: url('http://salonathonpresents.com/wp-content/uploads/2015/08/salonextras.png');
+  background-size: 670px 300px;
+  background-repeat: no-repeat;
+  background-position: -350px -3px;
+  width: 300px;
+  height: 300px;
+  display: inline-block;
+}
+
+.smaller-wrapper{
+  width: 60%;
+  float: right;
+}
+
+.caption__media{
+  width: 150px;
+  /*height: 150px;*/
+}
+
+.caption p{
+  width: 150px;
+  height: 35px;
+  text-align: center;
+  font-family: 'Proxima Nova', sans-serif;
+  font-size: 15px;
+  margin: 0px;
+  padding-top: 3px;
+}
+
+#categories li{
+  list-style: none;
+  margin: 10px;
+  display: inline-block;
+}
+
+#categories .container {
+  margin: 0 auto;
+}
+
+@media only screen and (max-width : 947px) and (min-width : 780px) {
+ .caption__media{
+   width: 130px;
+   /*height: 130px;*/
+ }
+
+ .caption p{
+   width: 130px;
+   height: 30px;
+   font-size: 13px;
+ }
+}
+
+@media only screen and (max-width : 850px) and (min-width : 780px) {
+  #categories{
+    padding: 0px;
+  }
+  .meet_staff{
+    margin-left: 0px;
+  }
+}
+
+@media only screen and (max-width : 780px){
+  .meet_staff{
+    width: 300px;
+    margin: 0px auto;
+    float: none;
+  }
+
+  .smaller-wrapper{
+    float: none;
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  #categories {
+    margin: 0px auto;
+    width: 580px;
+    padding: 0px;
+  }
+
+  .caption__media{
+   width: 170px;
+   /*height: 170px;*/
+ }
+}
+
+@media only screen and (max-width : 590px){
+  #categories {
+    margin: 0px auto;
+    width: 100%;
+    padding: 0px;
+  }
+
+  .caption__media{
+   width: 150px;
+ }
+}
+
+
+
+* {
   overflow-x: hidden;
+}
+
+
+/* CSS For Small Screens */
+
+@media screen and (max-width : 705px){
+  /*Display 'show menu' link*/
+  .show-menu {
+    display: block;
+  }
+
+  #nav-bar{
+    display:none;
+  }
 }
