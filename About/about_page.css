@@ -46,19 +46,19 @@
 	height: 700px;
 	top: .3px;
 	
-	background-image: url("images/button_doc.png");
+	background-image: url("Images/button_doc.png");
 	background-size: 420px 130px;
 	background-repeat: no-repeat;
 	
-	-webkit-background-image: url("images/button_doc.png");
+	-webkit-background-image: url("Images/button_doc.png");
 	-webkit-background-size: 420px 130px;
 	-webkit-background-repeat: no-repeat;
 		
-	-moz-background-image: url("images/button_doc.png");
+	-moz-background-image: url("Images/button_doc.png");
 	-moz-background-size: 420px 130px;
 	-moz-background-repeat: no-repeat;
 	
-	-o-background-image: url("images/button_doc.png");
+	-o-background-image: url("Images/button_doc.png");
 	-o-background-size: 420px 130px;
 	-o-background-repeat: no-repeat;	
 }
@@ -71,19 +71,19 @@
 	position: relative;
 	margin: 25px auto;
 	
-	background-image: url("images/alt_top_banner.png");
+	background-image: url("Images/alt_top_banner.png");
 	background-size: 600px 600px;
 	background-repeat: no-repeat;
 	
-	-webkit-background-image: url("images/alt_top_banner.png");
+	-webkit-background-image: url("Images/alt_top_banner.png");
 	-webkit-background-size: 600px 600px;
 	-webkit-background-repeat: no-repeat;
 	
-	-moz-background-image: url("images/alt_top_banner.png");
+	-moz-background-image: url("Images/alt_top_banner.png");
 	-moz-background-size: 600px 600px;
 	-moz-background-repeat: no-repeat;
 	
-	-o-background-image: url("images/alt_top_banner.png");
+	-o-background-image: url("Images/alt_top_banner.png");
 	-o-background-size: 600px 600px;
 	-o-background-repeat: no-repeat;
 }
