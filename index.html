@@ -1,356 +1,43 @@
+<!DOCTYPE html>
 <html>
-<head>
-	<title>Salonathon</title>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta name="description" content="" />
-	<meta name="keywords" content="" />
-	<link rel="stylesheet" href="style.css" />
-</head>
-<body>
+    <head>
+        <title> Hello </title>
+        <script src="switch_script.js"></script>
+        <link rel="stylesheet" type="text/css" href="face_change.css">
+        <link rel="stylesheet" type="text/css" href="About/style.css">
+        <link href="http://fonts.googleapis.com/css?family=Dancing+Script:700" rel="stylesheet" type="text/css">                
+        <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css" >
+       <link rel="icon" type="img/ico" href="favicon.ico">     
+            
+            
+    </head>
+    <body id="bkgrnd">
+        <div class="container" style="border-style: dashed;">
+            <div class="img-container">
+                
+                <div>
+                    <button id="eyl" class="left" onclick="imageFwd('eyes');"></button>
+                    <img id="eyes" class="eyes" src="positioned_features/face_eyes7.png">
+                    <button id="eyr" class="right" onclick="imageBwd('eyes');"> </button>
+                </div>
+                
+                <div>
+                    <button id="nol" class="left" onclick="imageBwd('nose');"> </button>
+                    <img id="nose" class="nose" src="positioned_features/face_nose7.png">
+                    <button id="nor" class="right" onclick="imageFwd('nose');"> </button>
+                </div>
+                
+                <div>
+                    <button id="mol" class="left" onclick="imageBwd('mouth');"> </button>
+                    <img id="mouth" class="mouth" src="positioned_features/face_mouth7.png">
+                    <button id="mor" class="right" onclick="imageFwd('mouth');"> </button>
 
-	<!-- Header -->
-	<header id="header">
-		<label for="show-menu" media="(max-width: 705px)" class="show-menu">
-			<div class="logo">
-				<a href="#intro">
-					<img class="logo-still"src="images/stills/logo_still.png" width="250px" height="100px">
-					<img class="logo-gif"src="images//gifs/salonathon_logo.gif" width="250px" height="100px">
-				</a>
-			</div> 
-		</label>
+                </div>
 
-		<nav id="nav-bar">
-			<div class="logo salon_logo">
-				<a href="#intro">
-					<img class="logo-still" src="images/stills/logo_still.png" width="250px" height="100px">
-					<img class="logo-gif" src="images//gifs/salonathon_logo.gif" width="250px" height="100px">
-				</a>
-			</div>
-			<div class="umm">
-				<div class="logo">
-					<a href="#media">
-						<img class="logo-still" src="images/stills/media-still.png" width="60px" height="60px">
-						<img class="logo-gif" src="images/gifs/media-ani.gif" width="60px" height="60px">
-					</a>
-				</div>
-				<div class="logo">
-					<a href="#calendar">
-						<img class="logo-still" src="images/stills/cal-still.png" width="60px" height="60px">
-						<img class="logo-gif" src="images/gifs/cal-animation.gif" width="60px" height="60px">
-					</a>
-				</div>
-				<div class="logo">
-					<a href="#beyond-beauty-bar">
-						<img class="logo-still" src="images/stills/beyond-still.png" width="60px" height="60px">
-						<img class="logo-gif" src="images/gifs/beyond-animation.gif" width="60px" height="60px">
-					</a>
-				</div>
-				<div class="logo">
-					<a href="#about">
-						<img class="logo-still" src="images/stills/eye-still.png" width="60px" height="60px">
-						<img class="logo-gif" src="images/gifs/about.gif" width="60px" height="60px">
-					</a>
-				</div>
-				<div class="logo">
-					<a href="#press">
-						<img class="logo-still" src="images/stills/press-still.png" width="60px" height="60px">
-						<img class="logo-gif" src="images/gifs/press.gif" width="60px" height="60px">
-					</a>
-				</div>
-				<div class="logo">
-					<a href="#contact">
-						<img class="logo-still"src="images/stills/contactus-still.png" width="60px" height="60px">
-						<img class="logo-gif"src="images/gifs/contact-us.gif" width="60px" height="60px">
-					</a>
-				</div>
-			</div>
-		</nav>
-	</header>
-
-	<div id="intro">
-	</div>
-	<div class="body">
-		<!-- Intro -->
-		<section id="intro-pic"> 
-			<div class="about-spiel">
-				is a home for underground, emerging, and genre-defying art!
-			</div>
-			<span class="more">More</span>
-			<a href="#about-statement"> <div class="icon" id="down_button"></div></a>
-
-		</section>
-
-		<div class="blue-cross">
-			<div id="about-statement">
-				<p>
-					Salonathon has been running every Monday at Beauty Bar since the summer of 2011.  Hundreds of short performances have happened.  There has been sweat, there has been real and fake blood, there have been stillettos, puppets, podcasts, dances, diaries, uncomfortable silences, roaring laughs, confessions, songs, swaths of exposed skin, stories, and all kinds of gloriously unnamable experiments.
-				</p>
-				<p>
-					Now nearing its 4 year anniversary, Salonathon shows no signs of slowing.  There are so many exciting, hungry, charasmatic creators out there. There are so many ideas to try.  I, for one, cannot wait to see what is next.
-				</p>
-				<p>
-					Jane Beachy, Artistic Director &amp; Curator
-				</p>
-			</div>
-		</div>
-
-		<!-- Media -->
-		<section id="media" class="main">
-			<div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon10.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon11.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon12.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon13.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon14.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon15.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon9.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon8.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon3.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salonathon1.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salon5.jpg" />
-					</div>
-				</div>
-				<div class="box">
-					<div class="boxInner">
-						<img src="images/salonathon2.jpg" />
-					</div>
-				</div>
-			</div>
-			<a href="https://www.facebook.com/Salonathon/photos_stream?tab=photos_albums" target="_blank" > <div class="more_button"></div></a>
-			<div class="movie">
-				<iframe src="http://player.vimeo.com/video/76612670" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-				<p> Video by JRV MAJESTY productions </p>
-				<a href="https://vimeo.com/channels/599994" target="_blank"><div class="more_button"></div></a>
-			</div>
-		</section>
-
-		<!-- Calendar -->
-		<section id="calendar" class="main">
-			<div class="calendar-wrapper">
-				<div>
-					<a href="https://www.facebook.com/Salonathon/events" target="_blank"><span id="cal_img"></span></a>
-				</div>
-				<div>
-					<h4> Salonathon happens every Monday night</h4>
-					<p>at 9pm at Beauty Bar, located at 1444 W Chicago Ave.  Check out the theme and line up for this week.</p>
-				</div>
-			</div>
-			<div class="arrow">
-				<img alt="" src="http://salonathonpresents.com/wp-content/uploads/2015/08/arrow.png" width="75%"/>
-			</div>
-		</section>
-
-		<!-- Beyond Beauty Bar -->
-		<section id="beyond-beauty-bar" class="main">
-			<header>
-				<h2>Beyond Beauty Bar</h2>
-			</header>
-			<div class="beyond-wrapper">
-				<img src="images/salondawega.jpg">
-				<img src="images/cpl.png">
-				<img src="images/infiltration.jpg">
-
-			</div>
-			<div class="more_button"></div>
-		</section>
-
-		<!-- Staff -->
-		<section id="about" class="main">
-
-			<div class="meet_staff">
-				<span id="staff_img"></span>
-			</div>
-
-
-			<div class="smaller-wrapper">
-				<ul id="categories" class="clr">
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> Creator, Host, &amp; Curator</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> Host &amp; Curator</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> Host &amp; Curator</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> Accountant </p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> DJ </p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> DJ </p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> Operations Assistant</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> Photographer &amp; Web Designer</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="container">
-							<div class="caption">
-								<img class="caption__media" src="http://tinyurl.com/qgu9fej"/>
-								<p> Summer Intern &amp; Web Developer</p>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-
-		</section>
-
-		<!-- Contact -->
-		<div id="contact">
-			<span class="txt">Want to perform at</span>
-			<img alt="" src="http://salonathonpresents.com/wp-content/uploads/2015/08/salonathon_word.png" width="40%"/>
-			<div class="email"> email us at <br>
-				<a href="mailto:salonathon@gmail.com?Subject=Inquiry%20about%20Salonathon" target="_top">
-					salonathon@gmail.com
-				</a>
-			</div>
-		</div>
-
-		<!-- Footer -->
-		<footer id="footer">
-			<div class="footer-wrapper">
-				<div class="footer-left">
-					<ul class="word-list">
-						<li>Privacy Policy</li>
-						<li>Terms &amp; Conditions</li>
-						<li>Contact</li>
-					</ul>
-				</div>
-
-				<ul class="footer-middle">
-					<li>
-						<div>
-							<a href="#intro"><div class="icon" id="up_button"></div></a>
-						</div>
-					</li>
-
-					<li>
-						<div>
-							<h4> Sign up for rare updates</h4>
-						</div>
-					</li>
-
-
-					<li>
-						<div>
-							<input type="text" name="email" value="you@youremail.com">
-							<input type="submit" value="">
-						</div>
-					</li>
-				</ul>
-
-				<div class="icon-list">
-					<h4> Connect with us </h4>
-					<ul class="footer-list">
-						<li>
-							<a href="https://twitter.com/salonathon" target="_blank" class="icon fa-facebook"></a>
-						</li>
-						<li>
-							<a href="https://www.facebook.com/Salonathon" target="_blank" class="icon fa-instagram"></a>
-						</li>
-						<li>
-							<a href="https://instagram.com/salonathon/" target="_blank" class="icon fa-vimeo"></a>
-						</li>
-						<li>
-							<a href="https://vimeo.com/channels/599994" target="_blank" class="icon fa-twitter"></a>
-						</li>
-					</ul>
-				</div>
-			<span class="mb_stanton"> designed by mb stanton </span>
-		</div>
-
-
-
-
-	</footer>
-
-</body>
+            </div>
+                <a class="click" id="main_button" href="About/about.html">
+                    <span>Hello!</span>
+            </a>
+        </div>
+    </body>
 </html>
