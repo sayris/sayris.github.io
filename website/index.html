@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Hello </title>
+        <script src="switch_script.js"></script>
+        <link rel="stylesheet" type="text/css" href="face_change.css">
+        <link rel="stylesheet" type="text/css" href="About/style.css">
+        <link href="http://fonts.googleapis.com/css?family=Dancing+Script:700" rel="stylesheet" type="text/css">                
+        <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css" >
+       <link rel="icon" type="img/ico" href="favicon.ico">     
+            
+            
+    </head>
+    <body id="bkgrnd">
+        <div class="container" style="border-style: dashed;">
+            <div class="img-container">
+                
+                <div>
+                    <button id="eyl" class="left" onclick="imageFwd('eyes');"></button>
+                    <img id="eyes" class="eyes" src="positioned_features/face_eyes7.png">
+                    <button id="eyr" class="right" onclick="imageBwd('eyes');"> </button>
+                </div>
+                
+                <div>
+                    <button id="nol" class="left" onclick="imageBwd('nose');"> </button>
+                    <img id="nose" class="nose" src="positioned_features/face_nose7.png">
+                    <button id="nor" class="right" onclick="imageFwd('nose');"> </button>
+                </div>
+                
+                <div>
+                    <button id="mol" class="left" onclick="imageBwd('mouth');"> </button>
+                    <img id="mouth" class="mouth" src="positioned_features/face_mouth7.png">
+                    <button id="mor" class="right" onclick="imageFwd('mouth');"> </button>
+
+                </div>
+
+            </div>
+                <a class="click" id="main_button" href="About/about.html">
+                    <span>Hello!</span>
+            </a>
+        </div>
+    </body>
+</html>

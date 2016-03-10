@@ -1,0 +1,329 @@
+@charset "UTF-8";
+@font-face {
+   font-family: Barrio;
+   src: url(Barrio-Regular.otf);
+}
+.top_bar{
+	z-index: 5;
+	position:fixed;
+
+
+	background-color: #39414B;
+	background-image: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(.34, rgba(230,237,241,.05)),
+    color-stop(.67, rgba(230,237,241,0)));	
+	
+	background-image: -moz-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(.34, rgba(230,237,241,.05)),
+    color-stop(.67, rgba(230,237,241,0)));	
+	
+	background-image: -o-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(.34, rgba(230,237,241,.05)),
+    color-stop(.67, rgba(230,237,241,0)));
+	
+	background-size: 5px 5px;
+	width: 100%;
+	height: 25px;
+	top:-3px;
+	left: 0px;
+	overflow-x: hidden;
+}
+
+.banner_doc{
+	z-index: 6;
+	position: fixed;
+	float: left; 
+	width: 500px;
+	height: 700px;
+	top: .3px;
+	
+	background-image: url("Images/button_doc.png");
+	background-size: 420px 130px;
+	background-repeat: no-repeat;
+	
+	-webkit-background-image: url("Images/button_doc.png");
+	-webkit-background-size: 420px 130px;
+	-webkit-background-repeat: no-repeat;
+		
+	-moz-background-image: url("Images/button_doc.png");
+	-moz-background-size: 420px 130px;
+	-moz-background-repeat: no-repeat;
+	
+	-o-background-image: url("Images/button_doc.png");
+	-o-background-size: 420px 130px;
+	-o-background-repeat: no-repeat;	
+}
+
+.top_banner{
+	z-index: 2;
+	width: 600px;
+	height: 620px;
+	overflow-x: hidden;
+	position: relative;
+	margin: 25px auto;
+	
+	background-image: url("Images/alt_top_banner.png");
+	background-size: 600px 600px;
+	background-repeat: no-repeat;
+	
+	-webkit-background-image: url("Images/alt_top_banner.png");
+	-webkit-background-size: 600px 600px;
+	-webkit-background-repeat: no-repeat;
+	
+	-moz-background-image: url("Images/alt_top_banner.png");
+	-moz-background-size: 600px 600px;
+	-moz-background-repeat: no-repeat;
+	
+	-o-background-image: url("Images/alt_top_banner.png");
+	-o-background-size: 600px 600px;
+	-o-background-repeat: no-repeat;
+}
+
+
+.sidebar{
+	position: relative;
+	text-decoration: none;
+
+	margin: 0px 10px 0px 10px;
+	top: 28px;
+	left: 45px;
+
+	-webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+	
+	
+	/*"height" of button*/
+	-webkit-box-shadow: 
+	 0 8px 0 #8DD1CB,
+	 0 2px 10px rgba(0, 0, 0, .3); 
+	 
+	 -moz-box-shadow: 
+	 0 8px 0 #8DD1CB,
+	 0 12px 10px rgba(0, 0, 0, .3); 
+	  
+	 box-shadow: 
+	 0px 8px 0px #8DD1CB,
+	 0px 12px 10px rgba(0, 0, 0, .3);  	
+}
+
+.sidebar span{
+	z-index: 4;
+
+	color: white;
+	text-shadow: 0px -1px black;
+	padding: 10px 10px 10px 10px;
+
+	box-shadow:			/* border around the top of the button */
+	0px -1px 1px #D0EBE7, 
+    0px 1px 1px #D0EBE7; 
+	
+	-webkit-box-shadow:
+    0px -1px 1px #D0EBE7, 
+    0px 1px 1px #D0EBE7;
+	
+	-moz-box-shadow:
+    0px -1px 1px #D0EBE7, 
+    0px 1px 1px #D0EBE7;
+	
+}
+
+.click span {
+	background-color: #8DD1CB;
+    height: 25px;
+	
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+		
+	-webkit-transition: transform .1s;
+	-moz-transition: transform .1s;
+	-o-transition: transform.1s;
+    transition: transform .1s;
+    display: inline-block;   
+    font-family:'PT Sans Narrow', Arial Narrow, sans serif;
+    font-size: 23px;
+
+}	
+
+
+.click span:hover {
+    cursor: pointer;
+}
+
+.sidebar:active {
+    box-shadow:
+	0 8px 0 #8DD1CB,
+	0 12px 10px #222832;
+	
+	-moz-box-shadow:
+	0 8px 0 #8DD1CB,
+	0 12px 10px #222832;
+	
+	-o-box-shadow:
+	0 8px 0 #8DD1CB,
+	0 12px 10px #222832;
+	
+	-webkit-box-shadow:
+	0 8px 0 #8DD1CB,
+	0 12px 10px #222832; 	
+}
+
+
+.click:active span{
+	-webkit-transform: translate(0, 5px); 
+	-ms-transform: translate(0, 5px); 
+	-moz-transform: translate(0, 5px); 
+	transform: translate(0, 5px); 
+}
+
+.container{
+	width:100%;
+	height: 100%;
+	background-color:#596270;
+	margin-top: 20px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.main_text{
+	font-family: Calibri Light, Avenir Next Condensed, sans-serif;
+	color: #39414B;
+	width: 600px;
+	margin: 25px auto;	
+}
+
+.color1{
+	background-color: #8dd1cb;
+	width: 100%;
+	height: 900px;
+}
+
+.hi{
+	width: 700px;	
+	margin: 0px 0px 30px -80px;
+}
+
+.iam{
+	position: relative;
+	font-family: "PT Sans Narrow", sans-serif;
+	text-transform: uppercase;
+	color: #fff;
+	font-size: 65px;
+	margin: 0px 0px 0px 160px;	
+}
+
+
+.about_me{
+	position: relative;
+	border: 4px dashed #ccebe8;
+	padding: 15px 20px 15px 20px;
+	text-align: justify;
+	font-size: 20px;
+	line-height: 40px;
+	top: 40px;
+	margin-bottom: 100px;
+}
+
+.color2{
+	background-color: #fff;
+	width: 100%;
+	/*height: 1400px;*/
+	margin-top: -20px;
+}
+
+#resume{
+	overflow: scroll;
+	padding: 5px 20px 5px 20px;
+	text-align: center;
+	font-size: 40px;
+	margin-top: 5px;
+}
+
+.color3{
+	position: relative;
+	background-color: #39414B;
+	width: 100%;	
+	height: 400px;
+	overflow-x: hidden;
+
+}
+
+
+#email{
+	overflow: scroll;
+	text-align: center;
+	font-size: 50px;
+	margin-top: -50px;
+	text-decoration: none;
+
+}
+
+p{
+	text-indent: 45px;
+}
+
+.skill_bars{
+	width:600px;
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+
+.second_bar{
+	width:600px;
+	margin-top: 0px;
+	margin-bottom: 50px;
+}
+
+
+.skill{
+	border-bottom: 4px dashed grey;
+	padding: 5px 25px 5px 25px;
+	text-align: center;
+	font-family: "Barrio";
+	
+	
+}
+#weird{
+	position: absolute;
+	font-family: "Barrio";
+	font-size: 45px;
+	margin-top: -30px;
+	margin-left: 140px;
+	color: white;
+}
+.end{
+	position: absolute;
+	margin-top: 60px;
+	margin-left: 180px;
+	font-size: 25px;
+	text-decoration: none;
+	color: #5a6270;
+}
+
+.end:hover{
+	color: #e36967;
+}
+
+#nvlp{
+	position: absolute;
+	width: 70px;
+	margin-right: 20px;
+	margin-left: 80px;
+	margin-top: 57px;
+}
+
+.thingie{
+	width: 200px;
+	margin-left: 180px;
+	margin-top: 120px;
+}
