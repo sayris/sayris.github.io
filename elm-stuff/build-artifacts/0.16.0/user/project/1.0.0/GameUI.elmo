@@ -1,0 +1,43 @@
+Elm.GameUI = Elm.GameUI || {};
+Elm.GameUI.make = function (_elm) {
+   "use strict";
+   _elm.GameUI = _elm.GameUI || {};
+   if (_elm.GameUI.values) return _elm.GameUI.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var Reset = {ctor: "Reset"};
+   var NeedTime = {ctor: "NeedTime"};
+   var uiMailbox = $Signal.mailbox(NeedTime);
+   var resetButton = A2($Html.button,
+   _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "button",_1: true},{ctor: "_Tuple2",_0: "inlineB",_1: true}]))
+           ,A2($Html$Events.onClick,uiMailbox.address,Reset)]),
+   _U.list([$Html.text("Reset Current Game")]));
+   var newGameButton = A2($Html.button,
+   _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "button",_1: true},{ctor: "_Tuple2",_0: "centerB",_1: true}]))
+           ,A2($Html$Events.onClick,uiMailbox.address,NeedTime)]),
+   _U.list([$Html.text("Start New Game")]));
+   var newGameButton2 = A2($Html.button,
+   _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "button",_1: true},{ctor: "_Tuple2",_0: "inlineB",_1: true}]))
+           ,A2($Html$Events.onClick,uiMailbox.address,NeedTime)]),
+   _U.list([$Html.text("Start New Game")]));
+   var buttonGroup = A2($Html.div,_U.list([$Html$Attributes.$class("btn-group")]),_U.list([resetButton,newGameButton2]));
+   var NewGame = function (a) {    return {ctor: "NewGame",_0: a};};
+   return _elm.GameUI.values = {_op: _op
+                               ,NewGame: NewGame
+                               ,NeedTime: NeedTime
+                               ,Reset: Reset
+                               ,uiMailbox: uiMailbox
+                               ,resetButton: resetButton
+                               ,newGameButton: newGameButton
+                               ,newGameButton2: newGameButton2
+                               ,buttonGroup: buttonGroup};
+};

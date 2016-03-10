@@ -1,0 +1,85 @@
+Elm.TileMatrix = Elm.TileMatrix || {};
+Elm.TileMatrix.make = function (_elm) {
+   "use strict";
+   _elm.TileMatrix = _elm.TileMatrix || {};
+   if (_elm.TileMatrix.values) return _elm.TileMatrix.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $BlendokuTiles = Elm.BlendokuTiles.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var main = A2($Html.div,_U.list([]),_U.list([$Html.text("Hello")]));
+   var interpCList = F3(function (c1,c2,i) {
+      interpCList: while (true) {
+         var _p0 = {ctor: "_Tuple3",_0: c1,_1: c2,_2: i};
+         _v0_3: do {
+            if (_p0.ctor === "_Tuple3") {
+                  if (_p0._0.ctor === "[]") {
+                        if (_p0._1.ctor === "[]") {
+                              return _U.crashCase("TileMatrix",
+                              {start: {line: 58,column: 5},end: {line: 62,column: 59}},
+                              _p0)("interpCList: passed an invalid index");
+                           } else {
+                              break _v0_3;
+                           }
+                     } else {
+                        if (_p0._1.ctor === "::") {
+                              if (_p0._2 === 0) {
+                                    return {ctor: "_Tuple2",_0: _p0._0._0,_1: _p0._1._0};
+                                 } else {
+                                    var _v1 = _p0._0._1,_v2 = _p0._1._1,_v3 = i - 1;
+                                    c1 = _v1;
+                                    c2 = _v2;
+                                    i = _v3;
+                                    continue interpCList;
+                                 }
+                           } else {
+                              break _v0_3;
+                           }
+                     }
+               } else {
+                  break _v0_3;
+               }
+         } while (false);
+         return _U.crashCase("TileMatrix",{start: {line: 58,column: 5},end: {line: 62,column: 59}},_p0)("interpCList: shouldn\'t happen");
+      }
+   });
+   var mTile = F4(function (i,rI,p,st) {    return {index: i,randI: rI,pos: p,originPos: p,color: $Color.white,status: st};});
+   var justWrap = function (x) {    return A2($Maybe.withDefault,0,x);};
+   var spc = function (numTiles) {
+      var eq = function (i) {    return ($BlendokuTiles.tileSideLen / 2 | 0) * (1 + i) + $BlendokuTiles.tileSideLen * i + 20;};
+      var tmp = A2($List.map,eq,_U.range(0,numTiles - 1));
+      return $Array.fromList(tmp);
+   };
+   var makeMatrix = function (_p3) {
+      var _p4 = _p3;
+      var _p6 = _p4._1;
+      var _p5 = _p4._0;
+      var spX = spc(_p5);
+      var spY = spc(_p6);
+      var col0 = A2($List.map,
+      function (i) {
+         return _U.list([A4(mTile,i,7.32,{ctor: "_Tuple2",_0: justWrap(A2($Array.get,0,spX)),_1: justWrap(A2($Array.get,i,spY))},$BlendokuTiles.NotPlaced)]);
+      },
+      _U.range(0,_p6 - 1));
+      return A2($List.indexedMap,
+      F2(function (i,ts) {
+         return A2($List.append,
+         ts,
+         A2($List.map,
+         function (d) {
+            return A4(mTile,d,7.32,{ctor: "_Tuple2",_0: justWrap(A2($Array.get,d,spX)),_1: justWrap(A2($Array.get,i,spY))},$BlendokuTiles.NotPlaced);
+         },
+         _U.range(1,_p5 - 1)));
+      }),
+      col0);
+   };
+   return _elm.TileMatrix.values = {_op: _op,spc: spc,justWrap: justWrap,mTile: mTile,makeMatrix: makeMatrix,interpCList: interpCList,main: main};
+};
