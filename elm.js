@@ -1972,6 +1972,845 @@ Elm.List.make = function (_elm) {
                              ,sortBy: sortBy
                              ,sortWith: sortWith};
 };
+Elm.Native.Char = {};
+Elm.Native.Char.make = function(localRuntime) {
+	localRuntime.Native = localRuntime.Native || {};
+	localRuntime.Native.Char = localRuntime.Native.Char || {};
+	if (localRuntime.Native.Char.values)
+	{
+		return localRuntime.Native.Char.values;
+	}
+
+	var Utils = Elm.Native.Utils.make(localRuntime);
+
+	return localRuntime.Native.Char.values = {
+		fromCode: function(c) { return Utils.chr(String.fromCharCode(c)); },
+		toCode: function(c) { return c.charCodeAt(0); },
+		toUpper: function(c) { return Utils.chr(c.toUpperCase()); },
+		toLower: function(c) { return Utils.chr(c.toLowerCase()); },
+		toLocaleUpper: function(c) { return Utils.chr(c.toLocaleUpperCase()); },
+		toLocaleLower: function(c) { return Utils.chr(c.toLocaleLowerCase()); }
+	};
+};
+
+Elm.Char = Elm.Char || {};
+Elm.Char.make = function (_elm) {
+   "use strict";
+   _elm.Char = _elm.Char || {};
+   if (_elm.Char.values) return _elm.Char.values;
+   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$Native$Char = Elm.Native.Char.make(_elm);
+   var _op = {};
+   var fromCode = $Native$Char.fromCode;
+   var toCode = $Native$Char.toCode;
+   var toLocaleLower = $Native$Char.toLocaleLower;
+   var toLocaleUpper = $Native$Char.toLocaleUpper;
+   var toLower = $Native$Char.toLower;
+   var toUpper = $Native$Char.toUpper;
+   var isBetween = F3(function (low,high,$char) {    var code = toCode($char);return _U.cmp(code,toCode(low)) > -1 && _U.cmp(code,toCode(high)) < 1;});
+   var isUpper = A2(isBetween,_U.chr("A"),_U.chr("Z"));
+   var isLower = A2(isBetween,_U.chr("a"),_U.chr("z"));
+   var isDigit = A2(isBetween,_U.chr("0"),_U.chr("9"));
+   var isOctDigit = A2(isBetween,_U.chr("0"),_U.chr("7"));
+   var isHexDigit = function ($char) {
+      return isDigit($char) || (A3(isBetween,_U.chr("a"),_U.chr("f"),$char) || A3(isBetween,_U.chr("A"),_U.chr("F"),$char));
+   };
+   return _elm.Char.values = {_op: _op
+                             ,isUpper: isUpper
+                             ,isLower: isLower
+                             ,isDigit: isDigit
+                             ,isOctDigit: isOctDigit
+                             ,isHexDigit: isHexDigit
+                             ,toUpper: toUpper
+                             ,toLower: toLower
+                             ,toLocaleUpper: toLocaleUpper
+                             ,toLocaleLower: toLocaleLower
+                             ,toCode: toCode
+                             ,fromCode: fromCode};
+};
+Elm.Native.Color = {};
+Elm.Native.Color.make = function(localRuntime) {
+	localRuntime.Native = localRuntime.Native || {};
+	localRuntime.Native.Color = localRuntime.Native.Color || {};
+	if (localRuntime.Native.Color.values)
+	{
+		return localRuntime.Native.Color.values;
+	}
+
+	function toCss(c)
+	{
+		var format = '';
+		var colors = '';
+		if (c.ctor === 'RGBA')
+		{
+			format = 'rgb';
+			colors = c._0 + ', ' + c._1 + ', ' + c._2;
+		}
+		else
+		{
+			format = 'hsl';
+			colors = (c._0 * 180 / Math.PI) + ', ' +
+					 (c._1 * 100) + '%, ' +
+					 (c._2 * 100) + '%';
+		}
+		if (c._3 === 1)
+		{
+			return format + '(' + colors + ')';
+		}
+		else
+		{
+			return format + 'a(' + colors + ', ' + c._3 + ')';
+		}
+	}
+
+	return localRuntime.Native.Color.values = {
+		toCss: toCss
+	};
+};
+
+Elm.Color = Elm.Color || {};
+Elm.Color.make = function (_elm) {
+   "use strict";
+   _elm.Color = _elm.Color || {};
+   if (_elm.Color.values) return _elm.Color.values;
+   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm);
+   var _op = {};
+   var Radial = F5(function (a,b,c,d,e) {    return {ctor: "Radial",_0: a,_1: b,_2: c,_3: d,_4: e};});
+   var radial = Radial;
+   var Linear = F3(function (a,b,c) {    return {ctor: "Linear",_0: a,_1: b,_2: c};});
+   var linear = Linear;
+   var fmod = F2(function (f,n) {    var integer = $Basics.floor(f);return $Basics.toFloat(A2($Basics._op["%"],integer,n)) + f - $Basics.toFloat(integer);});
+   var rgbToHsl = F3(function (red,green,blue) {
+      var b = $Basics.toFloat(blue) / 255;
+      var g = $Basics.toFloat(green) / 255;
+      var r = $Basics.toFloat(red) / 255;
+      var cMax = A2($Basics.max,A2($Basics.max,r,g),b);
+      var cMin = A2($Basics.min,A2($Basics.min,r,g),b);
+      var c = cMax - cMin;
+      var lightness = (cMax + cMin) / 2;
+      var saturation = _U.eq(lightness,0) ? 0 : c / (1 - $Basics.abs(2 * lightness - 1));
+      var hue = $Basics.degrees(60) * (_U.eq(cMax,r) ? A2(fmod,(g - b) / c,6) : _U.eq(cMax,g) ? (b - r) / c + 2 : (r - g) / c + 4);
+      return {ctor: "_Tuple3",_0: hue,_1: saturation,_2: lightness};
+   });
+   var hslToRgb = F3(function (hue,saturation,lightness) {
+      var hue$ = hue / $Basics.degrees(60);
+      var chroma = (1 - $Basics.abs(2 * lightness - 1)) * saturation;
+      var x = chroma * (1 - $Basics.abs(A2(fmod,hue$,2) - 1));
+      var _p0 = _U.cmp(hue$,0) < 0 ? {ctor: "_Tuple3",_0: 0,_1: 0,_2: 0} : _U.cmp(hue$,1) < 0 ? {ctor: "_Tuple3",_0: chroma,_1: x,_2: 0} : _U.cmp(hue$,
+      2) < 0 ? {ctor: "_Tuple3",_0: x,_1: chroma,_2: 0} : _U.cmp(hue$,3) < 0 ? {ctor: "_Tuple3",_0: 0,_1: chroma,_2: x} : _U.cmp(hue$,4) < 0 ? {ctor: "_Tuple3"
+                                                                                                                                               ,_0: 0
+                                                                                                                                               ,_1: x
+                                                                                                                                               ,_2: chroma} : _U.cmp(hue$,
+      5) < 0 ? {ctor: "_Tuple3",_0: x,_1: 0,_2: chroma} : _U.cmp(hue$,6) < 0 ? {ctor: "_Tuple3",_0: chroma,_1: 0,_2: x} : {ctor: "_Tuple3",_0: 0,_1: 0,_2: 0};
+      var r = _p0._0;
+      var g = _p0._1;
+      var b = _p0._2;
+      var m = lightness - chroma / 2;
+      return {ctor: "_Tuple3",_0: r + m,_1: g + m,_2: b + m};
+   });
+   var toRgb = function (color) {
+      var _p1 = color;
+      if (_p1.ctor === "RGBA") {
+            return {red: _p1._0,green: _p1._1,blue: _p1._2,alpha: _p1._3};
+         } else {
+            var _p2 = A3(hslToRgb,_p1._0,_p1._1,_p1._2);
+            var r = _p2._0;
+            var g = _p2._1;
+            var b = _p2._2;
+            return {red: $Basics.round(255 * r),green: $Basics.round(255 * g),blue: $Basics.round(255 * b),alpha: _p1._3};
+         }
+   };
+   var toHsl = function (color) {
+      var _p3 = color;
+      if (_p3.ctor === "HSLA") {
+            return {hue: _p3._0,saturation: _p3._1,lightness: _p3._2,alpha: _p3._3};
+         } else {
+            var _p4 = A3(rgbToHsl,_p3._0,_p3._1,_p3._2);
+            var h = _p4._0;
+            var s = _p4._1;
+            var l = _p4._2;
+            return {hue: h,saturation: s,lightness: l,alpha: _p3._3};
+         }
+   };
+   var HSLA = F4(function (a,b,c,d) {    return {ctor: "HSLA",_0: a,_1: b,_2: c,_3: d};});
+   var hsla = F4(function (hue,saturation,lightness,alpha) {
+      return A4(HSLA,hue - $Basics.turns($Basics.toFloat($Basics.floor(hue / (2 * $Basics.pi)))),saturation,lightness,alpha);
+   });
+   var hsl = F3(function (hue,saturation,lightness) {    return A4(hsla,hue,saturation,lightness,1);});
+   var complement = function (color) {
+      var _p5 = color;
+      if (_p5.ctor === "HSLA") {
+            return A4(hsla,_p5._0 + $Basics.degrees(180),_p5._1,_p5._2,_p5._3);
+         } else {
+            var _p6 = A3(rgbToHsl,_p5._0,_p5._1,_p5._2);
+            var h = _p6._0;
+            var s = _p6._1;
+            var l = _p6._2;
+            return A4(hsla,h + $Basics.degrees(180),s,l,_p5._3);
+         }
+   };
+   var grayscale = function (p) {    return A4(HSLA,0,0,1 - p,1);};
+   var greyscale = function (p) {    return A4(HSLA,0,0,1 - p,1);};
+   var RGBA = F4(function (a,b,c,d) {    return {ctor: "RGBA",_0: a,_1: b,_2: c,_3: d};});
+   var rgba = RGBA;
+   var rgb = F3(function (r,g,b) {    return A4(RGBA,r,g,b,1);});
+   var lightRed = A4(RGBA,239,41,41,1);
+   var red = A4(RGBA,204,0,0,1);
+   var darkRed = A4(RGBA,164,0,0,1);
+   var lightOrange = A4(RGBA,252,175,62,1);
+   var orange = A4(RGBA,245,121,0,1);
+   var darkOrange = A4(RGBA,206,92,0,1);
+   var lightYellow = A4(RGBA,255,233,79,1);
+   var yellow = A4(RGBA,237,212,0,1);
+   var darkYellow = A4(RGBA,196,160,0,1);
+   var lightGreen = A4(RGBA,138,226,52,1);
+   var green = A4(RGBA,115,210,22,1);
+   var darkGreen = A4(RGBA,78,154,6,1);
+   var lightBlue = A4(RGBA,114,159,207,1);
+   var blue = A4(RGBA,52,101,164,1);
+   var darkBlue = A4(RGBA,32,74,135,1);
+   var lightPurple = A4(RGBA,173,127,168,1);
+   var purple = A4(RGBA,117,80,123,1);
+   var darkPurple = A4(RGBA,92,53,102,1);
+   var lightBrown = A4(RGBA,233,185,110,1);
+   var brown = A4(RGBA,193,125,17,1);
+   var darkBrown = A4(RGBA,143,89,2,1);
+   var black = A4(RGBA,0,0,0,1);
+   var white = A4(RGBA,255,255,255,1);
+   var lightGrey = A4(RGBA,238,238,236,1);
+   var grey = A4(RGBA,211,215,207,1);
+   var darkGrey = A4(RGBA,186,189,182,1);
+   var lightGray = A4(RGBA,238,238,236,1);
+   var gray = A4(RGBA,211,215,207,1);
+   var darkGray = A4(RGBA,186,189,182,1);
+   var lightCharcoal = A4(RGBA,136,138,133,1);
+   var charcoal = A4(RGBA,85,87,83,1);
+   var darkCharcoal = A4(RGBA,46,52,54,1);
+   return _elm.Color.values = {_op: _op
+                              ,rgb: rgb
+                              ,rgba: rgba
+                              ,hsl: hsl
+                              ,hsla: hsla
+                              ,greyscale: greyscale
+                              ,grayscale: grayscale
+                              ,complement: complement
+                              ,linear: linear
+                              ,radial: radial
+                              ,toRgb: toRgb
+                              ,toHsl: toHsl
+                              ,red: red
+                              ,orange: orange
+                              ,yellow: yellow
+                              ,green: green
+                              ,blue: blue
+                              ,purple: purple
+                              ,brown: brown
+                              ,lightRed: lightRed
+                              ,lightOrange: lightOrange
+                              ,lightYellow: lightYellow
+                              ,lightGreen: lightGreen
+                              ,lightBlue: lightBlue
+                              ,lightPurple: lightPurple
+                              ,lightBrown: lightBrown
+                              ,darkRed: darkRed
+                              ,darkOrange: darkOrange
+                              ,darkYellow: darkYellow
+                              ,darkGreen: darkGreen
+                              ,darkBlue: darkBlue
+                              ,darkPurple: darkPurple
+                              ,darkBrown: darkBrown
+                              ,white: white
+                              ,lightGrey: lightGrey
+                              ,grey: grey
+                              ,darkGrey: darkGrey
+                              ,lightCharcoal: lightCharcoal
+                              ,charcoal: charcoal
+                              ,darkCharcoal: darkCharcoal
+                              ,black: black
+                              ,lightGray: lightGray
+                              ,gray: gray
+                              ,darkGray: darkGray};
+};
+Elm.Native.Signal = {};
+
+Elm.Native.Signal.make = function(localRuntime) {
+	localRuntime.Native = localRuntime.Native || {};
+	localRuntime.Native.Signal = localRuntime.Native.Signal || {};
+	if (localRuntime.Native.Signal.values)
+	{
+		return localRuntime.Native.Signal.values;
+	}
+
+
+	var Task = Elm.Native.Task.make(localRuntime);
+	var Utils = Elm.Native.Utils.make(localRuntime);
+
+
+	function broadcastToKids(node, timestamp, update)
+	{
+		var kids = node.kids;
+		for (var i = kids.length; i--; )
+		{
+			kids[i].notify(timestamp, update, node.id);
+		}
+	}
+
+
+	// INPUT
+
+	function input(name, base)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'input-' + name,
+			value: base,
+			parents: [],
+			kids: []
+		};
+
+		node.notify = function(timestamp, targetId, value) {
+			var update = targetId === node.id;
+			if (update)
+			{
+				node.value = value;
+			}
+			broadcastToKids(node, timestamp, update);
+			return update;
+		};
+
+		localRuntime.inputs.push(node);
+
+		return node;
+	}
+
+	function constant(value)
+	{
+		return input('constant', value);
+	}
+
+
+	// MAILBOX
+
+	function mailbox(base)
+	{
+		var signal = input('mailbox', base);
+
+		function send(value) {
+			return Task.asyncFunction(function(callback) {
+				localRuntime.setTimeout(function() {
+					localRuntime.notify(signal.id, value);
+				}, 0);
+				callback(Task.succeed(Utils.Tuple0));
+			});
+		}
+
+		return {
+			signal: signal,
+			address: {
+				ctor: 'Address',
+				_0: send
+			}
+		};
+	}
+
+	function sendMessage(message)
+	{
+		Task.perform(message._0);
+	}
+
+
+	// OUTPUT
+
+	function output(name, handler, parent)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'output-' + name,
+			parents: [parent],
+			isOutput: true
+		};
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			if (parentUpdate)
+			{
+				handler(parent.value);
+			}
+		};
+
+		parent.kids.push(node);
+
+		return node;
+	}
+
+
+	// MAP
+
+	function mapMany(refreshValue, args)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'map' + args.length,
+			value: refreshValue(),
+			parents: args,
+			kids: []
+		};
+
+		var numberOfParents = args.length;
+		var count = 0;
+		var update = false;
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			++count;
+
+			update = update || parentUpdate;
+
+			if (count === numberOfParents)
+			{
+				if (update)
+				{
+					node.value = refreshValue();
+				}
+				broadcastToKids(node, timestamp, update);
+				update = false;
+				count = 0;
+			}
+		};
+
+		for (var i = numberOfParents; i--; )
+		{
+			args[i].kids.push(node);
+		}
+
+		return node;
+	}
+
+
+	function map(func, a)
+	{
+		function refreshValue()
+		{
+			return func(a.value);
+		}
+		return mapMany(refreshValue, [a]);
+	}
+
+
+	function map2(func, a, b)
+	{
+		function refreshValue()
+		{
+			return A2( func, a.value, b.value );
+		}
+		return mapMany(refreshValue, [a, b]);
+	}
+
+
+	function map3(func, a, b, c)
+	{
+		function refreshValue()
+		{
+			return A3( func, a.value, b.value, c.value );
+		}
+		return mapMany(refreshValue, [a, b, c]);
+	}
+
+
+	function map4(func, a, b, c, d)
+	{
+		function refreshValue()
+		{
+			return A4( func, a.value, b.value, c.value, d.value );
+		}
+		return mapMany(refreshValue, [a, b, c, d]);
+	}
+
+
+	function map5(func, a, b, c, d, e)
+	{
+		function refreshValue()
+		{
+			return A5( func, a.value, b.value, c.value, d.value, e.value );
+		}
+		return mapMany(refreshValue, [a, b, c, d, e]);
+	}
+
+
+	// FOLD
+
+	function foldp(update, state, signal)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'foldp',
+			parents: [signal],
+			kids: [],
+			value: state
+		};
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			if (parentUpdate)
+			{
+				node.value = A2( update, signal.value, node.value );
+			}
+			broadcastToKids(node, timestamp, parentUpdate);
+		};
+
+		signal.kids.push(node);
+
+		return node;
+	}
+
+
+	// TIME
+
+	function timestamp(signal)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'timestamp',
+			value: Utils.Tuple2(localRuntime.timer.programStart, signal.value),
+			parents: [signal],
+			kids: []
+		};
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			if (parentUpdate)
+			{
+				node.value = Utils.Tuple2(timestamp, signal.value);
+			}
+			broadcastToKids(node, timestamp, parentUpdate);
+		};
+
+		signal.kids.push(node);
+
+		return node;
+	}
+
+
+	function delay(time, signal)
+	{
+		var delayed = input('delay-input-' + time, signal.value);
+
+		function handler(value)
+		{
+			setTimeout(function() {
+				localRuntime.notify(delayed.id, value);
+			}, time);
+		}
+
+		output('delay-output-' + time, handler, signal);
+
+		return delayed;
+	}
+
+
+	// MERGING
+
+	function genericMerge(tieBreaker, leftStream, rightStream)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'merge',
+			value: A2(tieBreaker, leftStream.value, rightStream.value),
+			parents: [leftStream, rightStream],
+			kids: []
+		};
+
+		var left = { touched: false, update: false, value: null };
+		var right = { touched: false, update: false, value: null };
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			if (parentID === leftStream.id)
+			{
+				left.touched = true;
+				left.update = parentUpdate;
+				left.value = leftStream.value;
+			}
+			if (parentID === rightStream.id)
+			{
+				right.touched = true;
+				right.update = parentUpdate;
+				right.value = rightStream.value;
+			}
+
+			if (left.touched && right.touched)
+			{
+				var update = false;
+				if (left.update && right.update)
+				{
+					node.value = A2(tieBreaker, left.value, right.value);
+					update = true;
+				}
+				else if (left.update)
+				{
+					node.value = left.value;
+					update = true;
+				}
+				else if (right.update)
+				{
+					node.value = right.value;
+					update = true;
+				}
+				left.touched = false;
+				right.touched = false;
+
+				broadcastToKids(node, timestamp, update);
+			}
+		};
+
+		leftStream.kids.push(node);
+		rightStream.kids.push(node);
+
+		return node;
+	}
+
+
+	// FILTERING
+
+	function filterMap(toMaybe, base, signal)
+	{
+		var maybe = toMaybe(signal.value);
+		var node = {
+			id: Utils.guid(),
+			name: 'filterMap',
+			value: maybe.ctor === 'Nothing' ? base : maybe._0,
+			parents: [signal],
+			kids: []
+		};
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			var update = false;
+			if (parentUpdate)
+			{
+				var maybe = toMaybe(signal.value);
+				if (maybe.ctor === 'Just')
+				{
+					update = true;
+					node.value = maybe._0;
+				}
+			}
+			broadcastToKids(node, timestamp, update);
+		};
+
+		signal.kids.push(node);
+
+		return node;
+	}
+
+
+	// SAMPLING
+
+	function sampleOn(ticker, signal)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'sampleOn',
+			value: signal.value,
+			parents: [ticker, signal],
+			kids: []
+		};
+
+		var signalTouch = false;
+		var tickerTouch = false;
+		var tickerUpdate = false;
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			if (parentID === ticker.id)
+			{
+				tickerTouch = true;
+				tickerUpdate = parentUpdate;
+			}
+			if (parentID === signal.id)
+			{
+				signalTouch = true;
+			}
+
+			if (tickerTouch && signalTouch)
+			{
+				if (tickerUpdate)
+				{
+					node.value = signal.value;
+				}
+				tickerTouch = false;
+				signalTouch = false;
+
+				broadcastToKids(node, timestamp, tickerUpdate);
+			}
+		};
+
+		ticker.kids.push(node);
+		signal.kids.push(node);
+
+		return node;
+	}
+
+
+	// DROP REPEATS
+
+	function dropRepeats(signal)
+	{
+		var node = {
+			id: Utils.guid(),
+			name: 'dropRepeats',
+			value: signal.value,
+			parents: [signal],
+			kids: []
+		};
+
+		node.notify = function(timestamp, parentUpdate, parentID)
+		{
+			var update = false;
+			if (parentUpdate && !Utils.eq(node.value, signal.value))
+			{
+				node.value = signal.value;
+				update = true;
+			}
+			broadcastToKids(node, timestamp, update);
+		};
+
+		signal.kids.push(node);
+
+		return node;
+	}
+
+
+	return localRuntime.Native.Signal.values = {
+		input: input,
+		constant: constant,
+		mailbox: mailbox,
+		sendMessage: sendMessage,
+		output: output,
+		map: F2(map),
+		map2: F3(map2),
+		map3: F4(map3),
+		map4: F5(map4),
+		map5: F6(map5),
+		foldp: F3(foldp),
+		genericMerge: F3(genericMerge),
+		filterMap: F3(filterMap),
+		sampleOn: F2(sampleOn),
+		dropRepeats: dropRepeats,
+		timestamp: timestamp,
+		delay: F2(delay)
+	};
+};
+
+Elm.Native.Time = {};
+
+Elm.Native.Time.make = function(localRuntime)
+{
+	localRuntime.Native = localRuntime.Native || {};
+	localRuntime.Native.Time = localRuntime.Native.Time || {};
+	if (localRuntime.Native.Time.values)
+	{
+		return localRuntime.Native.Time.values;
+	}
+
+	var NS = Elm.Native.Signal.make(localRuntime);
+	var Maybe = Elm.Maybe.make(localRuntime);
+
+
+	// FRAMES PER SECOND
+
+	function fpsWhen(desiredFPS, isOn)
+	{
+		var msPerFrame = 1000 / desiredFPS;
+		var ticker = NS.input('fps-' + desiredFPS, null);
+
+		function notifyTicker()
+		{
+			localRuntime.notify(ticker.id, null);
+		}
+
+		function firstArg(x, y)
+		{
+			return x;
+		}
+
+		// input fires either when isOn changes, or when ticker fires.
+		// Its value is a tuple with the current timestamp, and the state of isOn
+		var input = NS.timestamp(A3(NS.map2, F2(firstArg), NS.dropRepeats(isOn), ticker));
+
+		var initialState = {
+			isOn: false,
+			time: localRuntime.timer.programStart,
+			delta: 0
+		};
+
+		var timeoutId;
+
+		function update(input, state)
+		{
+			var currentTime = input._0;
+			var isOn = input._1;
+			var wasOn = state.isOn;
+			var previousTime = state.time;
+
+			if (isOn)
+			{
+				timeoutId = localRuntime.setTimeout(notifyTicker, msPerFrame);
+			}
+			else if (wasOn)
+			{
+				clearTimeout(timeoutId);
+			}
+
+			return {
+				isOn: isOn,
+				time: currentTime,
+				delta: (isOn && !wasOn) ? 0 : currentTime - previousTime
+			};
+		}
+
+		return A2(
+			NS.map,
+			function(state) { return state.delta; },
+			A3(NS.foldp, F2(update), update(input.value, initialState), input)
+		);
+	}
+
+
+	// EVERY
+
+	function every(t)
+	{
+		var ticker = NS.input('every-' + t, null);
+		function tellTime()
+		{
+			localRuntime.notify(ticker.id, null);
+		}
+		var clock = A2(NS.map, fst, NS.timestamp(ticker));
+		setInterval(tellTime, t);
+		return clock;
+	}
+
+
+	function fst(pair)
+	{
+		return pair._0;
+	}
+
+
+	function read(s)
+	{
+		var t = Date.parse(s);
+		return isNaN(t) ? Maybe.Nothing : Maybe.Just(t);
+	}
+
+	return localRuntime.Native.Time.values = {
+		fpsWhen: F2(fpsWhen),
+		every: every,
+		toDate: function(t) { return new Date(t); },
+		read: read
+	};
+};
+
 Elm.Native.Transform2D = {};
 Elm.Native.Transform2D.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -2774,209 +3613,6 @@ Elm.Native.Graphics.Collage.make = function(localRuntime) {
 	};
 };
 
-Elm.Native.Color = {};
-Elm.Native.Color.make = function(localRuntime) {
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Color = localRuntime.Native.Color || {};
-	if (localRuntime.Native.Color.values)
-	{
-		return localRuntime.Native.Color.values;
-	}
-
-	function toCss(c)
-	{
-		var format = '';
-		var colors = '';
-		if (c.ctor === 'RGBA')
-		{
-			format = 'rgb';
-			colors = c._0 + ', ' + c._1 + ', ' + c._2;
-		}
-		else
-		{
-			format = 'hsl';
-			colors = (c._0 * 180 / Math.PI) + ', ' +
-					 (c._1 * 100) + '%, ' +
-					 (c._2 * 100) + '%';
-		}
-		if (c._3 === 1)
-		{
-			return format + '(' + colors + ')';
-		}
-		else
-		{
-			return format + 'a(' + colors + ', ' + c._3 + ')';
-		}
-	}
-
-	return localRuntime.Native.Color.values = {
-		toCss: toCss
-	};
-};
-
-Elm.Color = Elm.Color || {};
-Elm.Color.make = function (_elm) {
-   "use strict";
-   _elm.Color = _elm.Color || {};
-   if (_elm.Color.values) return _elm.Color.values;
-   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm);
-   var _op = {};
-   var Radial = F5(function (a,b,c,d,e) {    return {ctor: "Radial",_0: a,_1: b,_2: c,_3: d,_4: e};});
-   var radial = Radial;
-   var Linear = F3(function (a,b,c) {    return {ctor: "Linear",_0: a,_1: b,_2: c};});
-   var linear = Linear;
-   var fmod = F2(function (f,n) {    var integer = $Basics.floor(f);return $Basics.toFloat(A2($Basics._op["%"],integer,n)) + f - $Basics.toFloat(integer);});
-   var rgbToHsl = F3(function (red,green,blue) {
-      var b = $Basics.toFloat(blue) / 255;
-      var g = $Basics.toFloat(green) / 255;
-      var r = $Basics.toFloat(red) / 255;
-      var cMax = A2($Basics.max,A2($Basics.max,r,g),b);
-      var cMin = A2($Basics.min,A2($Basics.min,r,g),b);
-      var c = cMax - cMin;
-      var lightness = (cMax + cMin) / 2;
-      var saturation = _U.eq(lightness,0) ? 0 : c / (1 - $Basics.abs(2 * lightness - 1));
-      var hue = $Basics.degrees(60) * (_U.eq(cMax,r) ? A2(fmod,(g - b) / c,6) : _U.eq(cMax,g) ? (b - r) / c + 2 : (r - g) / c + 4);
-      return {ctor: "_Tuple3",_0: hue,_1: saturation,_2: lightness};
-   });
-   var hslToRgb = F3(function (hue,saturation,lightness) {
-      var hue$ = hue / $Basics.degrees(60);
-      var chroma = (1 - $Basics.abs(2 * lightness - 1)) * saturation;
-      var x = chroma * (1 - $Basics.abs(A2(fmod,hue$,2) - 1));
-      var _p0 = _U.cmp(hue$,0) < 0 ? {ctor: "_Tuple3",_0: 0,_1: 0,_2: 0} : _U.cmp(hue$,1) < 0 ? {ctor: "_Tuple3",_0: chroma,_1: x,_2: 0} : _U.cmp(hue$,
-      2) < 0 ? {ctor: "_Tuple3",_0: x,_1: chroma,_2: 0} : _U.cmp(hue$,3) < 0 ? {ctor: "_Tuple3",_0: 0,_1: chroma,_2: x} : _U.cmp(hue$,4) < 0 ? {ctor: "_Tuple3"
-                                                                                                                                               ,_0: 0
-                                                                                                                                               ,_1: x
-                                                                                                                                               ,_2: chroma} : _U.cmp(hue$,
-      5) < 0 ? {ctor: "_Tuple3",_0: x,_1: 0,_2: chroma} : _U.cmp(hue$,6) < 0 ? {ctor: "_Tuple3",_0: chroma,_1: 0,_2: x} : {ctor: "_Tuple3",_0: 0,_1: 0,_2: 0};
-      var r = _p0._0;
-      var g = _p0._1;
-      var b = _p0._2;
-      var m = lightness - chroma / 2;
-      return {ctor: "_Tuple3",_0: r + m,_1: g + m,_2: b + m};
-   });
-   var toRgb = function (color) {
-      var _p1 = color;
-      if (_p1.ctor === "RGBA") {
-            return {red: _p1._0,green: _p1._1,blue: _p1._2,alpha: _p1._3};
-         } else {
-            var _p2 = A3(hslToRgb,_p1._0,_p1._1,_p1._2);
-            var r = _p2._0;
-            var g = _p2._1;
-            var b = _p2._2;
-            return {red: $Basics.round(255 * r),green: $Basics.round(255 * g),blue: $Basics.round(255 * b),alpha: _p1._3};
-         }
-   };
-   var toHsl = function (color) {
-      var _p3 = color;
-      if (_p3.ctor === "HSLA") {
-            return {hue: _p3._0,saturation: _p3._1,lightness: _p3._2,alpha: _p3._3};
-         } else {
-            var _p4 = A3(rgbToHsl,_p3._0,_p3._1,_p3._2);
-            var h = _p4._0;
-            var s = _p4._1;
-            var l = _p4._2;
-            return {hue: h,saturation: s,lightness: l,alpha: _p3._3};
-         }
-   };
-   var HSLA = F4(function (a,b,c,d) {    return {ctor: "HSLA",_0: a,_1: b,_2: c,_3: d};});
-   var hsla = F4(function (hue,saturation,lightness,alpha) {
-      return A4(HSLA,hue - $Basics.turns($Basics.toFloat($Basics.floor(hue / (2 * $Basics.pi)))),saturation,lightness,alpha);
-   });
-   var hsl = F3(function (hue,saturation,lightness) {    return A4(hsla,hue,saturation,lightness,1);});
-   var complement = function (color) {
-      var _p5 = color;
-      if (_p5.ctor === "HSLA") {
-            return A4(hsla,_p5._0 + $Basics.degrees(180),_p5._1,_p5._2,_p5._3);
-         } else {
-            var _p6 = A3(rgbToHsl,_p5._0,_p5._1,_p5._2);
-            var h = _p6._0;
-            var s = _p6._1;
-            var l = _p6._2;
-            return A4(hsla,h + $Basics.degrees(180),s,l,_p5._3);
-         }
-   };
-   var grayscale = function (p) {    return A4(HSLA,0,0,1 - p,1);};
-   var greyscale = function (p) {    return A4(HSLA,0,0,1 - p,1);};
-   var RGBA = F4(function (a,b,c,d) {    return {ctor: "RGBA",_0: a,_1: b,_2: c,_3: d};});
-   var rgba = RGBA;
-   var rgb = F3(function (r,g,b) {    return A4(RGBA,r,g,b,1);});
-   var lightRed = A4(RGBA,239,41,41,1);
-   var red = A4(RGBA,204,0,0,1);
-   var darkRed = A4(RGBA,164,0,0,1);
-   var lightOrange = A4(RGBA,252,175,62,1);
-   var orange = A4(RGBA,245,121,0,1);
-   var darkOrange = A4(RGBA,206,92,0,1);
-   var lightYellow = A4(RGBA,255,233,79,1);
-   var yellow = A4(RGBA,237,212,0,1);
-   var darkYellow = A4(RGBA,196,160,0,1);
-   var lightGreen = A4(RGBA,138,226,52,1);
-   var green = A4(RGBA,115,210,22,1);
-   var darkGreen = A4(RGBA,78,154,6,1);
-   var lightBlue = A4(RGBA,114,159,207,1);
-   var blue = A4(RGBA,52,101,164,1);
-   var darkBlue = A4(RGBA,32,74,135,1);
-   var lightPurple = A4(RGBA,173,127,168,1);
-   var purple = A4(RGBA,117,80,123,1);
-   var darkPurple = A4(RGBA,92,53,102,1);
-   var lightBrown = A4(RGBA,233,185,110,1);
-   var brown = A4(RGBA,193,125,17,1);
-   var darkBrown = A4(RGBA,143,89,2,1);
-   var black = A4(RGBA,0,0,0,1);
-   var white = A4(RGBA,255,255,255,1);
-   var lightGrey = A4(RGBA,238,238,236,1);
-   var grey = A4(RGBA,211,215,207,1);
-   var darkGrey = A4(RGBA,186,189,182,1);
-   var lightGray = A4(RGBA,238,238,236,1);
-   var gray = A4(RGBA,211,215,207,1);
-   var darkGray = A4(RGBA,186,189,182,1);
-   var lightCharcoal = A4(RGBA,136,138,133,1);
-   var charcoal = A4(RGBA,85,87,83,1);
-   var darkCharcoal = A4(RGBA,46,52,54,1);
-   return _elm.Color.values = {_op: _op
-                              ,rgb: rgb
-                              ,rgba: rgba
-                              ,hsl: hsl
-                              ,hsla: hsla
-                              ,greyscale: greyscale
-                              ,grayscale: grayscale
-                              ,complement: complement
-                              ,linear: linear
-                              ,radial: radial
-                              ,toRgb: toRgb
-                              ,toHsl: toHsl
-                              ,red: red
-                              ,orange: orange
-                              ,yellow: yellow
-                              ,green: green
-                              ,blue: blue
-                              ,purple: purple
-                              ,brown: brown
-                              ,lightRed: lightRed
-                              ,lightOrange: lightOrange
-                              ,lightYellow: lightYellow
-                              ,lightGreen: lightGreen
-                              ,lightBlue: lightBlue
-                              ,lightPurple: lightPurple
-                              ,lightBrown: lightBrown
-                              ,darkRed: darkRed
-                              ,darkOrange: darkOrange
-                              ,darkYellow: darkYellow
-                              ,darkGreen: darkGreen
-                              ,darkBlue: darkBlue
-                              ,darkPurple: darkPurple
-                              ,darkBrown: darkBrown
-                              ,white: white
-                              ,lightGrey: lightGrey
-                              ,grey: grey
-                              ,darkGrey: darkGrey
-                              ,lightCharcoal: lightCharcoal
-                              ,charcoal: charcoal
-                              ,darkCharcoal: darkCharcoal
-                              ,black: black
-                              ,lightGray: lightGray
-                              ,gray: gray
-                              ,darkGray: darkGray};
-};
 
 // setup
 Elm.Native = Elm.Native || {};
@@ -4465,578 +5101,6 @@ Elm.Debug.make = function (_elm) {
    var log = $Native$Debug.log;
    return _elm.Debug.values = {_op: _op,log: log,crash: crash,watch: watch,watchSummary: watchSummary,trace: trace};
 };
-Elm.Result = Elm.Result || {};
-Elm.Result.make = function (_elm) {
-   "use strict";
-   _elm.Result = _elm.Result || {};
-   if (_elm.Result.values) return _elm.Result.values;
-   var _U = Elm.Native.Utils.make(_elm),$Maybe = Elm.Maybe.make(_elm);
-   var _op = {};
-   var toMaybe = function (result) {    var _p0 = result;if (_p0.ctor === "Ok") {    return $Maybe.Just(_p0._0);} else {    return $Maybe.Nothing;}};
-   var withDefault = F2(function (def,result) {    var _p1 = result;if (_p1.ctor === "Ok") {    return _p1._0;} else {    return def;}});
-   var Err = function (a) {    return {ctor: "Err",_0: a};};
-   var andThen = F2(function (result,callback) {    var _p2 = result;if (_p2.ctor === "Ok") {    return callback(_p2._0);} else {    return Err(_p2._0);}});
-   var Ok = function (a) {    return {ctor: "Ok",_0: a};};
-   var map = F2(function (func,ra) {    var _p3 = ra;if (_p3.ctor === "Ok") {    return Ok(func(_p3._0));} else {    return Err(_p3._0);}});
-   var map2 = F3(function (func,ra,rb) {
-      var _p4 = {ctor: "_Tuple2",_0: ra,_1: rb};
-      if (_p4._0.ctor === "Ok") {
-            if (_p4._1.ctor === "Ok") {
-                  return Ok(A2(func,_p4._0._0,_p4._1._0));
-               } else {
-                  return Err(_p4._1._0);
-               }
-         } else {
-            return Err(_p4._0._0);
-         }
-   });
-   var map3 = F4(function (func,ra,rb,rc) {
-      var _p5 = {ctor: "_Tuple3",_0: ra,_1: rb,_2: rc};
-      if (_p5._0.ctor === "Ok") {
-            if (_p5._1.ctor === "Ok") {
-                  if (_p5._2.ctor === "Ok") {
-                        return Ok(A3(func,_p5._0._0,_p5._1._0,_p5._2._0));
-                     } else {
-                        return Err(_p5._2._0);
-                     }
-               } else {
-                  return Err(_p5._1._0);
-               }
-         } else {
-            return Err(_p5._0._0);
-         }
-   });
-   var map4 = F5(function (func,ra,rb,rc,rd) {
-      var _p6 = {ctor: "_Tuple4",_0: ra,_1: rb,_2: rc,_3: rd};
-      if (_p6._0.ctor === "Ok") {
-            if (_p6._1.ctor === "Ok") {
-                  if (_p6._2.ctor === "Ok") {
-                        if (_p6._3.ctor === "Ok") {
-                              return Ok(A4(func,_p6._0._0,_p6._1._0,_p6._2._0,_p6._3._0));
-                           } else {
-                              return Err(_p6._3._0);
-                           }
-                     } else {
-                        return Err(_p6._2._0);
-                     }
-               } else {
-                  return Err(_p6._1._0);
-               }
-         } else {
-            return Err(_p6._0._0);
-         }
-   });
-   var map5 = F6(function (func,ra,rb,rc,rd,re) {
-      var _p7 = {ctor: "_Tuple5",_0: ra,_1: rb,_2: rc,_3: rd,_4: re};
-      if (_p7._0.ctor === "Ok") {
-            if (_p7._1.ctor === "Ok") {
-                  if (_p7._2.ctor === "Ok") {
-                        if (_p7._3.ctor === "Ok") {
-                              if (_p7._4.ctor === "Ok") {
-                                    return Ok(A5(func,_p7._0._0,_p7._1._0,_p7._2._0,_p7._3._0,_p7._4._0));
-                                 } else {
-                                    return Err(_p7._4._0);
-                                 }
-                           } else {
-                              return Err(_p7._3._0);
-                           }
-                     } else {
-                        return Err(_p7._2._0);
-                     }
-               } else {
-                  return Err(_p7._1._0);
-               }
-         } else {
-            return Err(_p7._0._0);
-         }
-   });
-   var formatError = F2(function (f,result) {    var _p8 = result;if (_p8.ctor === "Ok") {    return Ok(_p8._0);} else {    return Err(f(_p8._0));}});
-   var fromMaybe = F2(function (err,maybe) {    var _p9 = maybe;if (_p9.ctor === "Just") {    return Ok(_p9._0);} else {    return Err(err);}});
-   return _elm.Result.values = {_op: _op
-                               ,withDefault: withDefault
-                               ,map: map
-                               ,map2: map2
-                               ,map3: map3
-                               ,map4: map4
-                               ,map5: map5
-                               ,andThen: andThen
-                               ,toMaybe: toMaybe
-                               ,fromMaybe: fromMaybe
-                               ,formatError: formatError
-                               ,Ok: Ok
-                               ,Err: Err};
-};
-Elm.Native.Signal = {};
-
-Elm.Native.Signal.make = function(localRuntime) {
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Signal = localRuntime.Native.Signal || {};
-	if (localRuntime.Native.Signal.values)
-	{
-		return localRuntime.Native.Signal.values;
-	}
-
-
-	var Task = Elm.Native.Task.make(localRuntime);
-	var Utils = Elm.Native.Utils.make(localRuntime);
-
-
-	function broadcastToKids(node, timestamp, update)
-	{
-		var kids = node.kids;
-		for (var i = kids.length; i--; )
-		{
-			kids[i].notify(timestamp, update, node.id);
-		}
-	}
-
-
-	// INPUT
-
-	function input(name, base)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'input-' + name,
-			value: base,
-			parents: [],
-			kids: []
-		};
-
-		node.notify = function(timestamp, targetId, value) {
-			var update = targetId === node.id;
-			if (update)
-			{
-				node.value = value;
-			}
-			broadcastToKids(node, timestamp, update);
-			return update;
-		};
-
-		localRuntime.inputs.push(node);
-
-		return node;
-	}
-
-	function constant(value)
-	{
-		return input('constant', value);
-	}
-
-
-	// MAILBOX
-
-	function mailbox(base)
-	{
-		var signal = input('mailbox', base);
-
-		function send(value) {
-			return Task.asyncFunction(function(callback) {
-				localRuntime.setTimeout(function() {
-					localRuntime.notify(signal.id, value);
-				}, 0);
-				callback(Task.succeed(Utils.Tuple0));
-			});
-		}
-
-		return {
-			signal: signal,
-			address: {
-				ctor: 'Address',
-				_0: send
-			}
-		};
-	}
-
-	function sendMessage(message)
-	{
-		Task.perform(message._0);
-	}
-
-
-	// OUTPUT
-
-	function output(name, handler, parent)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'output-' + name,
-			parents: [parent],
-			isOutput: true
-		};
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			if (parentUpdate)
-			{
-				handler(parent.value);
-			}
-		};
-
-		parent.kids.push(node);
-
-		return node;
-	}
-
-
-	// MAP
-
-	function mapMany(refreshValue, args)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'map' + args.length,
-			value: refreshValue(),
-			parents: args,
-			kids: []
-		};
-
-		var numberOfParents = args.length;
-		var count = 0;
-		var update = false;
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			++count;
-
-			update = update || parentUpdate;
-
-			if (count === numberOfParents)
-			{
-				if (update)
-				{
-					node.value = refreshValue();
-				}
-				broadcastToKids(node, timestamp, update);
-				update = false;
-				count = 0;
-			}
-		};
-
-		for (var i = numberOfParents; i--; )
-		{
-			args[i].kids.push(node);
-		}
-
-		return node;
-	}
-
-
-	function map(func, a)
-	{
-		function refreshValue()
-		{
-			return func(a.value);
-		}
-		return mapMany(refreshValue, [a]);
-	}
-
-
-	function map2(func, a, b)
-	{
-		function refreshValue()
-		{
-			return A2( func, a.value, b.value );
-		}
-		return mapMany(refreshValue, [a, b]);
-	}
-
-
-	function map3(func, a, b, c)
-	{
-		function refreshValue()
-		{
-			return A3( func, a.value, b.value, c.value );
-		}
-		return mapMany(refreshValue, [a, b, c]);
-	}
-
-
-	function map4(func, a, b, c, d)
-	{
-		function refreshValue()
-		{
-			return A4( func, a.value, b.value, c.value, d.value );
-		}
-		return mapMany(refreshValue, [a, b, c, d]);
-	}
-
-
-	function map5(func, a, b, c, d, e)
-	{
-		function refreshValue()
-		{
-			return A5( func, a.value, b.value, c.value, d.value, e.value );
-		}
-		return mapMany(refreshValue, [a, b, c, d, e]);
-	}
-
-
-	// FOLD
-
-	function foldp(update, state, signal)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'foldp',
-			parents: [signal],
-			kids: [],
-			value: state
-		};
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			if (parentUpdate)
-			{
-				node.value = A2( update, signal.value, node.value );
-			}
-			broadcastToKids(node, timestamp, parentUpdate);
-		};
-
-		signal.kids.push(node);
-
-		return node;
-	}
-
-
-	// TIME
-
-	function timestamp(signal)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'timestamp',
-			value: Utils.Tuple2(localRuntime.timer.programStart, signal.value),
-			parents: [signal],
-			kids: []
-		};
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			if (parentUpdate)
-			{
-				node.value = Utils.Tuple2(timestamp, signal.value);
-			}
-			broadcastToKids(node, timestamp, parentUpdate);
-		};
-
-		signal.kids.push(node);
-
-		return node;
-	}
-
-
-	function delay(time, signal)
-	{
-		var delayed = input('delay-input-' + time, signal.value);
-
-		function handler(value)
-		{
-			setTimeout(function() {
-				localRuntime.notify(delayed.id, value);
-			}, time);
-		}
-
-		output('delay-output-' + time, handler, signal);
-
-		return delayed;
-	}
-
-
-	// MERGING
-
-	function genericMerge(tieBreaker, leftStream, rightStream)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'merge',
-			value: A2(tieBreaker, leftStream.value, rightStream.value),
-			parents: [leftStream, rightStream],
-			kids: []
-		};
-
-		var left = { touched: false, update: false, value: null };
-		var right = { touched: false, update: false, value: null };
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			if (parentID === leftStream.id)
-			{
-				left.touched = true;
-				left.update = parentUpdate;
-				left.value = leftStream.value;
-			}
-			if (parentID === rightStream.id)
-			{
-				right.touched = true;
-				right.update = parentUpdate;
-				right.value = rightStream.value;
-			}
-
-			if (left.touched && right.touched)
-			{
-				var update = false;
-				if (left.update && right.update)
-				{
-					node.value = A2(tieBreaker, left.value, right.value);
-					update = true;
-				}
-				else if (left.update)
-				{
-					node.value = left.value;
-					update = true;
-				}
-				else if (right.update)
-				{
-					node.value = right.value;
-					update = true;
-				}
-				left.touched = false;
-				right.touched = false;
-
-				broadcastToKids(node, timestamp, update);
-			}
-		};
-
-		leftStream.kids.push(node);
-		rightStream.kids.push(node);
-
-		return node;
-	}
-
-
-	// FILTERING
-
-	function filterMap(toMaybe, base, signal)
-	{
-		var maybe = toMaybe(signal.value);
-		var node = {
-			id: Utils.guid(),
-			name: 'filterMap',
-			value: maybe.ctor === 'Nothing' ? base : maybe._0,
-			parents: [signal],
-			kids: []
-		};
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			var update = false;
-			if (parentUpdate)
-			{
-				var maybe = toMaybe(signal.value);
-				if (maybe.ctor === 'Just')
-				{
-					update = true;
-					node.value = maybe._0;
-				}
-			}
-			broadcastToKids(node, timestamp, update);
-		};
-
-		signal.kids.push(node);
-
-		return node;
-	}
-
-
-	// SAMPLING
-
-	function sampleOn(ticker, signal)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'sampleOn',
-			value: signal.value,
-			parents: [ticker, signal],
-			kids: []
-		};
-
-		var signalTouch = false;
-		var tickerTouch = false;
-		var tickerUpdate = false;
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			if (parentID === ticker.id)
-			{
-				tickerTouch = true;
-				tickerUpdate = parentUpdate;
-			}
-			if (parentID === signal.id)
-			{
-				signalTouch = true;
-			}
-
-			if (tickerTouch && signalTouch)
-			{
-				if (tickerUpdate)
-				{
-					node.value = signal.value;
-				}
-				tickerTouch = false;
-				signalTouch = false;
-
-				broadcastToKids(node, timestamp, tickerUpdate);
-			}
-		};
-
-		ticker.kids.push(node);
-		signal.kids.push(node);
-
-		return node;
-	}
-
-
-	// DROP REPEATS
-
-	function dropRepeats(signal)
-	{
-		var node = {
-			id: Utils.guid(),
-			name: 'dropRepeats',
-			value: signal.value,
-			parents: [signal],
-			kids: []
-		};
-
-		node.notify = function(timestamp, parentUpdate, parentID)
-		{
-			var update = false;
-			if (parentUpdate && !Utils.eq(node.value, signal.value))
-			{
-				node.value = signal.value;
-				update = true;
-			}
-			broadcastToKids(node, timestamp, update);
-		};
-
-		signal.kids.push(node);
-
-		return node;
-	}
-
-
-	return localRuntime.Native.Signal.values = {
-		input: input,
-		constant: constant,
-		mailbox: mailbox,
-		sendMessage: sendMessage,
-		output: output,
-		map: F2(map),
-		map2: F3(map2),
-		map3: F4(map3),
-		map4: F5(map4),
-		map5: F6(map5),
-		foldp: F3(foldp),
-		genericMerge: F3(genericMerge),
-		filterMap: F3(filterMap),
-		sampleOn: F2(sampleOn),
-		dropRepeats: dropRepeats,
-		timestamp: timestamp,
-		delay: F2(delay)
-	};
-};
-
 Elm.Native.Task = {};
 
 Elm.Native.Task.make = function(localRuntime) {
@@ -5263,6 +5327,107 @@ Elm.Native.Task.make = function(localRuntime) {
 	};
 };
 
+Elm.Result = Elm.Result || {};
+Elm.Result.make = function (_elm) {
+   "use strict";
+   _elm.Result = _elm.Result || {};
+   if (_elm.Result.values) return _elm.Result.values;
+   var _U = Elm.Native.Utils.make(_elm),$Maybe = Elm.Maybe.make(_elm);
+   var _op = {};
+   var toMaybe = function (result) {    var _p0 = result;if (_p0.ctor === "Ok") {    return $Maybe.Just(_p0._0);} else {    return $Maybe.Nothing;}};
+   var withDefault = F2(function (def,result) {    var _p1 = result;if (_p1.ctor === "Ok") {    return _p1._0;} else {    return def;}});
+   var Err = function (a) {    return {ctor: "Err",_0: a};};
+   var andThen = F2(function (result,callback) {    var _p2 = result;if (_p2.ctor === "Ok") {    return callback(_p2._0);} else {    return Err(_p2._0);}});
+   var Ok = function (a) {    return {ctor: "Ok",_0: a};};
+   var map = F2(function (func,ra) {    var _p3 = ra;if (_p3.ctor === "Ok") {    return Ok(func(_p3._0));} else {    return Err(_p3._0);}});
+   var map2 = F3(function (func,ra,rb) {
+      var _p4 = {ctor: "_Tuple2",_0: ra,_1: rb};
+      if (_p4._0.ctor === "Ok") {
+            if (_p4._1.ctor === "Ok") {
+                  return Ok(A2(func,_p4._0._0,_p4._1._0));
+               } else {
+                  return Err(_p4._1._0);
+               }
+         } else {
+            return Err(_p4._0._0);
+         }
+   });
+   var map3 = F4(function (func,ra,rb,rc) {
+      var _p5 = {ctor: "_Tuple3",_0: ra,_1: rb,_2: rc};
+      if (_p5._0.ctor === "Ok") {
+            if (_p5._1.ctor === "Ok") {
+                  if (_p5._2.ctor === "Ok") {
+                        return Ok(A3(func,_p5._0._0,_p5._1._0,_p5._2._0));
+                     } else {
+                        return Err(_p5._2._0);
+                     }
+               } else {
+                  return Err(_p5._1._0);
+               }
+         } else {
+            return Err(_p5._0._0);
+         }
+   });
+   var map4 = F5(function (func,ra,rb,rc,rd) {
+      var _p6 = {ctor: "_Tuple4",_0: ra,_1: rb,_2: rc,_3: rd};
+      if (_p6._0.ctor === "Ok") {
+            if (_p6._1.ctor === "Ok") {
+                  if (_p6._2.ctor === "Ok") {
+                        if (_p6._3.ctor === "Ok") {
+                              return Ok(A4(func,_p6._0._0,_p6._1._0,_p6._2._0,_p6._3._0));
+                           } else {
+                              return Err(_p6._3._0);
+                           }
+                     } else {
+                        return Err(_p6._2._0);
+                     }
+               } else {
+                  return Err(_p6._1._0);
+               }
+         } else {
+            return Err(_p6._0._0);
+         }
+   });
+   var map5 = F6(function (func,ra,rb,rc,rd,re) {
+      var _p7 = {ctor: "_Tuple5",_0: ra,_1: rb,_2: rc,_3: rd,_4: re};
+      if (_p7._0.ctor === "Ok") {
+            if (_p7._1.ctor === "Ok") {
+                  if (_p7._2.ctor === "Ok") {
+                        if (_p7._3.ctor === "Ok") {
+                              if (_p7._4.ctor === "Ok") {
+                                    return Ok(A5(func,_p7._0._0,_p7._1._0,_p7._2._0,_p7._3._0,_p7._4._0));
+                                 } else {
+                                    return Err(_p7._4._0);
+                                 }
+                           } else {
+                              return Err(_p7._3._0);
+                           }
+                     } else {
+                        return Err(_p7._2._0);
+                     }
+               } else {
+                  return Err(_p7._1._0);
+               }
+         } else {
+            return Err(_p7._0._0);
+         }
+   });
+   var formatError = F2(function (f,result) {    var _p8 = result;if (_p8.ctor === "Ok") {    return Ok(_p8._0);} else {    return Err(f(_p8._0));}});
+   var fromMaybe = F2(function (err,maybe) {    var _p9 = maybe;if (_p9.ctor === "Just") {    return Ok(_p9._0);} else {    return Err(err);}});
+   return _elm.Result.values = {_op: _op
+                               ,withDefault: withDefault
+                               ,map: map
+                               ,map2: map2
+                               ,map3: map3
+                               ,map4: map4
+                               ,map5: map5
+                               ,andThen: andThen
+                               ,toMaybe: toMaybe
+                               ,fromMaybe: fromMaybe
+                               ,formatError: formatError
+                               ,Ok: Ok
+                               ,Err: Err};
+};
 Elm.Task = Elm.Task || {};
 Elm.Task.make = function (_elm) {
    "use strict";
@@ -5421,1328 +5586,51 @@ Elm.Signal.make = function (_elm) {
                                ,forwardTo: forwardTo
                                ,Mailbox: Mailbox};
 };
-Elm.Native.Array = {};
-Elm.Native.Array.make = function(localRuntime) {
-
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Array = localRuntime.Native.Array || {};
-	if (localRuntime.Native.Array.values)
-	{
-		return localRuntime.Native.Array.values;
-	}
-	if ('values' in Elm.Native.Array)
-	{
-		return localRuntime.Native.Array.values = Elm.Native.Array.values;
-	}
-
-	var List = Elm.Native.List.make(localRuntime);
-
-	// A RRB-Tree has two distinct data types.
-	// Leaf -> "height"  is always 0
-	//         "table"   is an array of elements
-	// Node -> "height"  is always greater than 0
-	//         "table"   is an array of child nodes
-	//         "lengths" is an array of accumulated lengths of the child nodes
-
-	// M is the maximal table size. 32 seems fast. E is the allowed increase
-	// of search steps when concatting to find an index. Lower values will
-	// decrease balancing, but will increase search steps.
-	var M = 32;
-	var E = 2;
-
-	// An empty array.
-	var empty = {
-		ctor: '_Array',
-		height: 0,
-		table: []
-	};
-
-
-	function get(i, array)
-	{
-		if (i < 0 || i >= length(array))
-		{
-			throw new Error(
-				'Index ' + i + ' is out of range. Check the length of ' +
-				'your array first or use getMaybe or getWithDefault.');
-		}
-		return unsafeGet(i, array);
-	}
-
-
-	function unsafeGet(i, array)
-	{
-		for (var x = array.height; x > 0; x--)
-		{
-			var slot = i >> (x * 5);
-			while (array.lengths[slot] <= i)
-			{
-				slot++;
-			}
-			if (slot > 0)
-			{
-				i -= array.lengths[slot - 1];
-			}
-			array = array.table[slot];
-		}
-		return array.table[i];
-	}
-
-
-	// Sets the value at the index i. Only the nodes leading to i will get
-	// copied and updated.
-	function set(i, item, array)
-	{
-		if (i < 0 || length(array) <= i)
-		{
-			return array;
-		}
-		return unsafeSet(i, item, array);
-	}
-
-
-	function unsafeSet(i, item, array)
-	{
-		array = nodeCopy(array);
-
-		if (array.height === 0)
-		{
-			array.table[i] = item;
-		}
-		else
-		{
-			var slot = getSlot(i, array);
-			if (slot > 0)
-			{
-				i -= array.lengths[slot - 1];
-			}
-			array.table[slot] = unsafeSet(i, item, array.table[slot]);
-		}
-		return array;
-	}
-
-
-	function initialize(len, f)
-	{
-		if (len <= 0)
-		{
-			return empty;
-		}
-		var h = Math.floor( Math.log(len) / Math.log(M) );
-		return initialize_(f, h, 0, len);
-	}
-
-	function initialize_(f, h, from, to)
-	{
-		if (h === 0)
-		{
-			var table = new Array((to - from) % (M + 1));
-			for (var i = 0; i < table.length; i++)
-			{
-			  table[i] = f(from + i);
-			}
-			return {
-				ctor: '_Array',
-				height: 0,
-				table: table
-			};
-		}
-
-		var step = Math.pow(M, h);
-		var table = new Array(Math.ceil((to - from) / step));
-		var lengths = new Array(table.length);
-		for (var i = 0; i < table.length; i++)
-		{
-			table[i] = initialize_(f, h - 1, from + (i * step), Math.min(from + ((i + 1) * step), to));
-			lengths[i] = length(table[i]) + (i > 0 ? lengths[i-1] : 0);
-		}
-		return {
-			ctor: '_Array',
-			height: h,
-			table: table,
-			lengths: lengths
-		};
-	}
-
-	function fromList(list)
-	{
-		if (list === List.Nil)
-		{
-			return empty;
-		}
-
-		// Allocate M sized blocks (table) and write list elements to it.
-		var table = new Array(M);
-		var nodes = [];
-		var i = 0;
-
-		while (list.ctor !== '[]')
-		{
-			table[i] = list._0;
-			list = list._1;
-			i++;
-
-			// table is full, so we can push a leaf containing it into the
-			// next node.
-			if (i === M)
-			{
-				var leaf = {
-					ctor: '_Array',
-					height: 0,
-					table: table
-				};
-				fromListPush(leaf, nodes);
-				table = new Array(M);
-				i = 0;
-			}
-		}
-
-		// Maybe there is something left on the table.
-		if (i > 0)
-		{
-			var leaf = {
-				ctor: '_Array',
-				height: 0,
-				table: table.splice(0, i)
-			};
-			fromListPush(leaf, nodes);
-		}
-
-		// Go through all of the nodes and eventually push them into higher nodes.
-		for (var h = 0; h < nodes.length - 1; h++)
-		{
-			if (nodes[h].table.length > 0)
-			{
-				fromListPush(nodes[h], nodes);
-			}
-		}
-
-		var head = nodes[nodes.length - 1];
-		if (head.height > 0 && head.table.length === 1)
-		{
-			return head.table[0];
-		}
-		else
-		{
-			return head;
-		}
-	}
-
-	// Push a node into a higher node as a child.
-	function fromListPush(toPush, nodes)
-	{
-		var h = toPush.height;
-
-		// Maybe the node on this height does not exist.
-		if (nodes.length === h)
-		{
-			var node = {
-				ctor: '_Array',
-				height: h + 1,
-				table: [],
-				lengths: []
-			};
-			nodes.push(node);
-		}
-
-		nodes[h].table.push(toPush);
-		var len = length(toPush);
-		if (nodes[h].lengths.length > 0)
-		{
-			len += nodes[h].lengths[nodes[h].lengths.length - 1];
-		}
-		nodes[h].lengths.push(len);
-
-		if (nodes[h].table.length === M)
-		{
-			fromListPush(nodes[h], nodes);
-			nodes[h] = {
-				ctor: '_Array',
-				height: h + 1,
-				table: [],
-				lengths: []
-			};
-		}
-	}
-
-	// Pushes an item via push_ to the bottom right of a tree.
-	function push(item, a)
-	{
-		var pushed = push_(item, a);
-		if (pushed !== null)
-		{
-			return pushed;
-		}
-
-		var newTree = create(item, a.height);
-		return siblise(a, newTree);
-	}
-
-	// Recursively tries to push an item to the bottom-right most
-	// tree possible. If there is no space left for the item,
-	// null will be returned.
-	function push_(item, a)
-	{
-		// Handle resursion stop at leaf level.
-		if (a.height === 0)
-		{
-			if (a.table.length < M)
-			{
-				var newA = {
-					ctor: '_Array',
-					height: 0,
-					table: a.table.slice()
-				};
-				newA.table.push(item);
-				return newA;
-			}
-			else
-			{
-			  return null;
-			}
-		}
-
-		// Recursively push
-		var pushed = push_(item, botRight(a));
-
-		// There was space in the bottom right tree, so the slot will
-		// be updated.
-		if (pushed !== null)
-		{
-			var newA = nodeCopy(a);
-			newA.table[newA.table.length - 1] = pushed;
-			newA.lengths[newA.lengths.length - 1]++;
-			return newA;
-		}
-
-		// When there was no space left, check if there is space left
-		// for a new slot with a tree which contains only the item
-		// at the bottom.
-		if (a.table.length < M)
-		{
-			var newSlot = create(item, a.height - 1);
-			var newA = nodeCopy(a);
-			newA.table.push(newSlot);
-			newA.lengths.push(newA.lengths[newA.lengths.length - 1] + length(newSlot));
-			return newA;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	// Converts an array into a list of elements.
-	function toList(a)
-	{
-		return toList_(List.Nil, a);
-	}
-
-	function toList_(list, a)
-	{
-		for (var i = a.table.length - 1; i >= 0; i--)
-		{
-			list =
-				a.height === 0
-					? List.Cons(a.table[i], list)
-					: toList_(list, a.table[i]);
-		}
-		return list;
-	}
-
-	// Maps a function over the elements of an array.
-	function map(f, a)
-	{
-		var newA = {
-			ctor: '_Array',
-			height: a.height,
-			table: new Array(a.table.length)
-		};
-		if (a.height > 0)
-		{
-			newA.lengths = a.lengths;
-		}
-		for (var i = 0; i < a.table.length; i++)
-		{
-			newA.table[i] =
-				a.height === 0
-					? f(a.table[i])
-					: map(f, a.table[i]);
-		}
-		return newA;
-	}
-
-	// Maps a function over the elements with their index as first argument.
-	function indexedMap(f, a)
-	{
-		return indexedMap_(f, a, 0);
-	}
-
-	function indexedMap_(f, a, from)
-	{
-		var newA = {
-			ctor: '_Array',
-			height: a.height,
-			table: new Array(a.table.length)
-		};
-		if (a.height > 0)
-		{
-			newA.lengths = a.lengths;
-		}
-		for (var i = 0; i < a.table.length; i++)
-		{
-			newA.table[i] =
-				a.height === 0
-					? A2(f, from + i, a.table[i])
-					: indexedMap_(f, a.table[i], i == 0 ? from : from + a.lengths[i - 1]);
-		}
-		return newA;
-	}
-
-	function foldl(f, b, a)
-	{
-		if (a.height === 0)
-		{
-			for (var i = 0; i < a.table.length; i++)
-			{
-				b = A2(f, a.table[i], b);
-			}
-		}
-		else
-		{
-			for (var i = 0; i < a.table.length; i++)
-			{
-				b = foldl(f, b, a.table[i]);
-			}
-		}
-		return b;
-	}
-
-	function foldr(f, b, a)
-	{
-		if (a.height === 0)
-		{
-			for (var i = a.table.length; i--; )
-			{
-				b = A2(f, a.table[i], b);
-			}
-		}
-		else
-		{
-			for (var i = a.table.length; i--; )
-			{
-				b = foldr(f, b, a.table[i]);
-			}
-		}
-		return b;
-	}
-
-	// TODO: currently, it slices the right, then the left. This can be
-	// optimized.
-	function slice(from, to, a)
-	{
-		if (from < 0)
-		{
-			from += length(a);
-		}
-		if (to < 0)
-		{
-			to += length(a);
-		}
-		return sliceLeft(from, sliceRight(to, a));
-	}
-
-	function sliceRight(to, a)
-	{
-		if (to === length(a))
-		{
-			return a;
-		}
-
-		// Handle leaf level.
-		if (a.height === 0)
-		{
-			var newA = { ctor:'_Array', height:0 };
-			newA.table = a.table.slice(0, to);
-			return newA;
-		}
-
-		// Slice the right recursively.
-		var right = getSlot(to, a);
-		var sliced = sliceRight(to - (right > 0 ? a.lengths[right - 1] : 0), a.table[right]);
-
-		// Maybe the a node is not even needed, as sliced contains the whole slice.
-		if (right === 0)
-		{
-			return sliced;
-		}
-
-		// Create new node.
-		var newA = {
-			ctor: '_Array',
-			height: a.height,
-			table: a.table.slice(0, right),
-			lengths: a.lengths.slice(0, right)
-		};
-		if (sliced.table.length > 0)
-		{
-			newA.table[right] = sliced;
-			newA.lengths[right] = length(sliced) + (right > 0 ? newA.lengths[right - 1] : 0);
-		}
-		return newA;
-	}
-
-	function sliceLeft(from, a)
-	{
-		if (from === 0)
-		{
-			return a;
-		}
-
-		// Handle leaf level.
-		if (a.height === 0)
-		{
-			var newA = { ctor:'_Array', height:0 };
-			newA.table = a.table.slice(from, a.table.length + 1);
-			return newA;
-		}
-
-		// Slice the left recursively.
-		var left = getSlot(from, a);
-		var sliced = sliceLeft(from - (left > 0 ? a.lengths[left - 1] : 0), a.table[left]);
-
-		// Maybe the a node is not even needed, as sliced contains the whole slice.
-		if (left === a.table.length - 1)
-		{
-			return sliced;
-		}
-
-		// Create new node.
-		var newA = {
-			ctor: '_Array',
-			height: a.height,
-			table: a.table.slice(left, a.table.length + 1),
-			lengths: new Array(a.table.length - left)
-		};
-		newA.table[0] = sliced;
-		var len = 0;
-		for (var i = 0; i < newA.table.length; i++)
-		{
-			len += length(newA.table[i]);
-			newA.lengths[i] = len;
-		}
-
-		return newA;
-	}
-
-	// Appends two trees.
-	function append(a,b)
-	{
-		if (a.table.length === 0)
-		{
-			return b;
-		}
-		if (b.table.length === 0)
-		{
-			return a;
-		}
-
-		var c = append_(a, b);
-
-		// Check if both nodes can be crunshed together.
-		if (c[0].table.length + c[1].table.length <= M)
-		{
-			if (c[0].table.length === 0)
-			{
-				return c[1];
-			}
-			if (c[1].table.length === 0)
-			{
-				return c[0];
-			}
-
-			// Adjust .table and .lengths
-			c[0].table = c[0].table.concat(c[1].table);
-			if (c[0].height > 0)
-			{
-				var len = length(c[0]);
-				for (var i = 0; i < c[1].lengths.length; i++)
-				{
-					c[1].lengths[i] += len;
-				}
-				c[0].lengths = c[0].lengths.concat(c[1].lengths);
-			}
-
-			return c[0];
-		}
-
-		if (c[0].height > 0)
-		{
-			var toRemove = calcToRemove(a, b);
-			if (toRemove > E)
-			{
-				c = shuffle(c[0], c[1], toRemove);
-			}
-		}
-
-		return siblise(c[0], c[1]);
-	}
-
-	// Returns an array of two nodes; right and left. One node _may_ be empty.
-	function append_(a, b)
-	{
-		if (a.height === 0 && b.height === 0)
-		{
-			return [a, b];
-		}
-
-		if (a.height !== 1 || b.height !== 1)
-		{
-			if (a.height === b.height)
-			{
-				a = nodeCopy(a);
-				b = nodeCopy(b);
-				var appended = append_(botRight(a), botLeft(b));
-
-				insertRight(a, appended[1]);
-				insertLeft(b, appended[0]);
-			}
-			else if (a.height > b.height)
-			{
-				a = nodeCopy(a);
-				var appended = append_(botRight(a), b);
-
-				insertRight(a, appended[0]);
-				b = parentise(appended[1], appended[1].height + 1);
-			}
-			else
-			{
-				b = nodeCopy(b);
-				var appended = append_(a, botLeft(b));
-
-				var left = appended[0].table.length === 0 ? 0 : 1;
-				var right = left === 0 ? 1 : 0;
-				insertLeft(b, appended[left]);
-				a = parentise(appended[right], appended[right].height + 1);
-			}
-		}
-
-		// Check if balancing is needed and return based on that.
-		if (a.table.length === 0 || b.table.length === 0)
-		{
-			return [a, b];
-		}
-
-		var toRemove = calcToRemove(a, b);
-		if (toRemove <= E)
-		{
-			return [a, b];
-		}
-		return shuffle(a, b, toRemove);
-	}
-
-	// Helperfunctions for append_. Replaces a child node at the side of the parent.
-	function insertRight(parent, node)
-	{
-		var index = parent.table.length - 1;
-		parent.table[index] = node;
-		parent.lengths[index] = length(node);
-		parent.lengths[index] += index > 0 ? parent.lengths[index - 1] : 0;
-	}
-
-	function insertLeft(parent, node)
-	{
-		if (node.table.length > 0)
-		{
-			parent.table[0] = node;
-			parent.lengths[0] = length(node);
-
-			var len = length(parent.table[0]);
-			for (var i = 1; i < parent.lengths.length; i++)
-			{
-				len += length(parent.table[i]);
-				parent.lengths[i] = len;
-			}
-		}
-		else
-		{
-			parent.table.shift();
-			for (var i = 1; i < parent.lengths.length; i++)
-			{
-				parent.lengths[i] = parent.lengths[i] - parent.lengths[0];
-			}
-			parent.lengths.shift();
-		}
-	}
-
-	// Returns the extra search steps for E. Refer to the paper.
-	function calcToRemove(a, b)
-	{
-		var subLengths = 0;
-		for (var i = 0; i < a.table.length; i++)
-		{
-			subLengths += a.table[i].table.length;
-		}
-		for (var i = 0; i < b.table.length; i++)
-		{
-			subLengths += b.table[i].table.length;
-		}
-
-		var toRemove = a.table.length + b.table.length;
-		return toRemove - (Math.floor((subLengths - 1) / M) + 1);
-	}
-
-	// get2, set2 and saveSlot are helpers for accessing elements over two arrays.
-	function get2(a, b, index)
-	{
-		return index < a.length
-			? a[index]
-			: b[index - a.length];
-	}
-
-	function set2(a, b, index, value)
-	{
-		if (index < a.length)
-		{
-			a[index] = value;
-		}
-		else
-		{
-			b[index - a.length] = value;
-		}
-	}
-
-	function saveSlot(a, b, index, slot)
-	{
-		set2(a.table, b.table, index, slot);
-
-		var l = (index === 0 || index === a.lengths.length)
-			? 0
-			: get2(a.lengths, a.lengths, index - 1);
-
-		set2(a.lengths, b.lengths, index, l + length(slot));
-	}
-
-	// Creates a node or leaf with a given length at their arrays for perfomance.
-	// Is only used by shuffle.
-	function createNode(h, length)
-	{
-		if (length < 0)
-		{
-			length = 0;
-		}
-		var a = {
-			ctor: '_Array',
-			height: h,
-			table: new Array(length)
-		};
-		if (h > 0)
-		{
-			a.lengths = new Array(length);
-		}
-		return a;
-	}
-
-	// Returns an array of two balanced nodes.
-	function shuffle(a, b, toRemove)
-	{
-		var newA = createNode(a.height, Math.min(M, a.table.length + b.table.length - toRemove));
-		var newB = createNode(a.height, newA.table.length - (a.table.length + b.table.length - toRemove));
-
-		// Skip the slots with size M. More precise: copy the slot references
-		// to the new node
-		var read = 0;
-		while (get2(a.table, b.table, read).table.length % M === 0)
-		{
-			set2(newA.table, newB.table, read, get2(a.table, b.table, read));
-			set2(newA.lengths, newB.lengths, read, get2(a.lengths, b.lengths, read));
-			read++;
-		}
-
-		// Pulling items from left to right, caching in a slot before writing
-		// it into the new nodes.
-		var write = read;
-		var slot = new createNode(a.height - 1, 0);
-		var from = 0;
-
-		// If the current slot is still containing data, then there will be at
-		// least one more write, so we do not break this loop yet.
-		while (read - write - (slot.table.length > 0 ? 1 : 0) < toRemove)
-		{
-			// Find out the max possible items for copying.
-			var source = get2(a.table, b.table, read);
-			var to = Math.min(M - slot.table.length, source.table.length);
-
-			// Copy and adjust size table.
-			slot.table = slot.table.concat(source.table.slice(from, to));
-			if (slot.height > 0)
-			{
-				var len = slot.lengths.length;
-				for (var i = len; i < len + to - from; i++)
-				{
-					slot.lengths[i] = length(slot.table[i]);
-					slot.lengths[i] += (i > 0 ? slot.lengths[i - 1] : 0);
-				}
-			}
-
-			from += to;
-
-			// Only proceed to next slots[i] if the current one was
-			// fully copied.
-			if (source.table.length <= to)
-			{
-				read++; from = 0;
-			}
-
-			// Only create a new slot if the current one is filled up.
-			if (slot.table.length === M)
-			{
-				saveSlot(newA, newB, write, slot);
-				slot = createNode(a.height - 1, 0);
-				write++;
-			}
-		}
-
-		// Cleanup after the loop. Copy the last slot into the new nodes.
-		if (slot.table.length > 0)
-		{
-			saveSlot(newA, newB, write, slot);
-			write++;
-		}
-
-		// Shift the untouched slots to the left
-		while (read < a.table.length + b.table.length )
-		{
-			saveSlot(newA, newB, write, get2(a.table, b.table, read));
-			read++;
-			write++;
-		}
-
-		return [newA, newB];
-	}
-
-	// Navigation functions
-	function botRight(a)
-	{
-		return a.table[a.table.length - 1];
-	}
-	function botLeft(a)
-	{
-		return a.table[0];
-	}
-
-	// Copies a node for updating. Note that you should not use this if
-	// only updating only one of "table" or "lengths" for performance reasons.
-	function nodeCopy(a)
-	{
-		var newA = {
-			ctor: '_Array',
-			height: a.height,
-			table: a.table.slice()
-		};
-		if (a.height > 0)
-		{
-			newA.lengths = a.lengths.slice();
-		}
-		return newA;
-	}
-
-	// Returns how many items are in the tree.
-	function length(array)
-	{
-		if (array.height === 0)
-		{
-			return array.table.length;
-		}
-		else
-		{
-			return array.lengths[array.lengths.length - 1];
-		}
-	}
-
-	// Calculates in which slot of "table" the item probably is, then
-	// find the exact slot via forward searching in  "lengths". Returns the index.
-	function getSlot(i, a)
-	{
-		var slot = i >> (5 * a.height);
-		while (a.lengths[slot] <= i)
-		{
-			slot++;
-		}
-		return slot;
-	}
-
-	// Recursively creates a tree with a given height containing
-	// only the given item.
-	function create(item, h)
-	{
-		if (h === 0)
-		{
-			return {
-				ctor: '_Array',
-				height: 0,
-				table: [item]
-			};
-		}
-		return {
-			ctor: '_Array',
-			height: h,
-			table: [create(item, h - 1)],
-			lengths: [1]
-		};
-	}
-
-	// Recursively creates a tree that contains the given tree.
-	function parentise(tree, h)
-	{
-		if (h === tree.height)
-		{
-			return tree;
-		}
-
-		return {
-			ctor: '_Array',
-			height: h,
-			table: [parentise(tree, h - 1)],
-			lengths: [length(tree)]
-		};
-	}
-
-	// Emphasizes blood brotherhood beneath two trees.
-	function siblise(a, b)
-	{
-		return {
-			ctor: '_Array',
-			height: a.height + 1,
-			table: [a, b],
-			lengths: [length(a), length(a) + length(b)]
-		};
-	}
-
-	function toJSArray(a)
-	{
-		var jsArray = new Array(length(a));
-		toJSArray_(jsArray, 0, a);
-		return jsArray;
-	}
-
-	function toJSArray_(jsArray, i, a)
-	{
-		for (var t = 0; t < a.table.length; t++)
-		{
-			if (a.height === 0)
-			{
-				jsArray[i + t] = a.table[t];
-			}
-			else
-			{
-				var inc = t === 0 ? 0 : a.lengths[t - 1];
-				toJSArray_(jsArray, i + inc, a.table[t]);
-			}
-		}
-	}
-
-	function fromJSArray(jsArray)
-	{
-		if (jsArray.length === 0)
-		{
-			return empty;
-		}
-		var h = Math.floor(Math.log(jsArray.length) / Math.log(M));
-		return fromJSArray_(jsArray, h, 0, jsArray.length);
-	}
-
-	function fromJSArray_(jsArray, h, from, to)
-	{
-		if (h === 0)
-		{
-			return {
-				ctor: '_Array',
-				height: 0,
-				table: jsArray.slice(from, to)
-			};
-		}
-
-		var step = Math.pow(M, h);
-		var table = new Array(Math.ceil((to - from) / step));
-		var lengths = new Array(table.length);
-		for (var i = 0; i < table.length; i++)
-		{
-			table[i] = fromJSArray_(jsArray, h - 1, from + (i * step), Math.min(from + ((i + 1) * step), to));
-			lengths[i] = length(table[i]) + (i > 0 ? lengths[i - 1] : 0);
-		}
-		return {
-			ctor: '_Array',
-			height: h,
-			table: table,
-			lengths: lengths
-		};
-	}
-
-	Elm.Native.Array.values = {
-		empty: empty,
-		fromList: fromList,
-		toList: toList,
-		initialize: F2(initialize),
-		append: F2(append),
-		push: F2(push),
-		slice: F3(slice),
-		get: F2(get),
-		set: F3(set),
-		map: F2(map),
-		indexedMap: F2(indexedMap),
-		foldl: F3(foldl),
-		foldr: F3(foldr),
-		length: length,
-
-		toJSArray: toJSArray,
-		fromJSArray: fromJSArray
-	};
-
-	return localRuntime.Native.Array.values = Elm.Native.Array.values;
-};
-
-Elm.Array = Elm.Array || {};
-Elm.Array.make = function (_elm) {
+Elm.Time = Elm.Time || {};
+Elm.Time.make = function (_elm) {
    "use strict";
-   _elm.Array = _elm.Array || {};
-   if (_elm.Array.values) return _elm.Array.values;
+   _elm.Time = _elm.Time || {};
+   if (_elm.Time.values) return _elm.Time.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Native$Array = Elm.Native.Array.make(_elm);
+   $Native$Signal = Elm.Native.Signal.make(_elm),
+   $Native$Time = Elm.Native.Time.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var append = $Native$Array.append;
-   var length = $Native$Array.length;
-   var isEmpty = function (array) {    return _U.eq(length(array),0);};
-   var slice = $Native$Array.slice;
-   var set = $Native$Array.set;
-   var get = F2(function (i,array) {
-      return _U.cmp(0,i) < 1 && _U.cmp(i,$Native$Array.length(array)) < 0 ? $Maybe.Just(A2($Native$Array.get,i,array)) : $Maybe.Nothing;
+   var delay = $Native$Signal.delay;
+   var since = F2(function (time,signal) {
+      var stop = A2($Signal.map,$Basics.always(-1),A2(delay,time,signal));
+      var start = A2($Signal.map,$Basics.always(1),signal);
+      var delaydiff = A3($Signal.foldp,F2(function (x,y) {    return x + y;}),0,A2($Signal.merge,start,stop));
+      return A2($Signal.map,F2(function (x,y) {    return !_U.eq(x,y);})(0),delaydiff);
    });
-   var push = $Native$Array.push;
-   var empty = $Native$Array.empty;
-   var filter = F2(function (isOkay,arr) {
-      var update = F2(function (x,xs) {    return isOkay(x) ? A2($Native$Array.push,x,xs) : xs;});
-      return A3($Native$Array.foldl,update,$Native$Array.empty,arr);
-   });
-   var foldr = $Native$Array.foldr;
-   var foldl = $Native$Array.foldl;
-   var indexedMap = $Native$Array.indexedMap;
-   var map = $Native$Array.map;
-   var toIndexedList = function (array) {
-      return A3($List.map2,
-      F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),
-      _U.range(0,$Native$Array.length(array) - 1),
-      $Native$Array.toList(array));
-   };
-   var toList = $Native$Array.toList;
-   var fromList = $Native$Array.fromList;
-   var initialize = $Native$Array.initialize;
-   var repeat = F2(function (n,e) {    return A2(initialize,n,$Basics.always(e));});
-   var Array = {ctor: "Array"};
-   return _elm.Array.values = {_op: _op
-                              ,empty: empty
-                              ,repeat: repeat
-                              ,initialize: initialize
-                              ,fromList: fromList
-                              ,isEmpty: isEmpty
-                              ,length: length
-                              ,push: push
-                              ,append: append
-                              ,get: get
-                              ,set: set
-                              ,slice: slice
-                              ,toList: toList
-                              ,toIndexedList: toIndexedList
-                              ,map: map
-                              ,indexedMap: indexedMap
-                              ,filter: filter
-                              ,foldl: foldl
-                              ,foldr: foldr};
-};
-Elm.Random = Elm.Random || {};
-Elm.Random.make = function (_elm) {
-   "use strict";
-   _elm.Random = _elm.Random || {};
-   if (_elm.Random.values) return _elm.Random.values;
-   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$List = Elm.List.make(_elm);
-   var _op = {};
-   var magicNum8 = 2147483562;
-   var range = function (_p0) {    return {ctor: "_Tuple2",_0: 0,_1: magicNum8};};
-   var magicNum7 = 2137383399;
-   var magicNum6 = 2147483563;
-   var magicNum5 = 3791;
-   var magicNum4 = 40692;
-   var magicNum3 = 52774;
-   var magicNum2 = 12211;
-   var magicNum1 = 53668;
-   var magicNum0 = 40014;
-   var generate = F2(function (_p1,seed) {    var _p2 = _p1;return _p2._0(seed);});
-   var Seed = function (a) {    return {ctor: "Seed",_0: a};};
-   var State = F2(function (a,b) {    return {ctor: "State",_0: a,_1: b};});
-   var initState = function (s$) {
-      var s = A2($Basics.max,s$,0 - s$);
-      var q = s / (magicNum6 - 1) | 0;
-      var s2 = A2($Basics._op["%"],q,magicNum7 - 1);
-      var s1 = A2($Basics._op["%"],s,magicNum6 - 1);
-      return A2(State,s1 + 1,s2 + 1);
-   };
-   var next = function (_p3) {
-      var _p4 = _p3;
-      var _p6 = _p4._1;
-      var _p5 = _p4._0;
-      var k$ = _p6 / magicNum3 | 0;
-      var s2$ = magicNum4 * (_p6 - k$ * magicNum3) - k$ * magicNum5;
-      var s2$$ = _U.cmp(s2$,0) < 0 ? s2$ + magicNum7 : s2$;
-      var k = _p5 / magicNum1 | 0;
-      var s1$ = magicNum0 * (_p5 - k * magicNum1) - k * magicNum2;
-      var s1$$ = _U.cmp(s1$,0) < 0 ? s1$ + magicNum6 : s1$;
-      var z = s1$$ - s2$$;
-      var z$ = _U.cmp(z,1) < 0 ? z + magicNum8 : z;
-      return {ctor: "_Tuple2",_0: z$,_1: A2(State,s1$$,s2$$)};
-   };
-   var split = function (_p7) {
-      var _p8 = _p7;
-      var _p11 = _p8._1;
-      var _p10 = _p8._0;
-      var _p9 = $Basics.snd(next(_p8));
-      var t1 = _p9._0;
-      var t2 = _p9._1;
-      var new_s2 = _U.eq(_p11,1) ? magicNum7 - 1 : _p11 - 1;
-      var new_s1 = _U.eq(_p10,magicNum6 - 1) ? 1 : _p10 + 1;
-      return {ctor: "_Tuple2",_0: A2(State,new_s1,t2),_1: A2(State,t1,new_s2)};
-   };
-   var initialSeed = function (n) {    return Seed({state: initState(n),next: next,split: split,range: range});};
-   var Generator = function (a) {    return {ctor: "Generator",_0: a};};
-   var andThen = F2(function (_p12,callback) {
-      var _p13 = _p12;
-      return Generator(function (seed) {
-         var _p14 = _p13._0(seed);
-         var result = _p14._0;
-         var newSeed = _p14._1;
-         var _p15 = callback(result);
-         var genB = _p15._0;
-         return genB(newSeed);
-      });
-   });
-   var map5 = F6(function (func,_p20,_p19,_p18,_p17,_p16) {
-      var _p21 = _p20;
-      var _p22 = _p19;
-      var _p23 = _p18;
-      var _p24 = _p17;
-      var _p25 = _p16;
-      return Generator(function (seed0) {
-         var _p26 = _p21._0(seed0);
-         var a = _p26._0;
-         var seed1 = _p26._1;
-         var _p27 = _p22._0(seed1);
-         var b = _p27._0;
-         var seed2 = _p27._1;
-         var _p28 = _p23._0(seed2);
-         var c = _p28._0;
-         var seed3 = _p28._1;
-         var _p29 = _p24._0(seed3);
-         var d = _p29._0;
-         var seed4 = _p29._1;
-         var _p30 = _p25._0(seed4);
-         var e = _p30._0;
-         var seed5 = _p30._1;
-         return {ctor: "_Tuple2",_0: A5(func,a,b,c,d,e),_1: seed5};
-      });
-   });
-   var map4 = F5(function (func,_p34,_p33,_p32,_p31) {
-      var _p35 = _p34;
-      var _p36 = _p33;
-      var _p37 = _p32;
-      var _p38 = _p31;
-      return Generator(function (seed0) {
-         var _p39 = _p35._0(seed0);
-         var a = _p39._0;
-         var seed1 = _p39._1;
-         var _p40 = _p36._0(seed1);
-         var b = _p40._0;
-         var seed2 = _p40._1;
-         var _p41 = _p37._0(seed2);
-         var c = _p41._0;
-         var seed3 = _p41._1;
-         var _p42 = _p38._0(seed3);
-         var d = _p42._0;
-         var seed4 = _p42._1;
-         return {ctor: "_Tuple2",_0: A4(func,a,b,c,d),_1: seed4};
-      });
-   });
-   var map3 = F4(function (func,_p45,_p44,_p43) {
-      var _p46 = _p45;
-      var _p47 = _p44;
-      var _p48 = _p43;
-      return Generator(function (seed0) {
-         var _p49 = _p46._0(seed0);
-         var a = _p49._0;
-         var seed1 = _p49._1;
-         var _p50 = _p47._0(seed1);
-         var b = _p50._0;
-         var seed2 = _p50._1;
-         var _p51 = _p48._0(seed2);
-         var c = _p51._0;
-         var seed3 = _p51._1;
-         return {ctor: "_Tuple2",_0: A3(func,a,b,c),_1: seed3};
-      });
-   });
-   var map2 = F3(function (func,_p53,_p52) {
-      var _p54 = _p53;
-      var _p55 = _p52;
-      return Generator(function (seed0) {
-         var _p56 = _p54._0(seed0);
-         var a = _p56._0;
-         var seed1 = _p56._1;
-         var _p57 = _p55._0(seed1);
-         var b = _p57._0;
-         var seed2 = _p57._1;
-         return {ctor: "_Tuple2",_0: A2(func,a,b),_1: seed2};
-      });
-   });
-   var map = F2(function (func,_p58) {
-      var _p59 = _p58;
-      return Generator(function (seed0) {    var _p60 = _p59._0(seed0);var a = _p60._0;var seed1 = _p60._1;return {ctor: "_Tuple2",_0: func(a),_1: seed1};});
-   });
-   var listHelp = F4(function (list,n,generate,seed) {
-      listHelp: while (true) if (_U.cmp(n,1) < 0) return {ctor: "_Tuple2",_0: $List.reverse(list),_1: seed}; else {
-            var _p61 = generate(seed);
-            var value = _p61._0;
-            var newSeed = _p61._1;
-            var _v19 = A2($List._op["::"],value,list),_v20 = n - 1,_v21 = generate,_v22 = newSeed;
-            list = _v19;
-            n = _v20;
-            generate = _v21;
-            seed = _v22;
-            continue listHelp;
-         }
-   });
-   var list = F2(function (n,_p62) {    var _p63 = _p62;return Generator(function (seed) {    return A4(listHelp,_U.list([]),n,_p63._0,seed);});});
-   var pair = F2(function (genA,genB) {    return A3(map2,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),genA,genB);});
-   var minInt = -2147483648;
-   var maxInt = 2147483647;
-   var iLogBase = F2(function (b,i) {    return _U.cmp(i,b) < 0 ? 1 : 1 + A2(iLogBase,b,i / b | 0);});
-   var $int = F2(function (a,b) {
-      return Generator(function (_p64) {
-         var _p65 = _p64;
-         var _p70 = _p65._0;
-         var base = 2147483561;
-         var f = F3(function (n,acc,state) {
-            f: while (true) {
-               var _p66 = n;
-               if (_p66 === 0) {
-                     return {ctor: "_Tuple2",_0: acc,_1: state};
-                  } else {
-                     var _p67 = _p70.next(state);
-                     var x = _p67._0;
-                     var state$ = _p67._1;
-                     var _v26 = n - 1,_v27 = x + acc * base,_v28 = state$;
-                     n = _v26;
-                     acc = _v27;
-                     state = _v28;
-                     continue f;
-                  }
-            }
-         });
-         var _p68 = _U.cmp(a,b) < 0 ? {ctor: "_Tuple2",_0: a,_1: b} : {ctor: "_Tuple2",_0: b,_1: a};
-         var lo = _p68._0;
-         var hi = _p68._1;
-         var k = hi - lo + 1;
-         var n = A2(iLogBase,base,k);
-         var _p69 = A3(f,n,1,_p70.state);
-         var v = _p69._0;
-         var state$ = _p69._1;
-         return {ctor: "_Tuple2",_0: lo + A2($Basics._op["%"],v,k),_1: Seed(_U.update(_p70,{state: state$}))};
-      });
-   });
-   var $float = F2(function (a,b) {
-      return Generator(function (seed) {
-         var _p71 = A2(generate,A2($int,minInt,maxInt),seed);
-         var number = _p71._0;
-         var newSeed = _p71._1;
-         var negativeOneToOne = $Basics.toFloat(number) / $Basics.toFloat(maxInt - minInt);
-         var _p72 = _U.cmp(a,b) < 0 ? {ctor: "_Tuple2",_0: a,_1: b} : {ctor: "_Tuple2",_0: b,_1: a};
-         var lo = _p72._0;
-         var hi = _p72._1;
-         var scaled = (lo + hi) / 2 + (hi - lo) * negativeOneToOne;
-         return {ctor: "_Tuple2",_0: scaled,_1: newSeed};
-      });
-   });
-   var bool = A2(map,F2(function (x,y) {    return _U.eq(x,y);})(1),A2($int,0,1));
-   return _elm.Random.values = {_op: _op
-                               ,bool: bool
-                               ,$int: $int
-                               ,$float: $float
-                               ,list: list
-                               ,pair: pair
-                               ,map: map
-                               ,map2: map2
-                               ,map3: map3
-                               ,map4: map4
-                               ,map5: map5
-                               ,andThen: andThen
-                               ,minInt: minInt
-                               ,maxInt: maxInt
-                               ,generate: generate
-                               ,initialSeed: initialSeed};
-};
-Elm.Native.Char = {};
-Elm.Native.Char.make = function(localRuntime) {
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Char = localRuntime.Native.Char || {};
-	if (localRuntime.Native.Char.values)
-	{
-		return localRuntime.Native.Char.values;
-	}
-
-	var Utils = Elm.Native.Utils.make(localRuntime);
-
-	return localRuntime.Native.Char.values = {
-		fromCode: function(c) { return Utils.chr(String.fromCharCode(c)); },
-		toCode: function(c) { return c.charCodeAt(0); },
-		toUpper: function(c) { return Utils.chr(c.toUpperCase()); },
-		toLower: function(c) { return Utils.chr(c.toLowerCase()); },
-		toLocaleUpper: function(c) { return Utils.chr(c.toLocaleUpperCase()); },
-		toLocaleLower: function(c) { return Utils.chr(c.toLocaleLowerCase()); }
-	};
-};
-
-Elm.Char = Elm.Char || {};
-Elm.Char.make = function (_elm) {
-   "use strict";
-   _elm.Char = _elm.Char || {};
-   if (_elm.Char.values) return _elm.Char.values;
-   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$Native$Char = Elm.Native.Char.make(_elm);
-   var _op = {};
-   var fromCode = $Native$Char.fromCode;
-   var toCode = $Native$Char.toCode;
-   var toLocaleLower = $Native$Char.toLocaleLower;
-   var toLocaleUpper = $Native$Char.toLocaleUpper;
-   var toLower = $Native$Char.toLower;
-   var toUpper = $Native$Char.toUpper;
-   var isBetween = F3(function (low,high,$char) {    var code = toCode($char);return _U.cmp(code,toCode(low)) > -1 && _U.cmp(code,toCode(high)) < 1;});
-   var isUpper = A2(isBetween,_U.chr("A"),_U.chr("Z"));
-   var isLower = A2(isBetween,_U.chr("a"),_U.chr("z"));
-   var isDigit = A2(isBetween,_U.chr("0"),_U.chr("9"));
-   var isOctDigit = A2(isBetween,_U.chr("0"),_U.chr("7"));
-   var isHexDigit = function ($char) {
-      return isDigit($char) || (A3(isBetween,_U.chr("a"),_U.chr("f"),$char) || A3(isBetween,_U.chr("A"),_U.chr("F"),$char));
-   };
-   return _elm.Char.values = {_op: _op
-                             ,isUpper: isUpper
-                             ,isLower: isLower
-                             ,isDigit: isDigit
-                             ,isOctDigit: isOctDigit
-                             ,isHexDigit: isHexDigit
-                             ,toUpper: toUpper
-                             ,toLower: toLower
-                             ,toLocaleUpper: toLocaleUpper
-                             ,toLocaleLower: toLocaleLower
-                             ,toCode: toCode
-                             ,fromCode: fromCode};
+   var timestamp = $Native$Signal.timestamp;
+   var every = $Native$Time.every;
+   var fpsWhen = $Native$Time.fpsWhen;
+   var fps = function (targetFrames) {    return A2(fpsWhen,targetFrames,$Signal.constant(true));};
+   var inMilliseconds = function (t) {    return t;};
+   var millisecond = 1;
+   var second = 1000 * millisecond;
+   var minute = 60 * second;
+   var hour = 60 * minute;
+   var inHours = function (t) {    return t / hour;};
+   var inMinutes = function (t) {    return t / minute;};
+   var inSeconds = function (t) {    return t / second;};
+   return _elm.Time.values = {_op: _op
+                             ,millisecond: millisecond
+                             ,second: second
+                             ,minute: minute
+                             ,hour: hour
+                             ,inMilliseconds: inMilliseconds
+                             ,inSeconds: inSeconds
+                             ,inMinutes: inMinutes
+                             ,inHours: inHours
+                             ,fps: fps
+                             ,fpsWhen: fpsWhen
+                             ,every: every
+                             ,timestamp: timestamp
+                             ,delay: delay
+                             ,since: since};
 };
 Elm.Native.String = {};
 
@@ -7738,904 +6626,669 @@ Elm.Dict.make = function (_elm) {
                              ,toList: toList
                              ,fromList: fromList};
 };
-Elm.Native.Json = {};
-
-Elm.Native.Json.make = function(localRuntime) {
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Json = localRuntime.Native.Json || {};
-	if (localRuntime.Native.Json.values) {
-		return localRuntime.Native.Json.values;
-	}
-
-	var ElmArray = Elm.Native.Array.make(localRuntime);
-	var List = Elm.Native.List.make(localRuntime);
-	var Maybe = Elm.Maybe.make(localRuntime);
-	var Result = Elm.Result.make(localRuntime);
-	var Utils = Elm.Native.Utils.make(localRuntime);
-
-
-	function crash(expected, actual) {
-		throw new Error(
-			'expecting ' + expected + ' but got ' + JSON.stringify(actual)
-		);
-	}
-
-
-	// PRIMITIVE VALUES
-
-	function decodeNull(successValue) {
-		return function(value) {
-			if (value === null) {
-				return successValue;
-			}
-			crash('null', value);
-		};
-	}
-
-
-	function decodeString(value) {
-		if (typeof value === 'string' || value instanceof String) {
-			return value;
-		}
-		crash('a String', value);
-	}
-
-
-	function decodeFloat(value) {
-		if (typeof value === 'number') {
-			return value;
-		}
-		crash('a Float', value);
-	}
-
-
-	function decodeInt(value) {
-		if (typeof value !== 'number') {
-			crash('an Int', value);
-		}
-
-		if (value < 2147483647 && value > -2147483647 && (value | 0) === value) {
-			return value;
-		}
-
-		if (isFinite(value) && !(value % 1)) {
-			return value;
-		}
-
-		crash('an Int', value);
-	}
-
-
-	function decodeBool(value) {
-		if (typeof value === 'boolean') {
-			return value;
-		}
-		crash('a Bool', value);
-	}
-
-
-	// ARRAY
-
-	function decodeArray(decoder) {
-		return function(value) {
-			if (value instanceof Array) {
-				var len = value.length;
-				var array = new Array(len);
-				for (var i = len; i--; ) {
-					array[i] = decoder(value[i]);
-				}
-				return ElmArray.fromJSArray(array);
-			}
-			crash('an Array', value);
-		};
-	}
-
-
-	// LIST
-
-	function decodeList(decoder) {
-		return function(value) {
-			if (value instanceof Array) {
-				var len = value.length;
-				var list = List.Nil;
-				for (var i = len; i--; ) {
-					list = List.Cons( decoder(value[i]), list );
-				}
-				return list;
-			}
-			crash('a List', value);
-		};
-	}
-
-
-	// MAYBE
-
-	function decodeMaybe(decoder) {
-		return function(value) {
-			try {
-				return Maybe.Just(decoder(value));
-			} catch(e) {
-				return Maybe.Nothing;
-			}
-		};
-	}
-
-
-	// FIELDS
-
-	function decodeField(field, decoder) {
-		return function(value) {
-			var subValue = value[field];
-			if (subValue !== undefined) {
-				return decoder(subValue);
-			}
-			crash("an object with field '" + field + "'", value);
-		};
-	}
-
-
-	// OBJECTS
-
-	function decodeKeyValuePairs(decoder) {
-		return function(value) {
-			var isObject =
-				typeof value === 'object'
-					&& value !== null
-					&& !(value instanceof Array);
-
-			if (isObject) {
-				var keyValuePairs = List.Nil;
-				for (var key in value)
-				{
-					var elmValue = decoder(value[key]);
-					var pair = Utils.Tuple2(key, elmValue);
-					keyValuePairs = List.Cons(pair, keyValuePairs);
-				}
-				return keyValuePairs;
-			}
-
-			crash('an object', value);
-		};
-	}
-
-	function decodeObject1(f, d1) {
-		return function(value) {
-			return f(d1(value));
-		};
-	}
-
-	function decodeObject2(f, d1, d2) {
-		return function(value) {
-			return A2( f, d1(value), d2(value) );
-		};
-	}
-
-	function decodeObject3(f, d1, d2, d3) {
-		return function(value) {
-			return A3( f, d1(value), d2(value), d3(value) );
-		};
-	}
-
-	function decodeObject4(f, d1, d2, d3, d4) {
-		return function(value) {
-			return A4( f, d1(value), d2(value), d3(value), d4(value) );
-		};
-	}
-
-	function decodeObject5(f, d1, d2, d3, d4, d5) {
-		return function(value) {
-			return A5( f, d1(value), d2(value), d3(value), d4(value), d5(value) );
-		};
-	}
-
-	function decodeObject6(f, d1, d2, d3, d4, d5, d6) {
-		return function(value) {
-			return A6( f,
-				d1(value),
-				d2(value),
-				d3(value),
-				d4(value),
-				d5(value),
-				d6(value)
-			);
-		};
-	}
-
-	function decodeObject7(f, d1, d2, d3, d4, d5, d6, d7) {
-		return function(value) {
-			return A7( f,
-				d1(value),
-				d2(value),
-				d3(value),
-				d4(value),
-				d5(value),
-				d6(value),
-				d7(value)
-			);
-		};
-	}
-
-	function decodeObject8(f, d1, d2, d3, d4, d5, d6, d7, d8) {
-		return function(value) {
-			return A8( f,
-				d1(value),
-				d2(value),
-				d3(value),
-				d4(value),
-				d5(value),
-				d6(value),
-				d7(value),
-				d8(value)
-			);
-		};
-	}
-
-
-	// TUPLES
-
-	function decodeTuple1(f, d1) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 1 ) {
-				crash('a Tuple of length 1', value);
-			}
-			return f( d1(value[0]) );
-		};
-	}
-
-	function decodeTuple2(f, d1, d2) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 2 ) {
-				crash('a Tuple of length 2', value);
-			}
-			return A2( f, d1(value[0]), d2(value[1]) );
-		};
-	}
-
-	function decodeTuple3(f, d1, d2, d3) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 3 ) {
-				crash('a Tuple of length 3', value);
-			}
-			return A3( f, d1(value[0]), d2(value[1]), d3(value[2]) );
-		};
-	}
-
-
-	function decodeTuple4(f, d1, d2, d3, d4) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 4 ) {
-				crash('a Tuple of length 4', value);
-			}
-			return A4( f, d1(value[0]), d2(value[1]), d3(value[2]), d4(value[3]) );
-		};
-	}
-
-
-	function decodeTuple5(f, d1, d2, d3, d4, d5) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 5 ) {
-				crash('a Tuple of length 5', value);
-			}
-			return A5( f,
-				d1(value[0]),
-				d2(value[1]),
-				d3(value[2]),
-				d4(value[3]),
-				d5(value[4])
-			);
-		};
-	}
-
-
-	function decodeTuple6(f, d1, d2, d3, d4, d5, d6) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 6 ) {
-				crash('a Tuple of length 6', value);
-			}
-			return A6( f,
-				d1(value[0]),
-				d2(value[1]),
-				d3(value[2]),
-				d4(value[3]),
-				d5(value[4]),
-				d6(value[5])
-			);
-		};
-	}
-
-	function decodeTuple7(f, d1, d2, d3, d4, d5, d6, d7) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 7 ) {
-				crash('a Tuple of length 7', value);
-			}
-			return A7( f,
-				d1(value[0]),
-				d2(value[1]),
-				d3(value[2]),
-				d4(value[3]),
-				d5(value[4]),
-				d6(value[5]),
-				d7(value[6])
-			);
-		};
-	}
-
-
-	function decodeTuple8(f, d1, d2, d3, d4, d5, d6, d7, d8) {
-		return function(value) {
-			if ( !(value instanceof Array) || value.length !== 8 ) {
-				crash('a Tuple of length 8', value);
-			}
-			return A8( f,
-				d1(value[0]),
-				d2(value[1]),
-				d3(value[2]),
-				d4(value[3]),
-				d5(value[4]),
-				d6(value[5]),
-				d7(value[6]),
-				d8(value[7])
-			);
-		};
-	}
-
-
-	// CUSTOM DECODERS
-
-	function decodeValue(value) {
-		return value;
-	}
-
-	function runDecoderValue(decoder, value) {
-		try {
-			return Result.Ok(decoder(value));
-		} catch(e) {
-			return Result.Err(e.message);
-		}
-	}
-
-	function customDecoder(decoder, callback) {
-		return function(value) {
-			var result = callback(decoder(value));
-			if (result.ctor === 'Err') {
-				throw new Error('custom decoder failed: ' + result._0);
-			}
-			return result._0;
-		};
-	}
-
-	function andThen(decode, callback) {
-		return function(value) {
-			var result = decode(value);
-			return callback(result)(value);
-		};
-	}
-
-	function fail(msg) {
-		return function(value) {
-			throw new Error(msg);
-		};
-	}
-
-	function succeed(successValue) {
-		return function(value) {
-			return successValue;
-		};
-	}
-
-
-	// ONE OF MANY
-
-	function oneOf(decoders) {
-		return function(value) {
-			var errors = [];
-			var temp = decoders;
-			while (temp.ctor !== '[]') {
-				try {
-					return temp._0(value);
-				} catch(e) {
-					errors.push(e.message);
-				}
-				temp = temp._1;
-			}
-			throw new Error('expecting one of the following:\n    ' + errors.join('\n    '));
-		};
-	}
-
-	function get(decoder, value) {
-		try {
-			return Result.Ok(decoder(value));
-		} catch(e) {
-			return Result.Err(e.message);
-		}
-	}
-
-
-	// ENCODE / DECODE
-
-	function runDecoderString(decoder, string) {
-		try {
-			return Result.Ok(decoder(JSON.parse(string)));
-		} catch(e) {
-			return Result.Err(e.message);
-		}
-	}
-
-	function encode(indentLevel, value) {
-		return JSON.stringify(value, null, indentLevel);
-	}
-
-	function identity(value) {
-		return value;
-	}
-
-	function encodeObject(keyValuePairs) {
-		var obj = {};
-		while (keyValuePairs.ctor !== '[]') {
-			var pair = keyValuePairs._0;
-			obj[pair._0] = pair._1;
-			keyValuePairs = keyValuePairs._1;
-		}
-		return obj;
-	}
-
-	return localRuntime.Native.Json.values = {
-		encode: F2(encode),
-		runDecoderString: F2(runDecoderString),
-		runDecoderValue: F2(runDecoderValue),
-
-		get: F2(get),
-		oneOf: oneOf,
-
-		decodeNull: decodeNull,
-		decodeInt: decodeInt,
-		decodeFloat: decodeFloat,
-		decodeString: decodeString,
-		decodeBool: decodeBool,
-
-		decodeMaybe: decodeMaybe,
-
-		decodeList: decodeList,
-		decodeArray: decodeArray,
-
-		decodeField: F2(decodeField),
-
-		decodeObject1: F2(decodeObject1),
-		decodeObject2: F3(decodeObject2),
-		decodeObject3: F4(decodeObject3),
-		decodeObject4: F5(decodeObject4),
-		decodeObject5: F6(decodeObject5),
-		decodeObject6: F7(decodeObject6),
-		decodeObject7: F8(decodeObject7),
-		decodeObject8: F9(decodeObject8),
-		decodeKeyValuePairs: decodeKeyValuePairs,
-
-		decodeTuple1: F2(decodeTuple1),
-		decodeTuple2: F3(decodeTuple2),
-		decodeTuple3: F4(decodeTuple3),
-		decodeTuple4: F5(decodeTuple4),
-		decodeTuple5: F6(decodeTuple5),
-		decodeTuple6: F7(decodeTuple6),
-		decodeTuple7: F8(decodeTuple7),
-		decodeTuple8: F9(decodeTuple8),
-
-		andThen: F2(andThen),
-		decodeValue: decodeValue,
-		customDecoder: F2(customDecoder),
-		fail: fail,
-		succeed: succeed,
-
-		identity: identity,
-		encodeNull: null,
-		encodeArray: ElmArray.toJSArray,
-		encodeList: List.toArray,
-		encodeObject: encodeObject
-
-	};
-};
-
-Elm.Json = Elm.Json || {};
-Elm.Json.Encode = Elm.Json.Encode || {};
-Elm.Json.Encode.make = function (_elm) {
-   "use strict";
-   _elm.Json = _elm.Json || {};
-   _elm.Json.Encode = _elm.Json.Encode || {};
-   if (_elm.Json.Encode.values) return _elm.Json.Encode.values;
-   var _U = Elm.Native.Utils.make(_elm),$Array = Elm.Array.make(_elm),$Native$Json = Elm.Native.Json.make(_elm);
-   var _op = {};
-   var list = $Native$Json.encodeList;
-   var array = $Native$Json.encodeArray;
-   var object = $Native$Json.encodeObject;
-   var $null = $Native$Json.encodeNull;
-   var bool = $Native$Json.identity;
-   var $float = $Native$Json.identity;
-   var $int = $Native$Json.identity;
-   var string = $Native$Json.identity;
-   var encode = $Native$Json.encode;
-   var Value = {ctor: "Value"};
-   return _elm.Json.Encode.values = {_op: _op
-                                    ,encode: encode
-                                    ,string: string
-                                    ,$int: $int
-                                    ,$float: $float
-                                    ,bool: bool
-                                    ,$null: $null
-                                    ,list: list
-                                    ,array: array
-                                    ,object: object};
-};
-Elm.Json = Elm.Json || {};
-Elm.Json.Decode = Elm.Json.Decode || {};
-Elm.Json.Decode.make = function (_elm) {
-   "use strict";
-   _elm.Json = _elm.Json || {};
-   _elm.Json.Decode = _elm.Json.Decode || {};
-   if (_elm.Json.Decode.values) return _elm.Json.Decode.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Array = Elm.Array.make(_elm),
-   $Dict = Elm.Dict.make(_elm),
-   $Json$Encode = Elm.Json.Encode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Native$Json = Elm.Native.Json.make(_elm),
-   $Result = Elm.Result.make(_elm);
-   var _op = {};
-   var tuple8 = $Native$Json.decodeTuple8;
-   var tuple7 = $Native$Json.decodeTuple7;
-   var tuple6 = $Native$Json.decodeTuple6;
-   var tuple5 = $Native$Json.decodeTuple5;
-   var tuple4 = $Native$Json.decodeTuple4;
-   var tuple3 = $Native$Json.decodeTuple3;
-   var tuple2 = $Native$Json.decodeTuple2;
-   var tuple1 = $Native$Json.decodeTuple1;
-   var succeed = $Native$Json.succeed;
-   var fail = $Native$Json.fail;
-   var andThen = $Native$Json.andThen;
-   var customDecoder = $Native$Json.customDecoder;
-   var decodeValue = $Native$Json.runDecoderValue;
-   var value = $Native$Json.decodeValue;
-   var maybe = $Native$Json.decodeMaybe;
-   var $null = $Native$Json.decodeNull;
-   var array = $Native$Json.decodeArray;
-   var list = $Native$Json.decodeList;
-   var bool = $Native$Json.decodeBool;
-   var $int = $Native$Json.decodeInt;
-   var $float = $Native$Json.decodeFloat;
-   var string = $Native$Json.decodeString;
-   var oneOf = $Native$Json.oneOf;
-   var keyValuePairs = $Native$Json.decodeKeyValuePairs;
-   var object8 = $Native$Json.decodeObject8;
-   var object7 = $Native$Json.decodeObject7;
-   var object6 = $Native$Json.decodeObject6;
-   var object5 = $Native$Json.decodeObject5;
-   var object4 = $Native$Json.decodeObject4;
-   var object3 = $Native$Json.decodeObject3;
-   var object2 = $Native$Json.decodeObject2;
-   var object1 = $Native$Json.decodeObject1;
-   _op[":="] = $Native$Json.decodeField;
-   var at = F2(function (fields,decoder) {    return A3($List.foldr,F2(function (x,y) {    return A2(_op[":="],x,y);}),decoder,fields);});
-   var decodeString = $Native$Json.runDecoderString;
-   var map = $Native$Json.decodeObject1;
-   var dict = function (decoder) {    return A2(map,$Dict.fromList,keyValuePairs(decoder));};
-   var Decoder = {ctor: "Decoder"};
-   return _elm.Json.Decode.values = {_op: _op
-                                    ,decodeString: decodeString
-                                    ,decodeValue: decodeValue
-                                    ,string: string
-                                    ,$int: $int
-                                    ,$float: $float
-                                    ,bool: bool
-                                    ,$null: $null
-                                    ,list: list
-                                    ,array: array
-                                    ,tuple1: tuple1
-                                    ,tuple2: tuple2
-                                    ,tuple3: tuple3
-                                    ,tuple4: tuple4
-                                    ,tuple5: tuple5
-                                    ,tuple6: tuple6
-                                    ,tuple7: tuple7
-                                    ,tuple8: tuple8
-                                    ,at: at
-                                    ,object1: object1
-                                    ,object2: object2
-                                    ,object3: object3
-                                    ,object4: object4
-                                    ,object5: object5
-                                    ,object6: object6
-                                    ,object7: object7
-                                    ,object8: object8
-                                    ,keyValuePairs: keyValuePairs
-                                    ,dict: dict
-                                    ,maybe: maybe
-                                    ,oneOf: oneOf
-                                    ,map: map
-                                    ,fail: fail
-                                    ,succeed: succeed
-                                    ,andThen: andThen
-                                    ,value: value
-                                    ,customDecoder: customDecoder};
-};
-Elm.Native.Time = {};
-
-Elm.Native.Time.make = function(localRuntime)
-{
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Time = localRuntime.Native.Time || {};
-	if (localRuntime.Native.Time.values)
-	{
-		return localRuntime.Native.Time.values;
-	}
-
-	var NS = Elm.Native.Signal.make(localRuntime);
-	var Maybe = Elm.Maybe.make(localRuntime);
-
-
-	// FRAMES PER SECOND
-
-	function fpsWhen(desiredFPS, isOn)
-	{
-		var msPerFrame = 1000 / desiredFPS;
-		var ticker = NS.input('fps-' + desiredFPS, null);
-
-		function notifyTicker()
-		{
-			localRuntime.notify(ticker.id, null);
-		}
-
-		function firstArg(x, y)
-		{
-			return x;
-		}
-
-		// input fires either when isOn changes, or when ticker fires.
-		// Its value is a tuple with the current timestamp, and the state of isOn
-		var input = NS.timestamp(A3(NS.map2, F2(firstArg), NS.dropRepeats(isOn), ticker));
-
-		var initialState = {
-			isOn: false,
-			time: localRuntime.timer.programStart,
-			delta: 0
-		};
-
-		var timeoutId;
-
-		function update(input, state)
-		{
-			var currentTime = input._0;
-			var isOn = input._1;
-			var wasOn = state.isOn;
-			var previousTime = state.time;
-
-			if (isOn)
-			{
-				timeoutId = localRuntime.setTimeout(notifyTicker, msPerFrame);
-			}
-			else if (wasOn)
-			{
-				clearTimeout(timeoutId);
-			}
-
-			return {
-				isOn: isOn,
-				time: currentTime,
-				delta: (isOn && !wasOn) ? 0 : currentTime - previousTime
-			};
-		}
-
-		return A2(
-			NS.map,
-			function(state) { return state.delta; },
-			A3(NS.foldp, F2(update), update(input.value, initialState), input)
-		);
-	}
-
-
-	// EVERY
-
-	function every(t)
-	{
-		var ticker = NS.input('every-' + t, null);
-		function tellTime()
-		{
-			localRuntime.notify(ticker.id, null);
-		}
-		var clock = A2(NS.map, fst, NS.timestamp(ticker));
-		setInterval(tellTime, t);
-		return clock;
-	}
-
-
-	function fst(pair)
-	{
-		return pair._0;
-	}
-
-
-	function read(s)
-	{
-		var t = Date.parse(s);
-		return isNaN(t) ? Maybe.Nothing : Maybe.Just(t);
-	}
-
-	return localRuntime.Native.Time.values = {
-		fpsWhen: F2(fpsWhen),
-		every: every,
-		toDate: function(t) { return new Date(t); },
-		read: read
-	};
-};
-
-Elm.Time = Elm.Time || {};
-Elm.Time.make = function (_elm) {
-   "use strict";
-   _elm.Time = _elm.Time || {};
-   if (_elm.Time.values) return _elm.Time.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Native$Signal = Elm.Native.Signal.make(_elm),
-   $Native$Time = Elm.Native.Time.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var delay = $Native$Signal.delay;
-   var since = F2(function (time,signal) {
-      var stop = A2($Signal.map,$Basics.always(-1),A2(delay,time,signal));
-      var start = A2($Signal.map,$Basics.always(1),signal);
-      var delaydiff = A3($Signal.foldp,F2(function (x,y) {    return x + y;}),0,A2($Signal.merge,start,stop));
-      return A2($Signal.map,F2(function (x,y) {    return !_U.eq(x,y);})(0),delaydiff);
-   });
-   var timestamp = $Native$Signal.timestamp;
-   var every = $Native$Time.every;
-   var fpsWhen = $Native$Time.fpsWhen;
-   var fps = function (targetFrames) {    return A2(fpsWhen,targetFrames,$Signal.constant(true));};
-   var inMilliseconds = function (t) {    return t;};
-   var millisecond = 1;
-   var second = 1000 * millisecond;
-   var minute = 60 * second;
-   var hour = 60 * minute;
-   var inHours = function (t) {    return t / hour;};
-   var inMinutes = function (t) {    return t / minute;};
-   var inSeconds = function (t) {    return t / second;};
-   return _elm.Time.values = {_op: _op
-                             ,millisecond: millisecond
-                             ,second: second
-                             ,minute: minute
-                             ,hour: hour
-                             ,inMilliseconds: inMilliseconds
-                             ,inSeconds: inSeconds
-                             ,inMinutes: inMinutes
-                             ,inHours: inHours
-                             ,fps: fps
-                             ,fpsWhen: fpsWhen
-                             ,every: every
-                             ,timestamp: timestamp
-                             ,delay: delay
-                             ,since: since};
-};
-Elm.Matrix = Elm.Matrix || {};
-Elm.Matrix.make = function (_elm) {
-   "use strict";
-   _elm.Matrix = _elm.Matrix || {};
-   if (_elm.Matrix.values) return _elm.Matrix.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Array = Elm.Array.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var rowCount = function (m) {    return $Array.length(m);};
-   var colCount = function (m) {    return A2($Maybe.withDefault,0,A2($Maybe.map,$Array.length,A2($Array.get,0,m)));};
-   var fromList = function (l) {    return $Array.fromList(A2($List.map,$Array.fromList,l));};
-   var toList = function (m) {    return $Array.toList(A2($Array.map,$Array.toList,m));};
-   var flatten = function (m) {    return $List.concat(toList(m));};
-   var map = F2(function (f,m) {    return A2($Array.map,$Array.map(f),m);});
-   var col = $Basics.snd;
-   var row = $Basics.fst;
-   var get = F2(function (location,m) {    return A2($Maybe.andThen,A2($Array.get,row(location),m),$Array.get(col(location)));});
-   var update = F3(function (location,f,m) {
-      return A2($Maybe.withDefault,
-      m,
-      A2($Maybe.map,
-      function (current) {
-         return A2($Maybe.withDefault,
-         m,
-         A2($Maybe.map,
-         function (oldRow) {
-            return function (newRow) {
-               return A3($Array.set,row(location),newRow,m);
-            }(A3($Array.set,col(location),f(current),oldRow));
-         },
-         A2($Array.get,row(location),m)));
-      },
-      A2(get,location,m)));
-   });
-   var set = F3(function (location,value,m) {    return A3(update,location,$Basics.always(value),m);});
-   var loc = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var matrix = F3(function (numRows,numCols,f) {
-      return A2($Array.initialize,numRows,function (row) {    return A2($Array.initialize,numCols,function (col) {    return f(A2(loc,row,col));});});
-   });
-   var square = function (size) {    return A2(matrix,size,size);};
-   var mapWithLocation = F2(function (f,m) {
-      return A2($Array.indexedMap,
-      F2(function (rowNum,row) {    return A2($Array.indexedMap,F2(function (colNum,element) {    return A2(f,A2(loc,rowNum,colNum),element);}),row);}),
-      m);
-   });
-   return _elm.Matrix.values = {_op: _op
-                               ,loc: loc
-                               ,row: row
-                               ,col: col
-                               ,square: square
-                               ,matrix: matrix
-                               ,map: map
-                               ,mapWithLocation: mapWithLocation
-                               ,toList: toList
-                               ,fromList: fromList
-                               ,flatten: flatten
-                               ,get: get
-                               ,set: set
-                               ,update: update
-                               ,colCount: colCount
-                               ,rowCount: rowCount};
-};
+// setup
 Elm.Native = Elm.Native || {};
-Elm.Native.Mouse = {};
-Elm.Native.Mouse.make = function(localRuntime) {
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Mouse = localRuntime.Native.Mouse || {};
-	if (localRuntime.Native.Mouse.values)
-	{
-		return localRuntime.Native.Mouse.values;
+Elm.Native.Graphics = Elm.Native.Graphics || {};
+Elm.Native.Graphics.Input = Elm.Native.Graphics.Input || {};
+
+// definition
+Elm.Native.Graphics.Input.make = function(localRuntime) {
+	'use strict';
+
+	// attempt to short-circuit
+	if ('values' in Elm.Native.Graphics.Input) {
+		return Elm.Native.Graphics.Input.values;
 	}
 
-	var NS = Elm.Native.Signal.make(localRuntime);
+	var Color = Elm.Native.Color.make(localRuntime);
+	var List = Elm.Native.List.make(localRuntime);
+	var Signal = Elm.Native.Signal.make(localRuntime);
+	var Text = Elm.Native.Text.make(localRuntime);
 	var Utils = Elm.Native.Utils.make(localRuntime);
 
-	var position = NS.input('Mouse.position', Utils.Tuple2(0, 0));
+	var Element = Elm.Native.Graphics.Element.make(localRuntime);
 
-	var isDown = NS.input('Mouse.isDown', false);
 
-	var clicks = NS.input('Mouse.clicks', Utils.Tuple0);
+	function renderDropDown(model)
+	{
+		var drop = Element.createNode('select');
+		drop.style.border = '0 solid';
+		drop.style.pointerEvents = 'auto';
+		drop.style.display = 'block';
 
-	var node = localRuntime.isFullscreen()
-		? document
-		: localRuntime.node;
+		drop.elm_values = List.toArray(model.values);
+		drop.elm_handler = model.handler;
+		var values = drop.elm_values;
 
-	localRuntime.addListener([clicks.id], node, 'click', function click() {
-		localRuntime.notify(clicks.id, Utils.Tuple0);
-	});
-	localRuntime.addListener([isDown.id], node, 'mousedown', function down() {
-		localRuntime.notify(isDown.id, true);
-	});
-	localRuntime.addListener([isDown.id], node, 'mouseup', function up() {
-		localRuntime.notify(isDown.id, false);
-	});
-	localRuntime.addListener([position.id], node, 'mousemove', function move(e) {
-		localRuntime.notify(position.id, Utils.getXY(e));
-	});
+		for (var i = 0; i < values.length; ++i)
+		{
+			var option = Element.createNode('option');
+			var name = values[i]._0;
+			option.value = name;
+			option.innerHTML = name;
+			drop.appendChild(option);
+		}
+		drop.addEventListener('change', function() {
+			Signal.sendMessage(drop.elm_handler(drop.elm_values[drop.selectedIndex]._1));
+		});
 
-	return localRuntime.Native.Mouse.values = {
-		position: position,
-		isDown: isDown,
-		clicks: clicks
+		return drop;
+	}
+
+	function updateDropDown(node, oldModel, newModel)
+	{
+		node.elm_values = List.toArray(newModel.values);
+		node.elm_handler = newModel.handler;
+
+		var values = node.elm_values;
+		var kids = node.childNodes;
+		var kidsLength = kids.length;
+
+		var i = 0;
+		for (; i < kidsLength && i < values.length; ++i)
+		{
+			var option = kids[i];
+			var name = values[i]._0;
+			option.value = name;
+			option.innerHTML = name;
+		}
+		for (; i < kidsLength; ++i)
+		{
+			node.removeChild(node.lastChild);
+		}
+		for (; i < values.length; ++i)
+		{
+			var option = Element.createNode('option');
+			var name = values[i]._0;
+			option.value = name;
+			option.innerHTML = name;
+			node.appendChild(option);
+		}
+		return node;
+	}
+
+	function dropDown(handler, values)
+	{
+		return A3(Element.newElement, 100, 24, {
+			ctor: 'Custom',
+			type: 'DropDown',
+			render: renderDropDown,
+			update: updateDropDown,
+			model: {
+				values: values,
+				handler: handler
+			}
+		});
+	}
+
+	function renderButton(model)
+	{
+		var node = Element.createNode('button');
+		node.style.display = 'block';
+		node.style.pointerEvents = 'auto';
+		node.elm_message = model.message;
+		function click()
+		{
+			Signal.sendMessage(node.elm_message);
+		}
+		node.addEventListener('click', click);
+		node.innerHTML = model.text;
+		return node;
+	}
+
+	function updateButton(node, oldModel, newModel)
+	{
+		node.elm_message = newModel.message;
+		var txt = newModel.text;
+		if (oldModel.text !== txt)
+		{
+			node.innerHTML = txt;
+		}
+		return node;
+	}
+
+	function button(message, text)
+	{
+		return A3(Element.newElement, 100, 40, {
+			ctor: 'Custom',
+			type: 'Button',
+			render: renderButton,
+			update: updateButton,
+			model: {
+				message: message,
+				text: text
+			}
+		});
+	}
+
+	function renderCustomButton(model)
+	{
+		var btn = Element.createNode('div');
+		btn.style.pointerEvents = 'auto';
+		btn.elm_message = model.message;
+
+		btn.elm_up    = Element.render(model.up);
+		btn.elm_hover = Element.render(model.hover);
+		btn.elm_down  = Element.render(model.down);
+
+		btn.elm_up.style.display = 'block';
+		btn.elm_hover.style.display = 'none';
+		btn.elm_down.style.display = 'none';
+
+		btn.appendChild(btn.elm_up);
+		btn.appendChild(btn.elm_hover);
+		btn.appendChild(btn.elm_down);
+
+		function swap(visibleNode, hiddenNode1, hiddenNode2)
+		{
+			visibleNode.style.display = 'block';
+			hiddenNode1.style.display = 'none';
+			hiddenNode2.style.display = 'none';
+		}
+
+		var overCount = 0;
+		function over(e)
+		{
+			if (overCount++ > 0) return;
+			swap(btn.elm_hover, btn.elm_down, btn.elm_up);
+		}
+		function out(e)
+		{
+			if (btn.contains(e.toElement || e.relatedTarget)) return;
+			overCount = 0;
+			swap(btn.elm_up, btn.elm_down, btn.elm_hover);
+		}
+		function up()
+		{
+			swap(btn.elm_hover, btn.elm_down, btn.elm_up);
+			Signal.sendMessage(btn.elm_message);
+		}
+		function down()
+		{
+			swap(btn.elm_down, btn.elm_hover, btn.elm_up);
+		}
+
+		btn.addEventListener('mouseover', over);
+		btn.addEventListener('mouseout', out);
+		btn.addEventListener('mousedown', down);
+		btn.addEventListener('mouseup', up);
+
+		return btn;
+	}
+
+	function updateCustomButton(node, oldModel, newModel)
+	{
+		node.elm_message = newModel.message;
+
+		var kids = node.childNodes;
+		var styleUp    = kids[0].style.display;
+		var styleHover = kids[1].style.display;
+		var styleDown  = kids[2].style.display;
+
+		Element.updateAndReplace(kids[0], oldModel.up, newModel.up);
+		Element.updateAndReplace(kids[1], oldModel.hover, newModel.hover);
+		Element.updateAndReplace(kids[2], oldModel.down, newModel.down);
+
+		var kids = node.childNodes;
+		kids[0].style.display = styleUp;
+		kids[1].style.display = styleHover;
+		kids[2].style.display = styleDown;
+
+		return node;
+	}
+
+	function max3(a, b, c)
+	{
+		var ab = a > b ? a : b;
+		return ab > c ? ab : c;
+	}
+
+	function customButton(message, up, hover, down)
+	{
+		return A3(Element.newElement,
+				  max3(up._0.props.width, hover._0.props.width, down._0.props.width),
+				  max3(up._0.props.height, hover._0.props.height, down._0.props.height),
+				  { ctor: 'Custom',
+					type: 'CustomButton',
+					render: renderCustomButton,
+					update: updateCustomButton,
+					model: {
+						message: message,
+						up: up,
+						hover: hover,
+						down: down
+					}
+				  });
+	}
+
+	function renderCheckbox(model)
+	{
+		var node = Element.createNode('input');
+		node.type = 'checkbox';
+		node.checked = model.checked;
+		node.style.display = 'block';
+		node.style.pointerEvents = 'auto';
+		node.elm_handler = model.handler;
+		function change()
+		{
+			Signal.sendMessage(node.elm_handler(node.checked));
+		}
+		node.addEventListener('change', change);
+		return node;
+	}
+
+	function updateCheckbox(node, oldModel, newModel)
+	{
+		node.elm_handler = newModel.handler;
+		node.checked = newModel.checked;
+		return node;
+	}
+
+	function checkbox(handler, checked)
+	{
+		return A3(Element.newElement, 13, 13, {
+			ctor: 'Custom',
+			type: 'CheckBox',
+			render: renderCheckbox,
+			update: updateCheckbox,
+			model: { handler: handler, checked: checked }
+		});
+	}
+
+	function setRange(node, start, end, dir)
+	{
+		if (node.parentNode)
+		{
+			node.setSelectionRange(start, end, dir);
+		}
+		else
+		{
+			setTimeout(function() {node.setSelectionRange(start, end, dir); }, 0);
+		}
+	}
+
+	function updateIfNeeded(css, attribute, latestAttribute)
+	{
+		if (css[attribute] !== latestAttribute)
+		{
+			css[attribute] = latestAttribute;
+		}
+	}
+	function cssDimensions(dimensions)
+	{
+		return dimensions.top    + 'px ' +
+			   dimensions.right  + 'px ' +
+			   dimensions.bottom + 'px ' +
+			   dimensions.left   + 'px';
+	}
+	function updateFieldStyle(css, style)
+	{
+		updateIfNeeded(css, 'padding', cssDimensions(style.padding));
+
+		var outline = style.outline;
+		updateIfNeeded(css, 'border-width', cssDimensions(outline.width));
+		updateIfNeeded(css, 'border-color', Color.toCss(outline.color));
+		updateIfNeeded(css, 'border-radius', outline.radius + 'px');
+
+		var highlight = style.highlight;
+		if (highlight.width === 0)
+		{
+			css.outline = 'none';
+		}
+		else
+		{
+			updateIfNeeded(css, 'outline-width', highlight.width + 'px');
+			updateIfNeeded(css, 'outline-color', Color.toCss(highlight.color));
+		}
+
+		var textStyle = style.style;
+		updateIfNeeded(css, 'color', Color.toCss(textStyle.color));
+		if (textStyle.typeface.ctor !== '[]')
+		{
+			updateIfNeeded(css, 'font-family', Text.toTypefaces(textStyle.typeface));
+		}
+		if (textStyle.height.ctor !== 'Nothing')
+		{
+			updateIfNeeded(css, 'font-size', textStyle.height._0 + 'px');
+		}
+		updateIfNeeded(css, 'font-weight', textStyle.bold ? 'bold' : 'normal');
+		updateIfNeeded(css, 'font-style', textStyle.italic ? 'italic' : 'normal');
+		if (textStyle.line.ctor !== 'Nothing')
+		{
+			updateIfNeeded(css, 'text-decoration', Text.toLine(textStyle.line._0));
+		}
+	}
+
+	function renderField(model)
+	{
+		var field = Element.createNode('input');
+		updateFieldStyle(field.style, model.style);
+		field.style.borderStyle = 'solid';
+		field.style.pointerEvents = 'auto';
+
+		field.type = model.type;
+		field.placeholder = model.placeHolder;
+		field.value = model.content.string;
+
+		field.elm_handler = model.handler;
+		field.elm_old_value = field.value;
+
+		function inputUpdate(event)
+		{
+			var curr = field.elm_old_value;
+			var next = field.value;
+			if (curr === next)
+			{
+				return;
+			}
+
+			var direction = field.selectionDirection === 'forward' ? 'Forward' : 'Backward';
+			var start = field.selectionStart;
+			var end = field.selectionEnd;
+			field.value = field.elm_old_value;
+
+			Signal.sendMessage(field.elm_handler({
+				string: next,
+				selection: {
+					start: start,
+					end: end,
+					direction: { ctor: direction }
+				}
+			}));
+		}
+
+		field.addEventListener('input', inputUpdate);
+		field.addEventListener('focus', function() {
+			field.elm_hasFocus = true;
+		});
+		field.addEventListener('blur', function() {
+			field.elm_hasFocus = false;
+		});
+
+		return field;
+	}
+
+	function updateField(field, oldModel, newModel)
+	{
+		if (oldModel.style !== newModel.style)
+		{
+			updateFieldStyle(field.style, newModel.style);
+		}
+		field.elm_handler = newModel.handler;
+
+		field.type = newModel.type;
+		field.placeholder = newModel.placeHolder;
+		var value = newModel.content.string;
+		field.value = value;
+		field.elm_old_value = value;
+		if (field.elm_hasFocus)
+		{
+			var selection = newModel.content.selection;
+			var direction = selection.direction.ctor === 'Forward' ? 'forward' : 'backward';
+			setRange(field, selection.start, selection.end, direction);
+		}
+		return field;
+	}
+
+	function mkField(type)
+	{
+		function field(style, handler, placeHolder, content)
+		{
+			var padding = style.padding;
+			var outline = style.outline.width;
+			var adjustWidth = padding.left + padding.right + outline.left + outline.right;
+			var adjustHeight = padding.top + padding.bottom + outline.top + outline.bottom;
+			return A3(Element.newElement, 200, 30, {
+				ctor: 'Custom',
+				type: type + 'Field',
+				adjustWidth: adjustWidth,
+				adjustHeight: adjustHeight,
+				render: renderField,
+				update: updateField,
+				model: {
+					handler: handler,
+					placeHolder: placeHolder,
+					content: content,
+					style: style,
+					type: type
+				}
+			});
+		}
+		return F4(field);
+	}
+
+	function hoverable(handler, wrappedElement)
+	{
+		function onHover(bool)
+		{
+			Signal.sendMessage(handler(bool));
+		}
+		var element = wrappedElement._0;
+		var newProps = Utils.update(element.props, { hover: onHover });
+		return {
+			ctor: wrappedElement.ctor,
+			_0: {
+				props: newProps,
+				element: element.element
+			}
+		};
+	}
+
+	function clickable(message, wrappedElement)
+	{
+		function onClick()
+		{
+			Signal.sendMessage(message);
+		}
+		var element = wrappedElement._0;
+		var newProps = Utils.update(element.props, { click: onClick });
+		return {
+			ctor: wrappedElement.ctor,
+			_0: {
+				props: newProps,
+				element: element.element
+			}
+		};
+	}
+
+	return Elm.Native.Graphics.Input.values = {
+		button: F2(button),
+		customButton: F4(customButton),
+		checkbox: F2(checkbox),
+		dropDown: F2(dropDown),
+		field: mkField('text'),
+		email: mkField('email'),
+		password: mkField('password'),
+		hoverable: F2(hoverable),
+		clickable: F2(clickable)
 	};
 };
 
-Elm.Mouse = Elm.Mouse || {};
-Elm.Mouse.make = function (_elm) {
+Elm.Graphics = Elm.Graphics || {};
+Elm.Graphics.Input = Elm.Graphics.Input || {};
+Elm.Graphics.Input.make = function (_elm) {
    "use strict";
-   _elm.Mouse = _elm.Mouse || {};
-   if (_elm.Mouse.values) return _elm.Mouse.values;
-   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$Native$Mouse = Elm.Native.Mouse.make(_elm),$Signal = Elm.Signal.make(_elm);
+   _elm.Graphics = _elm.Graphics || {};
+   _elm.Graphics.Input = _elm.Graphics.Input || {};
+   if (_elm.Graphics.Input.values) return _elm.Graphics.Input.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Native$Graphics$Input = Elm.Native.Graphics.Input.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var clicks = $Native$Mouse.clicks;
-   var isDown = $Native$Mouse.isDown;
-   var position = $Native$Mouse.position;
-   var x = A2($Signal.map,$Basics.fst,position);
-   var y = A2($Signal.map,$Basics.snd,position);
-   return _elm.Mouse.values = {_op: _op,position: position,x: x,y: y,isDown: isDown,clicks: clicks};
+   var clickable = $Native$Graphics$Input.clickable;
+   var hoverable = $Native$Graphics$Input.hoverable;
+   var dropDown = $Native$Graphics$Input.dropDown;
+   var checkbox = $Native$Graphics$Input.checkbox;
+   var customButton = $Native$Graphics$Input.customButton;
+   var button = $Native$Graphics$Input.button;
+   return _elm.Graphics.Input.values = {_op: _op
+                                       ,button: button
+                                       ,customButton: customButton
+                                       ,checkbox: checkbox
+                                       ,dropDown: dropDown
+                                       ,hoverable: hoverable
+                                       ,clickable: clickable};
+};
+Elm.Set = Elm.Set || {};
+Elm.Set.make = function (_elm) {
+   "use strict";
+   _elm.Set = _elm.Set || {};
+   if (_elm.Set.values) return _elm.Set.values;
+   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$Dict = Elm.Dict.make(_elm),$List = Elm.List.make(_elm);
+   var _op = {};
+   var foldr = F3(function (f,b,_p0) {    var _p1 = _p0;return A3($Dict.foldr,F3(function (k,_p2,b) {    return A2(f,k,b);}),b,_p1._0);});
+   var foldl = F3(function (f,b,_p3) {    var _p4 = _p3;return A3($Dict.foldl,F3(function (k,_p5,b) {    return A2(f,k,b);}),b,_p4._0);});
+   var toList = function (_p6) {    var _p7 = _p6;return $Dict.keys(_p7._0);};
+   var size = function (_p8) {    var _p9 = _p8;return $Dict.size(_p9._0);};
+   var member = F2(function (k,_p10) {    var _p11 = _p10;return A2($Dict.member,k,_p11._0);});
+   var isEmpty = function (_p12) {    var _p13 = _p12;return $Dict.isEmpty(_p13._0);};
+   var Set_elm_builtin = function (a) {    return {ctor: "Set_elm_builtin",_0: a};};
+   var empty = Set_elm_builtin($Dict.empty);
+   var singleton = function (k) {    return Set_elm_builtin(A2($Dict.singleton,k,{ctor: "_Tuple0"}));};
+   var insert = F2(function (k,_p14) {    var _p15 = _p14;return Set_elm_builtin(A3($Dict.insert,k,{ctor: "_Tuple0"},_p15._0));});
+   var fromList = function (xs) {    return A3($List.foldl,insert,empty,xs);};
+   var map = F2(function (f,s) {    return fromList(A2($List.map,f,toList(s)));});
+   var remove = F2(function (k,_p16) {    var _p17 = _p16;return Set_elm_builtin(A2($Dict.remove,k,_p17._0));});
+   var union = F2(function (_p19,_p18) {    var _p20 = _p19;var _p21 = _p18;return Set_elm_builtin(A2($Dict.union,_p20._0,_p21._0));});
+   var intersect = F2(function (_p23,_p22) {    var _p24 = _p23;var _p25 = _p22;return Set_elm_builtin(A2($Dict.intersect,_p24._0,_p25._0));});
+   var diff = F2(function (_p27,_p26) {    var _p28 = _p27;var _p29 = _p26;return Set_elm_builtin(A2($Dict.diff,_p28._0,_p29._0));});
+   var filter = F2(function (p,_p30) {    var _p31 = _p30;return Set_elm_builtin(A2($Dict.filter,F2(function (k,_p32) {    return p(k);}),_p31._0));});
+   var partition = F2(function (p,_p33) {
+      var _p34 = _p33;
+      var _p35 = A2($Dict.partition,F2(function (k,_p36) {    return p(k);}),_p34._0);
+      var p1 = _p35._0;
+      var p2 = _p35._1;
+      return {ctor: "_Tuple2",_0: Set_elm_builtin(p1),_1: Set_elm_builtin(p2)};
+   });
+   return _elm.Set.values = {_op: _op
+                            ,empty: empty
+                            ,singleton: singleton
+                            ,insert: insert
+                            ,remove: remove
+                            ,isEmpty: isEmpty
+                            ,member: member
+                            ,size: size
+                            ,foldl: foldl
+                            ,foldr: foldr
+                            ,map: map
+                            ,filter: filter
+                            ,partition: partition
+                            ,union: union
+                            ,intersect: intersect
+                            ,diff: diff
+                            ,toList: toList
+                            ,fromList: fromList};
+};
+Elm.Native.Keyboard = {};
+
+Elm.Native.Keyboard.make = function(localRuntime) {
+	localRuntime.Native = localRuntime.Native || {};
+	localRuntime.Native.Keyboard = localRuntime.Native.Keyboard || {};
+	if (localRuntime.Native.Keyboard.values)
+	{
+		return localRuntime.Native.Keyboard.values;
+	}
+
+	var NS = Elm.Native.Signal.make(localRuntime);
+
+
+	function keyEvent(event)
+	{
+		return {
+			alt: event.altKey,
+			meta: event.metaKey,
+			keyCode: event.keyCode
+		};
+	}
+
+
+	function keyStream(node, eventName, handler)
+	{
+		var stream = NS.input(eventName, { alt: false, meta: false, keyCode: 0 });
+
+		localRuntime.addListener([stream.id], node, eventName, function(e) {
+			localRuntime.notify(stream.id, handler(e));
+		});
+
+		return stream;
+	}
+
+	var downs = keyStream(document, 'keydown', keyEvent);
+	var ups = keyStream(document, 'keyup', keyEvent);
+	var presses = keyStream(document, 'keypress', keyEvent);
+	var blurs = keyStream(window, 'blur', function() { return null; });
+
+
+	return localRuntime.Native.Keyboard.values = {
+		downs: downs,
+		ups: ups,
+		blurs: blurs,
+		presses: presses
+	};
+};
+
+Elm.Keyboard = Elm.Keyboard || {};
+Elm.Keyboard.make = function (_elm) {
+   "use strict";
+   _elm.Keyboard = _elm.Keyboard || {};
+   if (_elm.Keyboard.values) return _elm.Keyboard.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Char = Elm.Char.make(_elm),
+   $Native$Keyboard = Elm.Native.Keyboard.make(_elm),
+   $Set = Elm.Set.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var presses = A2($Signal.map,function (_) {    return _.keyCode;},$Native$Keyboard.presses);
+   var toXY = F2(function (_p0,keyCodes) {
+      var _p1 = _p0;
+      var is = function (keyCode) {    return A2($Set.member,keyCode,keyCodes) ? 1 : 0;};
+      return {x: is(_p1.right) - is(_p1.left),y: is(_p1.up) - is(_p1.down)};
+   });
+   var Directions = F4(function (a,b,c,d) {    return {up: a,down: b,left: c,right: d};});
+   var dropMap = F2(function (f,signal) {    return $Signal.dropRepeats(A2($Signal.map,f,signal));});
+   var EventInfo = F3(function (a,b,c) {    return {alt: a,meta: b,keyCode: c};});
+   var Blur = {ctor: "Blur"};
+   var Down = function (a) {    return {ctor: "Down",_0: a};};
+   var Up = function (a) {    return {ctor: "Up",_0: a};};
+   var rawEvents = $Signal.mergeMany(_U.list([A2($Signal.map,Up,$Native$Keyboard.ups)
+                                             ,A2($Signal.map,Down,$Native$Keyboard.downs)
+                                             ,A2($Signal.map,$Basics.always(Blur),$Native$Keyboard.blurs)]));
+   var empty = {alt: false,meta: false,keyCodes: $Set.empty};
+   var update = F2(function (event,model) {
+      var _p2 = event;
+      switch (_p2.ctor)
+      {case "Down": var _p3 = _p2._0;
+           return {alt: _p3.alt,meta: _p3.meta,keyCodes: A2($Set.insert,_p3.keyCode,model.keyCodes)};
+         case "Up": var _p4 = _p2._0;
+           return {alt: _p4.alt,meta: _p4.meta,keyCodes: A2($Set.remove,_p4.keyCode,model.keyCodes)};
+         default: return empty;}
+   });
+   var model = A3($Signal.foldp,update,empty,rawEvents);
+   var alt = A2(dropMap,function (_) {    return _.alt;},model);
+   var meta = A2(dropMap,function (_) {    return _.meta;},model);
+   var keysDown = A2(dropMap,function (_) {    return _.keyCodes;},model);
+   var arrows = A2(dropMap,toXY({up: 38,down: 40,left: 37,right: 39}),keysDown);
+   var wasd = A2(dropMap,toXY({up: 87,down: 83,left: 65,right: 68}),keysDown);
+   var isDown = function (keyCode) {    return A2(dropMap,$Set.member(keyCode),keysDown);};
+   var ctrl = isDown(17);
+   var shift = isDown(16);
+   var space = isDown(32);
+   var enter = isDown(13);
+   var Model = F3(function (a,b,c) {    return {alt: a,meta: b,keyCodes: c};});
+   return _elm.Keyboard.values = {_op: _op
+                                 ,arrows: arrows
+                                 ,wasd: wasd
+                                 ,enter: enter
+                                 ,space: space
+                                 ,ctrl: ctrl
+                                 ,shift: shift
+                                 ,alt: alt
+                                 ,meta: meta
+                                 ,isDown: isDown
+                                 ,keysDown: keysDown
+                                 ,presses: presses};
 };
 Elm.Native = Elm.Native || {};
 Elm.Native.Window = {};
@@ -8717,4252 +7370,332 @@ Elm.Window.make = function (_elm) {
    var height = A2($Signal.map,$Basics.snd,dimensions);
    return _elm.Window.values = {_op: _op,dimensions: dimensions,width: width,height: height};
 };
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-
-},{}],2:[function(require,module,exports){
-(function (global){
-var topLevel = typeof global !== 'undefined' ? global :
-    typeof window !== 'undefined' ? window : {}
-var minDoc = require('min-document');
-
-if (typeof document !== 'undefined') {
-    module.exports = document;
-} else {
-    var doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'];
-
-    if (!doccy) {
-        doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'] = minDoc;
-    }
-
-    module.exports = doccy;
-}
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"min-document":1}],3:[function(require,module,exports){
-"use strict";
-
-module.exports = function isObject(x) {
-	return typeof x === "object" && x !== null;
-};
-
-},{}],4:[function(require,module,exports){
-var nativeIsArray = Array.isArray
-var toString = Object.prototype.toString
-
-module.exports = nativeIsArray || isArray
-
-function isArray(obj) {
-    return toString.call(obj) === "[object Array]"
-}
-
-},{}],5:[function(require,module,exports){
-var isObject = require("is-object")
-var isHook = require("../vnode/is-vhook.js")
-
-module.exports = applyProperties
-
-function applyProperties(node, props, previous) {
-    for (var propName in props) {
-        var propValue = props[propName]
-
-        if (propValue === undefined) {
-            removeProperty(node, propName, propValue, previous);
-        } else if (isHook(propValue)) {
-            removeProperty(node, propName, propValue, previous)
-            if (propValue.hook) {
-                propValue.hook(node,
-                    propName,
-                    previous ? previous[propName] : undefined)
-            }
-        } else {
-            if (isObject(propValue)) {
-                patchObject(node, props, previous, propName, propValue);
-            } else {
-                node[propName] = propValue
-            }
-        }
-    }
-}
-
-function removeProperty(node, propName, propValue, previous) {
-    if (previous) {
-        var previousValue = previous[propName]
-
-        if (!isHook(previousValue)) {
-            if (propName === "attributes") {
-                for (var attrName in previousValue) {
-                    node.removeAttribute(attrName)
-                }
-            } else if (propName === "style") {
-                for (var i in previousValue) {
-                    node.style[i] = ""
-                }
-            } else if (typeof previousValue === "string") {
-                node[propName] = ""
-            } else {
-                node[propName] = null
-            }
-        } else if (previousValue.unhook) {
-            previousValue.unhook(node, propName, propValue)
-        }
-    }
-}
-
-function patchObject(node, props, previous, propName, propValue) {
-    var previousValue = previous ? previous[propName] : undefined
-
-    // Set attributes
-    if (propName === "attributes") {
-        for (var attrName in propValue) {
-            var attrValue = propValue[attrName]
-
-            if (attrValue === undefined) {
-                node.removeAttribute(attrName)
-            } else {
-                node.setAttribute(attrName, attrValue)
-            }
-        }
-
-        return
-    }
-
-    if(previousValue && isObject(previousValue) &&
-        getPrototype(previousValue) !== getPrototype(propValue)) {
-        node[propName] = propValue
-        return
-    }
-
-    if (!isObject(node[propName])) {
-        node[propName] = {}
-    }
-
-    var replacer = propName === "style" ? "" : undefined
-
-    for (var k in propValue) {
-        var value = propValue[k]
-        node[propName][k] = (value === undefined) ? replacer : value
-    }
-}
-
-function getPrototype(value) {
-    if (Object.getPrototypeOf) {
-        return Object.getPrototypeOf(value)
-    } else if (value.__proto__) {
-        return value.__proto__
-    } else if (value.constructor) {
-        return value.constructor.prototype
-    }
-}
-
-},{"../vnode/is-vhook.js":13,"is-object":3}],6:[function(require,module,exports){
-var document = require("global/document")
-
-var applyProperties = require("./apply-properties")
-
-var isVNode = require("../vnode/is-vnode.js")
-var isVText = require("../vnode/is-vtext.js")
-var isWidget = require("../vnode/is-widget.js")
-var handleThunk = require("../vnode/handle-thunk.js")
-
-module.exports = createElement
-
-function createElement(vnode, opts) {
-    var doc = opts ? opts.document || document : document
-    var warn = opts ? opts.warn : null
-
-    vnode = handleThunk(vnode).a
-
-    if (isWidget(vnode)) {
-        return vnode.init()
-    } else if (isVText(vnode)) {
-        return doc.createTextNode(vnode.text)
-    } else if (!isVNode(vnode)) {
-        if (warn) {
-            warn("Item is not a valid virtual dom node", vnode)
-        }
-        return null
-    }
-
-    var node = (vnode.namespace === null) ?
-        doc.createElement(vnode.tagName) :
-        doc.createElementNS(vnode.namespace, vnode.tagName)
-
-    var props = vnode.properties
-    applyProperties(node, props)
-
-    var children = vnode.children
-
-    for (var i = 0; i < children.length; i++) {
-        var childNode = createElement(children[i], opts)
-        if (childNode) {
-            node.appendChild(childNode)
-        }
-    }
-
-    return node
-}
-
-},{"../vnode/handle-thunk.js":11,"../vnode/is-vnode.js":14,"../vnode/is-vtext.js":15,"../vnode/is-widget.js":16,"./apply-properties":5,"global/document":2}],7:[function(require,module,exports){
-// Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
-// We don't want to read all of the DOM nodes in the tree so we use
-// the in-order tree indexing to eliminate recursion down certain branches.
-// We only recurse into a DOM node if we know that it contains a child of
-// interest.
-
-var noChild = {}
-
-module.exports = domIndex
-
-function domIndex(rootNode, tree, indices, nodes) {
-    if (!indices || indices.length === 0) {
-        return {}
-    } else {
-        indices.sort(ascending)
-        return recurse(rootNode, tree, indices, nodes, 0)
-    }
-}
-
-function recurse(rootNode, tree, indices, nodes, rootIndex) {
-    nodes = nodes || {}
-
-
-    if (rootNode) {
-        if (indexInRange(indices, rootIndex, rootIndex)) {
-            nodes[rootIndex] = rootNode
-        }
-
-        var vChildren = tree.children
-
-        if (vChildren) {
-
-            var childNodes = rootNode.childNodes
-
-            for (var i = 0; i < tree.children.length; i++) {
-                rootIndex += 1
-
-                var vChild = vChildren[i] || noChild
-                var nextIndex = rootIndex + (vChild.count || 0)
-
-                // skip recursion down the tree if there are no nodes down here
-                if (indexInRange(indices, rootIndex, nextIndex)) {
-                    recurse(childNodes[i], vChild, indices, nodes, rootIndex)
-                }
-
-                rootIndex = nextIndex
-            }
-        }
-    }
-
-    return nodes
-}
-
-// Binary search for an index in the interval [left, right]
-function indexInRange(indices, left, right) {
-    if (indices.length === 0) {
-        return false
-    }
-
-    var minIndex = 0
-    var maxIndex = indices.length - 1
-    var currentIndex
-    var currentItem
-
-    while (minIndex <= maxIndex) {
-        currentIndex = ((maxIndex + minIndex) / 2) >> 0
-        currentItem = indices[currentIndex]
-
-        if (minIndex === maxIndex) {
-            return currentItem >= left && currentItem <= right
-        } else if (currentItem < left) {
-            minIndex = currentIndex + 1
-        } else  if (currentItem > right) {
-            maxIndex = currentIndex - 1
-        } else {
-            return true
-        }
-    }
-
-    return false;
-}
-
-function ascending(a, b) {
-    return a > b ? 1 : -1
-}
-
-},{}],8:[function(require,module,exports){
-var applyProperties = require("./apply-properties")
-
-var isWidget = require("../vnode/is-widget.js")
-var VPatch = require("../vnode/vpatch.js")
-
-var render = require("./create-element")
-var updateWidget = require("./update-widget")
-
-module.exports = applyPatch
-
-function applyPatch(vpatch, domNode, renderOptions) {
-    var type = vpatch.type
-    var vNode = vpatch.vNode
-    var patch = vpatch.patch
-
-    switch (type) {
-        case VPatch.REMOVE:
-            return removeNode(domNode, vNode)
-        case VPatch.INSERT:
-            return insertNode(domNode, patch, renderOptions)
-        case VPatch.VTEXT:
-            return stringPatch(domNode, vNode, patch, renderOptions)
-        case VPatch.WIDGET:
-            return widgetPatch(domNode, vNode, patch, renderOptions)
-        case VPatch.VNODE:
-            return vNodePatch(domNode, vNode, patch, renderOptions)
-        case VPatch.ORDER:
-            reorderChildren(domNode, patch)
-            return domNode
-        case VPatch.PROPS:
-            applyProperties(domNode, patch, vNode.properties)
-            return domNode
-        case VPatch.THUNK:
-            return replaceRoot(domNode,
-                renderOptions.patch(domNode, patch, renderOptions))
-        default:
-            return domNode
-    }
-}
-
-function removeNode(domNode, vNode) {
-    var parentNode = domNode.parentNode
-
-    if (parentNode) {
-        parentNode.removeChild(domNode)
-    }
-
-    destroyWidget(domNode, vNode);
-
-    return null
-}
-
-function insertNode(parentNode, vNode, renderOptions) {
-    var newNode = render(vNode, renderOptions)
-
-    if (parentNode) {
-        parentNode.appendChild(newNode)
-    }
-
-    return parentNode
-}
-
-function stringPatch(domNode, leftVNode, vText, renderOptions) {
-    var newNode
-
-    if (domNode.nodeType === 3) {
-        domNode.replaceData(0, domNode.length, vText.text)
-        newNode = domNode
-    } else {
-        var parentNode = domNode.parentNode
-        newNode = render(vText, renderOptions)
-
-        if (parentNode && newNode !== domNode) {
-            parentNode.replaceChild(newNode, domNode)
-        }
-    }
-
-    return newNode
-}
-
-function widgetPatch(domNode, leftVNode, widget, renderOptions) {
-    var updating = updateWidget(leftVNode, widget)
-    var newNode
-
-    if (updating) {
-        newNode = widget.update(leftVNode, domNode) || domNode
-    } else {
-        newNode = render(widget, renderOptions)
-    }
-
-    var parentNode = domNode.parentNode
-
-    if (parentNode && newNode !== domNode) {
-        parentNode.replaceChild(newNode, domNode)
-    }
-
-    if (!updating) {
-        destroyWidget(domNode, leftVNode)
-    }
-
-    return newNode
-}
-
-function vNodePatch(domNode, leftVNode, vNode, renderOptions) {
-    var parentNode = domNode.parentNode
-    var newNode = render(vNode, renderOptions)
-
-    if (parentNode && newNode !== domNode) {
-        parentNode.replaceChild(newNode, domNode)
-    }
-
-    return newNode
-}
-
-function destroyWidget(domNode, w) {
-    if (typeof w.destroy === "function" && isWidget(w)) {
-        w.destroy(domNode)
-    }
-}
-
-function reorderChildren(domNode, moves) {
-    var childNodes = domNode.childNodes
-    var keyMap = {}
-    var node
-    var remove
-    var insert
-
-    for (var i = 0; i < moves.removes.length; i++) {
-        remove = moves.removes[i]
-        node = childNodes[remove.from]
-        if (remove.key) {
-            keyMap[remove.key] = node
-        }
-        domNode.removeChild(node)
-    }
-
-    var length = childNodes.length
-    for (var j = 0; j < moves.inserts.length; j++) {
-        insert = moves.inserts[j]
-        node = keyMap[insert.key]
-        // this is the weirdest bug i've ever seen in webkit
-        domNode.insertBefore(node, insert.to >= length++ ? null : childNodes[insert.to])
-    }
-}
-
-function replaceRoot(oldRoot, newRoot) {
-    if (oldRoot && newRoot && oldRoot !== newRoot && oldRoot.parentNode) {
-        oldRoot.parentNode.replaceChild(newRoot, oldRoot)
-    }
-
-    return newRoot;
-}
-
-},{"../vnode/is-widget.js":16,"../vnode/vpatch.js":19,"./apply-properties":5,"./create-element":6,"./update-widget":10}],9:[function(require,module,exports){
-var document = require("global/document")
-var isArray = require("x-is-array")
-
-var domIndex = require("./dom-index")
-var patchOp = require("./patch-op")
-module.exports = patch
-
-function patch(rootNode, patches) {
-    return patchRecursive(rootNode, patches)
-}
-
-function patchRecursive(rootNode, patches, renderOptions) {
-    var indices = patchIndices(patches)
-
-    if (indices.length === 0) {
-        return rootNode
-    }
-
-    var index = domIndex(rootNode, patches.a, indices)
-    var ownerDocument = rootNode.ownerDocument
-
-    if (!renderOptions) {
-        renderOptions = { patch: patchRecursive }
-        if (ownerDocument !== document) {
-            renderOptions.document = ownerDocument
-        }
-    }
-
-    for (var i = 0; i < indices.length; i++) {
-        var nodeIndex = indices[i]
-        rootNode = applyPatch(rootNode,
-            index[nodeIndex],
-            patches[nodeIndex],
-            renderOptions)
-    }
-
-    return rootNode
-}
-
-function applyPatch(rootNode, domNode, patchList, renderOptions) {
-    if (!domNode) {
-        return rootNode
-    }
-
-    var newNode
-
-    if (isArray(patchList)) {
-        for (var i = 0; i < patchList.length; i++) {
-            newNode = patchOp(patchList[i], domNode, renderOptions)
-
-            if (domNode === rootNode) {
-                rootNode = newNode
-            }
-        }
-    } else {
-        newNode = patchOp(patchList, domNode, renderOptions)
-
-        if (domNode === rootNode) {
-            rootNode = newNode
-        }
-    }
-
-    return rootNode
-}
-
-function patchIndices(patches) {
-    var indices = []
-
-    for (var key in patches) {
-        if (key !== "a") {
-            indices.push(Number(key))
-        }
-    }
-
-    return indices
-}
-
-},{"./dom-index":7,"./patch-op":8,"global/document":2,"x-is-array":4}],10:[function(require,module,exports){
-var isWidget = require("../vnode/is-widget.js")
-
-module.exports = updateWidget
-
-function updateWidget(a, b) {
-    if (isWidget(a) && isWidget(b)) {
-        if ("name" in a && "name" in b) {
-            return a.id === b.id
-        } else {
-            return a.init === b.init
-        }
-    }
-
-    return false
-}
-
-},{"../vnode/is-widget.js":16}],11:[function(require,module,exports){
-var isVNode = require("./is-vnode")
-var isVText = require("./is-vtext")
-var isWidget = require("./is-widget")
-var isThunk = require("./is-thunk")
-
-module.exports = handleThunk
-
-function handleThunk(a, b) {
-    var renderedA = a
-    var renderedB = b
-
-    if (isThunk(b)) {
-        renderedB = renderThunk(b, a)
-    }
-
-    if (isThunk(a)) {
-        renderedA = renderThunk(a, null)
-    }
-
-    return {
-        a: renderedA,
-        b: renderedB
-    }
-}
-
-function renderThunk(thunk, previous) {
-    var renderedThunk = thunk.vnode
-
-    if (!renderedThunk) {
-        renderedThunk = thunk.vnode = thunk.render(previous)
-    }
-
-    if (!(isVNode(renderedThunk) ||
-            isVText(renderedThunk) ||
-            isWidget(renderedThunk))) {
-        throw new Error("thunk did not return a valid node");
-    }
-
-    return renderedThunk
-}
-
-},{"./is-thunk":12,"./is-vnode":14,"./is-vtext":15,"./is-widget":16}],12:[function(require,module,exports){
-module.exports = isThunk
-
-function isThunk(t) {
-    return t && t.type === "Thunk"
-}
-
-},{}],13:[function(require,module,exports){
-module.exports = isHook
-
-function isHook(hook) {
-    return hook &&
-      (typeof hook.hook === "function" && !hook.hasOwnProperty("hook") ||
-       typeof hook.unhook === "function" && !hook.hasOwnProperty("unhook"))
-}
-
-},{}],14:[function(require,module,exports){
-var version = require("./version")
-
-module.exports = isVirtualNode
-
-function isVirtualNode(x) {
-    return x && x.type === "VirtualNode" && x.version === version
-}
-
-},{"./version":17}],15:[function(require,module,exports){
-var version = require("./version")
-
-module.exports = isVirtualText
-
-function isVirtualText(x) {
-    return x && x.type === "VirtualText" && x.version === version
-}
-
-},{"./version":17}],16:[function(require,module,exports){
-module.exports = isWidget
-
-function isWidget(w) {
-    return w && w.type === "Widget"
-}
-
-},{}],17:[function(require,module,exports){
-module.exports = "2"
-
-},{}],18:[function(require,module,exports){
-var version = require("./version")
-var isVNode = require("./is-vnode")
-var isWidget = require("./is-widget")
-var isThunk = require("./is-thunk")
-var isVHook = require("./is-vhook")
-
-module.exports = VirtualNode
-
-var noProperties = {}
-var noChildren = []
-
-function VirtualNode(tagName, properties, children, key, namespace) {
-    this.tagName = tagName
-    this.properties = properties || noProperties
-    this.children = children || noChildren
-    this.key = key != null ? String(key) : undefined
-    this.namespace = (typeof namespace === "string") ? namespace : null
-
-    var count = (children && children.length) || 0
-    var descendants = 0
-    var hasWidgets = false
-    var hasThunks = false
-    var descendantHooks = false
-    var hooks
-
-    for (var propName in properties) {
-        if (properties.hasOwnProperty(propName)) {
-            var property = properties[propName]
-            if (isVHook(property) && property.unhook) {
-                if (!hooks) {
-                    hooks = {}
-                }
-
-                hooks[propName] = property
-            }
-        }
-    }
-
-    for (var i = 0; i < count; i++) {
-        var child = children[i]
-        if (isVNode(child)) {
-            descendants += child.count || 0
-
-            if (!hasWidgets && child.hasWidgets) {
-                hasWidgets = true
-            }
-
-            if (!hasThunks && child.hasThunks) {
-                hasThunks = true
-            }
-
-            if (!descendantHooks && (child.hooks || child.descendantHooks)) {
-                descendantHooks = true
-            }
-        } else if (!hasWidgets && isWidget(child)) {
-            if (typeof child.destroy === "function") {
-                hasWidgets = true
-            }
-        } else if (!hasThunks && isThunk(child)) {
-            hasThunks = true;
-        }
-    }
-
-    this.count = count + descendants
-    this.hasWidgets = hasWidgets
-    this.hasThunks = hasThunks
-    this.hooks = hooks
-    this.descendantHooks = descendantHooks
-}
-
-VirtualNode.prototype.version = version
-VirtualNode.prototype.type = "VirtualNode"
-
-},{"./is-thunk":12,"./is-vhook":13,"./is-vnode":14,"./is-widget":16,"./version":17}],19:[function(require,module,exports){
-var version = require("./version")
-
-VirtualPatch.NONE = 0
-VirtualPatch.VTEXT = 1
-VirtualPatch.VNODE = 2
-VirtualPatch.WIDGET = 3
-VirtualPatch.PROPS = 4
-VirtualPatch.ORDER = 5
-VirtualPatch.INSERT = 6
-VirtualPatch.REMOVE = 7
-VirtualPatch.THUNK = 8
-
-module.exports = VirtualPatch
-
-function VirtualPatch(type, vNode, patch) {
-    this.type = Number(type)
-    this.vNode = vNode
-    this.patch = patch
-}
-
-VirtualPatch.prototype.version = version
-VirtualPatch.prototype.type = "VirtualPatch"
-
-},{"./version":17}],20:[function(require,module,exports){
-var version = require("./version")
-
-module.exports = VirtualText
-
-function VirtualText(text) {
-    this.text = String(text)
-}
-
-VirtualText.prototype.version = version
-VirtualText.prototype.type = "VirtualText"
-
-},{"./version":17}],21:[function(require,module,exports){
-var isObject = require("is-object")
-var isHook = require("../vnode/is-vhook")
-
-module.exports = diffProps
-
-function diffProps(a, b) {
-    var diff
-
-    for (var aKey in a) {
-        if (!(aKey in b)) {
-            diff = diff || {}
-            diff[aKey] = undefined
-        }
-
-        var aValue = a[aKey]
-        var bValue = b[aKey]
-
-        if (aValue === bValue) {
-            continue
-        } else if (isObject(aValue) && isObject(bValue)) {
-            if (getPrototype(bValue) !== getPrototype(aValue)) {
-                diff = diff || {}
-                diff[aKey] = bValue
-            } else if (isHook(bValue)) {
-                 diff = diff || {}
-                 diff[aKey] = bValue
-            } else {
-                var objectDiff = diffProps(aValue, bValue)
-                if (objectDiff) {
-                    diff = diff || {}
-                    diff[aKey] = objectDiff
-                }
-            }
-        } else {
-            diff = diff || {}
-            diff[aKey] = bValue
-        }
-    }
-
-    for (var bKey in b) {
-        if (!(bKey in a)) {
-            diff = diff || {}
-            diff[bKey] = b[bKey]
-        }
-    }
-
-    return diff
-}
-
-function getPrototype(value) {
-  if (Object.getPrototypeOf) {
-    return Object.getPrototypeOf(value)
-  } else if (value.__proto__) {
-    return value.__proto__
-  } else if (value.constructor) {
-    return value.constructor.prototype
-  }
-}
-
-},{"../vnode/is-vhook":13,"is-object":3}],22:[function(require,module,exports){
-var isArray = require("x-is-array")
-
-var VPatch = require("../vnode/vpatch")
-var isVNode = require("../vnode/is-vnode")
-var isVText = require("../vnode/is-vtext")
-var isWidget = require("../vnode/is-widget")
-var isThunk = require("../vnode/is-thunk")
-var handleThunk = require("../vnode/handle-thunk")
-
-var diffProps = require("./diff-props")
-
-module.exports = diff
-
-function diff(a, b) {
-    var patch = { a: a }
-    walk(a, b, patch, 0)
-    return patch
-}
-
-function walk(a, b, patch, index) {
-    if (a === b) {
-        return
-    }
-
-    var apply = patch[index]
-    var applyClear = false
-
-    if (isThunk(a) || isThunk(b)) {
-        thunks(a, b, patch, index)
-    } else if (b == null) {
-
-        // If a is a widget we will add a remove patch for it
-        // Otherwise any child widgets/hooks must be destroyed.
-        // This prevents adding two remove patches for a widget.
-        if (!isWidget(a)) {
-            clearState(a, patch, index)
-            apply = patch[index]
-        }
-
-        apply = appendPatch(apply, new VPatch(VPatch.REMOVE, a, b))
-    } else if (isVNode(b)) {
-        if (isVNode(a)) {
-            if (a.tagName === b.tagName &&
-                a.namespace === b.namespace &&
-                a.key === b.key) {
-                var propsPatch = diffProps(a.properties, b.properties)
-                if (propsPatch) {
-                    apply = appendPatch(apply,
-                        new VPatch(VPatch.PROPS, a, propsPatch))
-                }
-                apply = diffChildren(a, b, patch, apply, index)
-            } else {
-                apply = appendPatch(apply, new VPatch(VPatch.VNODE, a, b))
-                applyClear = true
-            }
-        } else {
-            apply = appendPatch(apply, new VPatch(VPatch.VNODE, a, b))
-            applyClear = true
-        }
-    } else if (isVText(b)) {
-        if (!isVText(a)) {
-            apply = appendPatch(apply, new VPatch(VPatch.VTEXT, a, b))
-            applyClear = true
-        } else if (a.text !== b.text) {
-            apply = appendPatch(apply, new VPatch(VPatch.VTEXT, a, b))
-        }
-    } else if (isWidget(b)) {
-        if (!isWidget(a)) {
-            applyClear = true
-        }
-
-        apply = appendPatch(apply, new VPatch(VPatch.WIDGET, a, b))
-    }
-
-    if (apply) {
-        patch[index] = apply
-    }
-
-    if (applyClear) {
-        clearState(a, patch, index)
-    }
-}
-
-function diffChildren(a, b, patch, apply, index) {
-    var aChildren = a.children
-    var orderedSet = reorder(aChildren, b.children)
-    var bChildren = orderedSet.children
-
-    var aLen = aChildren.length
-    var bLen = bChildren.length
-    var len = aLen > bLen ? aLen : bLen
-
-    for (var i = 0; i < len; i++) {
-        var leftNode = aChildren[i]
-        var rightNode = bChildren[i]
-        index += 1
-
-        if (!leftNode) {
-            if (rightNode) {
-                // Excess nodes in b need to be added
-                apply = appendPatch(apply,
-                    new VPatch(VPatch.INSERT, null, rightNode))
-            }
-        } else {
-            walk(leftNode, rightNode, patch, index)
-        }
-
-        if (isVNode(leftNode) && leftNode.count) {
-            index += leftNode.count
-        }
-    }
-
-    if (orderedSet.moves) {
-        // Reorder nodes last
-        apply = appendPatch(apply, new VPatch(
-            VPatch.ORDER,
-            a,
-            orderedSet.moves
-        ))
-    }
-
-    return apply
-}
-
-function clearState(vNode, patch, index) {
-    // TODO: Make this a single walk, not two
-    unhook(vNode, patch, index)
-    destroyWidgets(vNode, patch, index)
-}
-
-// Patch records for all destroyed widgets must be added because we need
-// a DOM node reference for the destroy function
-function destroyWidgets(vNode, patch, index) {
-    if (isWidget(vNode)) {
-        if (typeof vNode.destroy === "function") {
-            patch[index] = appendPatch(
-                patch[index],
-                new VPatch(VPatch.REMOVE, vNode, null)
-            )
-        }
-    } else if (isVNode(vNode) && (vNode.hasWidgets || vNode.hasThunks)) {
-        var children = vNode.children
-        var len = children.length
-        for (var i = 0; i < len; i++) {
-            var child = children[i]
-            index += 1
-
-            destroyWidgets(child, patch, index)
-
-            if (isVNode(child) && child.count) {
-                index += child.count
-            }
-        }
-    } else if (isThunk(vNode)) {
-        thunks(vNode, null, patch, index)
-    }
-}
-
-// Create a sub-patch for thunks
-function thunks(a, b, patch, index) {
-    var nodes = handleThunk(a, b)
-    var thunkPatch = diff(nodes.a, nodes.b)
-    if (hasPatches(thunkPatch)) {
-        patch[index] = new VPatch(VPatch.THUNK, null, thunkPatch)
-    }
-}
-
-function hasPatches(patch) {
-    for (var index in patch) {
-        if (index !== "a") {
-            return true
-        }
-    }
-
-    return false
-}
-
-// Execute hooks when two nodes are identical
-function unhook(vNode, patch, index) {
-    if (isVNode(vNode)) {
-        if (vNode.hooks) {
-            patch[index] = appendPatch(
-                patch[index],
-                new VPatch(
-                    VPatch.PROPS,
-                    vNode,
-                    undefinedKeys(vNode.hooks)
-                )
-            )
-        }
-
-        if (vNode.descendantHooks || vNode.hasThunks) {
-            var children = vNode.children
-            var len = children.length
-            for (var i = 0; i < len; i++) {
-                var child = children[i]
-                index += 1
-
-                unhook(child, patch, index)
-
-                if (isVNode(child) && child.count) {
-                    index += child.count
-                }
-            }
-        }
-    } else if (isThunk(vNode)) {
-        thunks(vNode, null, patch, index)
-    }
-}
-
-function undefinedKeys(obj) {
-    var result = {}
-
-    for (var key in obj) {
-        result[key] = undefined
-    }
-
-    return result
-}
-
-// List diff, naive left to right reordering
-function reorder(aChildren, bChildren) {
-    // O(M) time, O(M) memory
-    var bChildIndex = keyIndex(bChildren)
-    var bKeys = bChildIndex.keys
-    var bFree = bChildIndex.free
-
-    if (bFree.length === bChildren.length) {
-        return {
-            children: bChildren,
-            moves: null
-        }
-    }
-
-    // O(N) time, O(N) memory
-    var aChildIndex = keyIndex(aChildren)
-    var aKeys = aChildIndex.keys
-    var aFree = aChildIndex.free
-
-    if (aFree.length === aChildren.length) {
-        return {
-            children: bChildren,
-            moves: null
-        }
-    }
-
-    // O(MAX(N, M)) memory
-    var newChildren = []
-
-    var freeIndex = 0
-    var freeCount = bFree.length
-    var deletedItems = 0
-
-    // Iterate through a and match a node in b
-    // O(N) time,
-    for (var i = 0 ; i < aChildren.length; i++) {
-        var aItem = aChildren[i]
-        var itemIndex
-
-        if (aItem.key) {
-            if (bKeys.hasOwnProperty(aItem.key)) {
-                // Match up the old keys
-                itemIndex = bKeys[aItem.key]
-                newChildren.push(bChildren[itemIndex])
-
-            } else {
-                // Remove old keyed items
-                itemIndex = i - deletedItems++
-                newChildren.push(null)
-            }
-        } else {
-            // Match the item in a with the next free item in b
-            if (freeIndex < freeCount) {
-                itemIndex = bFree[freeIndex++]
-                newChildren.push(bChildren[itemIndex])
-            } else {
-                // There are no free items in b to match with
-                // the free items in a, so the extra free nodes
-                // are deleted.
-                itemIndex = i - deletedItems++
-                newChildren.push(null)
-            }
-        }
-    }
-
-    var lastFreeIndex = freeIndex >= bFree.length ?
-        bChildren.length :
-        bFree[freeIndex]
-
-    // Iterate through b and append any new keys
-    // O(M) time
-    for (var j = 0; j < bChildren.length; j++) {
-        var newItem = bChildren[j]
-
-        if (newItem.key) {
-            if (!aKeys.hasOwnProperty(newItem.key)) {
-                // Add any new keyed items
-                // We are adding new items to the end and then sorting them
-                // in place. In future we should insert new items in place.
-                newChildren.push(newItem)
-            }
-        } else if (j >= lastFreeIndex) {
-            // Add any leftover non-keyed items
-            newChildren.push(newItem)
-        }
-    }
-
-    var simulate = newChildren.slice()
-    var simulateIndex = 0
-    var removes = []
-    var inserts = []
-    var simulateItem
-
-    for (var k = 0; k < bChildren.length;) {
-        var wantedItem = bChildren[k]
-        simulateItem = simulate[simulateIndex]
-
-        // remove items
-        while (simulateItem === null && simulate.length) {
-            removes.push(remove(simulate, simulateIndex, null))
-            simulateItem = simulate[simulateIndex]
-        }
-
-        if (!simulateItem || simulateItem.key !== wantedItem.key) {
-            // if we need a key in this position...
-            if (wantedItem.key) {
-                if (simulateItem && simulateItem.key) {
-                    // if an insert doesn't put this key in place, it needs to move
-                    if (bKeys[simulateItem.key] !== k + 1) {
-                        removes.push(remove(simulate, simulateIndex, simulateItem.key))
-                        simulateItem = simulate[simulateIndex]
-                        // if the remove didn't put the wanted item in place, we need to insert it
-                        if (!simulateItem || simulateItem.key !== wantedItem.key) {
-                            inserts.push({key: wantedItem.key, to: k})
-                        }
-                        // items are matching, so skip ahead
-                        else {
-                            simulateIndex++
-                        }
-                    }
-                    else {
-                        inserts.push({key: wantedItem.key, to: k})
-                    }
-                }
-                else {
-                    inserts.push({key: wantedItem.key, to: k})
-                }
-                k++
-            }
-            // a key in simulate has no matching wanted key, remove it
-            else if (simulateItem && simulateItem.key) {
-                removes.push(remove(simulate, simulateIndex, simulateItem.key))
-            }
-        }
-        else {
-            simulateIndex++
-            k++
-        }
-    }
-
-    // remove all the remaining nodes from simulate
-    while(simulateIndex < simulate.length) {
-        simulateItem = simulate[simulateIndex]
-        removes.push(remove(simulate, simulateIndex, simulateItem && simulateItem.key))
-    }
-
-    // If the only moves we have are deletes then we can just
-    // let the delete patch remove these items.
-    if (removes.length === deletedItems && !inserts.length) {
-        return {
-            children: newChildren,
-            moves: null
-        }
-    }
-
-    return {
-        children: newChildren,
-        moves: {
-            removes: removes,
-            inserts: inserts
-        }
-    }
-}
-
-function remove(arr, index, key) {
-    arr.splice(index, 1)
-
-    return {
-        from: index,
-        key: key
-    }
-}
-
-function keyIndex(children) {
-    var keys = {}
-    var free = []
-    var length = children.length
-
-    for (var i = 0; i < length; i++) {
-        var child = children[i]
-
-        if (child.key) {
-            keys[child.key] = i
-        } else {
-            free.push(i)
-        }
-    }
-
-    return {
-        keys: keys,     // A hash of key name to index
-        free: free,     // An array of unkeyed item indices
-    }
-}
-
-function appendPatch(apply, patch) {
-    if (apply) {
-        if (isArray(apply)) {
-            apply.push(patch)
-        } else {
-            apply = [apply, patch]
-        }
-
-        return apply
-    } else {
-        return patch
-    }
-}
-
-},{"../vnode/handle-thunk":11,"../vnode/is-thunk":12,"../vnode/is-vnode":14,"../vnode/is-vtext":15,"../vnode/is-widget":16,"../vnode/vpatch":19,"./diff-props":21,"x-is-array":4}],23:[function(require,module,exports){
-var VNode = require('virtual-dom/vnode/vnode');
-var VText = require('virtual-dom/vnode/vtext');
-var diff = require('virtual-dom/vtree/diff');
-var patch = require('virtual-dom/vdom/patch');
-var createElement = require('virtual-dom/vdom/create-element');
-var isHook = require("virtual-dom/vnode/is-vhook");
-
-
-Elm.Native.VirtualDom = {};
-Elm.Native.VirtualDom.make = function(elm)
-{
-	elm.Native = elm.Native || {};
-	elm.Native.VirtualDom = elm.Native.VirtualDom || {};
-	if (elm.Native.VirtualDom.values)
-	{
-		return elm.Native.VirtualDom.values;
-	}
-
-	var Element = Elm.Native.Graphics.Element.make(elm);
-	var Json = Elm.Native.Json.make(elm);
-	var List = Elm.Native.List.make(elm);
-	var Signal = Elm.Native.Signal.make(elm);
-	var Utils = Elm.Native.Utils.make(elm);
-
-	var ATTRIBUTE_KEY = 'UniqueNameThatOthersAreVeryUnlikelyToUse';
-
-
-
-	// VIRTUAL DOM NODES
-
-
-	function text(string)
-	{
-		return new VText(string);
-	}
-
-	function node(name)
-	{
-		return F2(function(propertyList, contents) {
-			return makeNode(name, propertyList, contents);
-		});
-	}
-
-
-	// BUILD VIRTUAL DOME NODES
-
-
-	function makeNode(name, propertyList, contents)
-	{
-		var props = listToProperties(propertyList);
-
-		var key, namespace;
-		// support keys
-		if (props.key !== undefined)
-		{
-			key = props.key;
-			props.key = undefined;
-		}
-
-		// support namespace
-		if (props.namespace !== undefined)
-		{
-			namespace = props.namespace;
-			props.namespace = undefined;
-		}
-
-		// ensure that setting text of an input does not move the cursor
-		var useSoftSet =
-			(name === 'input' || name === 'textarea')
-			&& props.value !== undefined
-			&& !isHook(props.value);
-
-		if (useSoftSet)
-		{
-			props.value = SoftSetHook(props.value);
-		}
-
-		return new VNode(name, props, List.toArray(contents), key, namespace);
-	}
-
-	function listToProperties(list)
-	{
-		var object = {};
-		while (list.ctor !== '[]')
-		{
-			var entry = list._0;
-			if (entry.key === ATTRIBUTE_KEY)
-			{
-				object.attributes = object.attributes || {};
-				object.attributes[entry.value.attrKey] = entry.value.attrValue;
-			}
-			else
-			{
-				object[entry.key] = entry.value;
-			}
-			list = list._1;
-		}
-		return object;
-	}
-
-
-
-	// PROPERTIES AND ATTRIBUTES
-
-
-	function property(key, value)
-	{
-		return {
-			key: key,
-			value: value
-		};
-	}
-
-	function attribute(key, value)
-	{
-		return {
-			key: ATTRIBUTE_KEY,
-			value: {
-				attrKey: key,
-				attrValue: value
-			}
-		};
-	}
-
-
-
-	// NAMESPACED ATTRIBUTES
-
-
-	function attributeNS(namespace, key, value)
-	{
-		return {
-			key: key,
-			value: new AttributeHook(namespace, key, value)
-		};
-	}
-
-	function AttributeHook(namespace, key, value)
-	{
-		if (!(this instanceof AttributeHook))
-		{
-			return new AttributeHook(namespace, key, value);
-		}
-
-		this.namespace = namespace;
-		this.key = key;
-		this.value = value;
-	}
-
-	AttributeHook.prototype.hook = function (node, prop, prev)
-	{
-		if (prev
-			&& prev.type === 'AttributeHook'
-			&& prev.value === this.value
-			&& prev.namespace === this.namespace)
-		{
-			return;
-		}
-
-		node.setAttributeNS(this.namespace, prop, this.value);
-	};
-
-	AttributeHook.prototype.unhook = function (node, prop, next)
-	{
-		if (next
-			&& next.type === 'AttributeHook'
-			&& next.namespace === this.namespace)
-		{
-			return;
-		}
-
-		node.removeAttributeNS(this.namespace, this.key);
-	};
-
-	AttributeHook.prototype.type = 'AttributeHook';
-
-
-
-	// EVENTS
-
-
-	function on(name, options, decoder, createMessage)
-	{
-		function eventHandler(event)
-		{
-			var value = A2(Json.runDecoderValue, decoder, event);
-			if (value.ctor === 'Ok')
-			{
-				if (options.stopPropagation)
-				{
-					event.stopPropagation();
-				}
-				if (options.preventDefault)
-				{
-					event.preventDefault();
-				}
-				Signal.sendMessage(createMessage(value._0));
-			}
-		}
-		return property('on' + name, eventHandler);
-	}
-
-	function SoftSetHook(value)
-	{
-		if (!(this instanceof SoftSetHook))
-		{
-			return new SoftSetHook(value);
-		}
-
-		this.value = value;
-	}
-
-	SoftSetHook.prototype.hook = function (node, propertyName)
-	{
-		if (node[propertyName] !== this.value)
-		{
-			node[propertyName] = this.value;
-		}
-	};
-
-
-
-	// INTEGRATION WITH ELEMENTS
-
-
-	function ElementWidget(element)
-	{
-		this.element = element;
-	}
-
-	ElementWidget.prototype.type = "Widget";
-
-	ElementWidget.prototype.init = function init()
-	{
-		return Element.render(this.element);
-	};
-
-	ElementWidget.prototype.update = function update(previous, node)
-	{
-		return Element.update(node, previous.element, this.element);
-	};
-
-	function fromElement(element)
-	{
-		return new ElementWidget(element);
-	}
-
-	function toElement(width, height, html)
-	{
-		return A3(Element.newElement, width, height, {
-			ctor: 'Custom',
-			type: 'evancz/elm-html',
-			render: render,
-			update: update,
-			model: html
-		});
-	}
-
-
-
-	// RENDER AND UPDATE
-
-
-	function render(model)
-	{
-		var element = Element.createNode('div');
-		element.appendChild(createElement(model));
-		return element;
-	}
-
-	function update(node, oldModel, newModel)
-	{
-		updateAndReplace(node.firstChild, oldModel, newModel);
-		return node;
-	}
-
-	function updateAndReplace(node, oldModel, newModel)
-	{
-		var patches = diff(oldModel, newModel);
-		var newNode = patch(node, patches);
-		return newNode;
-	}
-
-
-
-	// LAZINESS
-
-
-	function lazyRef(fn, a)
-	{
-		function thunk()
-		{
-			return fn(a);
-		}
-		return new Thunk(fn, [a], thunk);
-	}
-
-	function lazyRef2(fn, a, b)
-	{
-		function thunk()
-		{
-			return A2(fn, a, b);
-		}
-		return new Thunk(fn, [a,b], thunk);
-	}
-
-	function lazyRef3(fn, a, b, c)
-	{
-		function thunk()
-		{
-			return A3(fn, a, b, c);
-		}
-		return new Thunk(fn, [a,b,c], thunk);
-	}
-
-	function Thunk(fn, args, thunk)
-	{
-		/* public (used by VirtualDom.js) */
-		this.vnode = null;
-		this.key = undefined;
-
-		/* private */
-		this.fn = fn;
-		this.args = args;
-		this.thunk = thunk;
-	}
-
-	Thunk.prototype.type = "Thunk";
-	Thunk.prototype.render = renderThunk;
-
-	function shouldUpdate(current, previous)
-	{
-		if (current.fn !== previous.fn)
-		{
-			return true;
-		}
-
-		// if it's the same function, we know the number of args must match
-		var cargs = current.args;
-		var pargs = previous.args;
-
-		for (var i = cargs.length; i--; )
-		{
-			if (cargs[i] !== pargs[i])
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	function renderThunk(previous)
-	{
-		if (previous == null || shouldUpdate(this, previous))
-		{
-			return this.thunk();
-		}
-		else
-		{
-			return previous.vnode;
-		}
-	}
-
-
-	return elm.Native.VirtualDom.values = Elm.Native.VirtualDom.values = {
-		node: node,
-		text: text,
-		on: F4(on),
-
-		property: F2(property),
-		attribute: F2(attribute),
-		attributeNS: F3(attributeNS),
-
-		lazy: F2(lazyRef),
-		lazy2: F3(lazyRef2),
-		lazy3: F4(lazyRef3),
-
-		toElement: F3(toElement),
-		fromElement: fromElement,
-
-		render: createElement,
-		updateAndReplace: updateAndReplace
-	};
-};
-
-},{"virtual-dom/vdom/create-element":6,"virtual-dom/vdom/patch":9,"virtual-dom/vnode/is-vhook":13,"virtual-dom/vnode/vnode":18,"virtual-dom/vnode/vtext":20,"virtual-dom/vtree/diff":22}]},{},[23]);
-
-Elm.VirtualDom = Elm.VirtualDom || {};
-Elm.VirtualDom.make = function (_elm) {
+Elm.BhangraRace = Elm.BhangraRace || {};
+Elm.BhangraRace.make = function (_elm) {
    "use strict";
-   _elm.VirtualDom = _elm.VirtualDom || {};
-   if (_elm.VirtualDom.values) return _elm.VirtualDom.values;
+   _elm.BhangraRace = _elm.BhangraRace || {};
+   if (_elm.BhangraRace.values) return _elm.BhangraRace.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
    $Graphics$Element = Elm.Graphics.Element.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Native$VirtualDom = Elm.Native.VirtualDom.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var lazy3 = $Native$VirtualDom.lazy3;
-   var lazy2 = $Native$VirtualDom.lazy2;
-   var lazy = $Native$VirtualDom.lazy;
-   var defaultOptions = {stopPropagation: false,preventDefault: false};
-   var Options = F2(function (a,b) {    return {stopPropagation: a,preventDefault: b};});
-   var onWithOptions = $Native$VirtualDom.on;
-   var on = F3(function (eventName,decoder,toMessage) {    return A4($Native$VirtualDom.on,eventName,defaultOptions,decoder,toMessage);});
-   var attributeNS = $Native$VirtualDom.attributeNS;
-   var attribute = $Native$VirtualDom.attribute;
-   var property = $Native$VirtualDom.property;
-   var Property = {ctor: "Property"};
-   var fromElement = $Native$VirtualDom.fromElement;
-   var toElement = $Native$VirtualDom.toElement;
-   var text = $Native$VirtualDom.text;
-   var node = $Native$VirtualDom.node;
-   var Node = {ctor: "Node"};
-   return _elm.VirtualDom.values = {_op: _op
-                                   ,text: text
-                                   ,node: node
-                                   ,toElement: toElement
-                                   ,fromElement: fromElement
-                                   ,property: property
-                                   ,attribute: attribute
-                                   ,attributeNS: attributeNS
-                                   ,on: on
-                                   ,onWithOptions: onWithOptions
-                                   ,defaultOptions: defaultOptions
-                                   ,lazy: lazy
-                                   ,lazy2: lazy2
-                                   ,lazy3: lazy3
-                                   ,Options: Options};
-};
-Elm.Html = Elm.Html || {};
-Elm.Html.make = function (_elm) {
-   "use strict";
-   _elm.Html = _elm.Html || {};
-   if (_elm.Html.values) return _elm.Html.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Graphics$Input = Elm.Graphics.Input.make(_elm),
+   $Keyboard = Elm.Keyboard.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $VirtualDom = Elm.VirtualDom.make(_elm);
-   var _op = {};
-   var fromElement = $VirtualDom.fromElement;
-   var toElement = $VirtualDom.toElement;
-   var text = $VirtualDom.text;
-   var node = $VirtualDom.node;
-   var body = node("body");
-   var section = node("section");
-   var nav = node("nav");
-   var article = node("article");
-   var aside = node("aside");
-   var h1 = node("h1");
-   var h2 = node("h2");
-   var h3 = node("h3");
-   var h4 = node("h4");
-   var h5 = node("h5");
-   var h6 = node("h6");
-   var header = node("header");
-   var footer = node("footer");
-   var address = node("address");
-   var main$ = node("main");
-   var p = node("p");
-   var hr = node("hr");
-   var pre = node("pre");
-   var blockquote = node("blockquote");
-   var ol = node("ol");
-   var ul = node("ul");
-   var li = node("li");
-   var dl = node("dl");
-   var dt = node("dt");
-   var dd = node("dd");
-   var figure = node("figure");
-   var figcaption = node("figcaption");
-   var div = node("div");
-   var a = node("a");
-   var em = node("em");
-   var strong = node("strong");
-   var small = node("small");
-   var s = node("s");
-   var cite = node("cite");
-   var q = node("q");
-   var dfn = node("dfn");
-   var abbr = node("abbr");
-   var time = node("time");
-   var code = node("code");
-   var $var = node("var");
-   var samp = node("samp");
-   var kbd = node("kbd");
-   var sub = node("sub");
-   var sup = node("sup");
-   var i = node("i");
-   var b = node("b");
-   var u = node("u");
-   var mark = node("mark");
-   var ruby = node("ruby");
-   var rt = node("rt");
-   var rp = node("rp");
-   var bdi = node("bdi");
-   var bdo = node("bdo");
-   var span = node("span");
-   var br = node("br");
-   var wbr = node("wbr");
-   var ins = node("ins");
-   var del = node("del");
-   var img = node("img");
-   var iframe = node("iframe");
-   var embed = node("embed");
-   var object = node("object");
-   var param = node("param");
-   var video = node("video");
-   var audio = node("audio");
-   var source = node("source");
-   var track = node("track");
-   var canvas = node("canvas");
-   var svg = node("svg");
-   var math = node("math");
-   var table = node("table");
-   var caption = node("caption");
-   var colgroup = node("colgroup");
-   var col = node("col");
-   var tbody = node("tbody");
-   var thead = node("thead");
-   var tfoot = node("tfoot");
-   var tr = node("tr");
-   var td = node("td");
-   var th = node("th");
-   var form = node("form");
-   var fieldset = node("fieldset");
-   var legend = node("legend");
-   var label = node("label");
-   var input = node("input");
-   var button = node("button");
-   var select = node("select");
-   var datalist = node("datalist");
-   var optgroup = node("optgroup");
-   var option = node("option");
-   var textarea = node("textarea");
-   var keygen = node("keygen");
-   var output = node("output");
-   var progress = node("progress");
-   var meter = node("meter");
-   var details = node("details");
-   var summary = node("summary");
-   var menuitem = node("menuitem");
-   var menu = node("menu");
-   return _elm.Html.values = {_op: _op
-                             ,node: node
-                             ,text: text
-                             ,toElement: toElement
-                             ,fromElement: fromElement
-                             ,body: body
-                             ,section: section
-                             ,nav: nav
-                             ,article: article
-                             ,aside: aside
-                             ,h1: h1
-                             ,h2: h2
-                             ,h3: h3
-                             ,h4: h4
-                             ,h5: h5
-                             ,h6: h6
-                             ,header: header
-                             ,footer: footer
-                             ,address: address
-                             ,main$: main$
-                             ,p: p
-                             ,hr: hr
-                             ,pre: pre
-                             ,blockquote: blockquote
-                             ,ol: ol
-                             ,ul: ul
-                             ,li: li
-                             ,dl: dl
-                             ,dt: dt
-                             ,dd: dd
-                             ,figure: figure
-                             ,figcaption: figcaption
-                             ,div: div
-                             ,a: a
-                             ,em: em
-                             ,strong: strong
-                             ,small: small
-                             ,s: s
-                             ,cite: cite
-                             ,q: q
-                             ,dfn: dfn
-                             ,abbr: abbr
-                             ,time: time
-                             ,code: code
-                             ,$var: $var
-                             ,samp: samp
-                             ,kbd: kbd
-                             ,sub: sub
-                             ,sup: sup
-                             ,i: i
-                             ,b: b
-                             ,u: u
-                             ,mark: mark
-                             ,ruby: ruby
-                             ,rt: rt
-                             ,rp: rp
-                             ,bdi: bdi
-                             ,bdo: bdo
-                             ,span: span
-                             ,br: br
-                             ,wbr: wbr
-                             ,ins: ins
-                             ,del: del
-                             ,img: img
-                             ,iframe: iframe
-                             ,embed: embed
-                             ,object: object
-                             ,param: param
-                             ,video: video
-                             ,audio: audio
-                             ,source: source
-                             ,track: track
-                             ,canvas: canvas
-                             ,svg: svg
-                             ,math: math
-                             ,table: table
-                             ,caption: caption
-                             ,colgroup: colgroup
-                             ,col: col
-                             ,tbody: tbody
-                             ,thead: thead
-                             ,tfoot: tfoot
-                             ,tr: tr
-                             ,td: td
-                             ,th: th
-                             ,form: form
-                             ,fieldset: fieldset
-                             ,legend: legend
-                             ,label: label
-                             ,input: input
-                             ,button: button
-                             ,select: select
-                             ,datalist: datalist
-                             ,optgroup: optgroup
-                             ,option: option
-                             ,textarea: textarea
-                             ,keygen: keygen
-                             ,output: output
-                             ,progress: progress
-                             ,meter: meter
-                             ,details: details
-                             ,summary: summary
-                             ,menuitem: menuitem
-                             ,menu: menu};
-};
-Elm.Html = Elm.Html || {};
-Elm.Html.Attributes = Elm.Html.Attributes || {};
-Elm.Html.Attributes.make = function (_elm) {
-   "use strict";
-   _elm.Html = _elm.Html || {};
-   _elm.Html.Attributes = _elm.Html.Attributes || {};
-   if (_elm.Html.Attributes.values) return _elm.Html.Attributes.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Json$Encode = Elm.Json.Encode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm),
-   $VirtualDom = Elm.VirtualDom.make(_elm);
-   var _op = {};
-   var attribute = $VirtualDom.attribute;
-   var contextmenu = function (value) {    return A2(attribute,"contextmenu",value);};
-   var property = $VirtualDom.property;
-   var stringProperty = F2(function (name,string) {    return A2(property,name,$Json$Encode.string(string));});
-   var $class = function (name) {    return A2(stringProperty,"className",name);};
-   var id = function (name) {    return A2(stringProperty,"id",name);};
-   var title = function (name) {    return A2(stringProperty,"title",name);};
-   var accesskey = function ($char) {    return A2(stringProperty,"accessKey",$String.fromChar($char));};
-   var dir = function (value) {    return A2(stringProperty,"dir",value);};
-   var draggable = function (value) {    return A2(stringProperty,"draggable",value);};
-   var dropzone = function (value) {    return A2(stringProperty,"dropzone",value);};
-   var itemprop = function (value) {    return A2(stringProperty,"itemprop",value);};
-   var lang = function (value) {    return A2(stringProperty,"lang",value);};
-   var tabindex = function (n) {    return A2(stringProperty,"tabIndex",$Basics.toString(n));};
-   var charset = function (value) {    return A2(stringProperty,"charset",value);};
-   var content = function (value) {    return A2(stringProperty,"content",value);};
-   var httpEquiv = function (value) {    return A2(stringProperty,"httpEquiv",value);};
-   var language = function (value) {    return A2(stringProperty,"language",value);};
-   var src = function (value) {    return A2(stringProperty,"src",value);};
-   var height = function (value) {    return A2(stringProperty,"height",$Basics.toString(value));};
-   var width = function (value) {    return A2(stringProperty,"width",$Basics.toString(value));};
-   var alt = function (value) {    return A2(stringProperty,"alt",value);};
-   var preload = function (value) {    return A2(stringProperty,"preload",value);};
-   var poster = function (value) {    return A2(stringProperty,"poster",value);};
-   var kind = function (value) {    return A2(stringProperty,"kind",value);};
-   var srclang = function (value) {    return A2(stringProperty,"srclang",value);};
-   var sandbox = function (value) {    return A2(stringProperty,"sandbox",value);};
-   var srcdoc = function (value) {    return A2(stringProperty,"srcdoc",value);};
-   var type$ = function (value) {    return A2(stringProperty,"type",value);};
-   var value = function (value) {    return A2(stringProperty,"value",value);};
-   var placeholder = function (value) {    return A2(stringProperty,"placeholder",value);};
-   var accept = function (value) {    return A2(stringProperty,"accept",value);};
-   var acceptCharset = function (value) {    return A2(stringProperty,"acceptCharset",value);};
-   var action = function (value) {    return A2(stringProperty,"action",value);};
-   var autocomplete = function (bool) {    return A2(stringProperty,"autocomplete",bool ? "on" : "off");};
-   var autosave = function (value) {    return A2(stringProperty,"autosave",value);};
-   var enctype = function (value) {    return A2(stringProperty,"enctype",value);};
-   var formaction = function (value) {    return A2(stringProperty,"formAction",value);};
-   var list = function (value) {    return A2(stringProperty,"list",value);};
-   var minlength = function (n) {    return A2(stringProperty,"minLength",$Basics.toString(n));};
-   var maxlength = function (n) {    return A2(stringProperty,"maxLength",$Basics.toString(n));};
-   var method = function (value) {    return A2(stringProperty,"method",value);};
-   var name = function (value) {    return A2(stringProperty,"name",value);};
-   var pattern = function (value) {    return A2(stringProperty,"pattern",value);};
-   var size = function (n) {    return A2(stringProperty,"size",$Basics.toString(n));};
-   var $for = function (value) {    return A2(stringProperty,"htmlFor",value);};
-   var form = function (value) {    return A2(stringProperty,"form",value);};
-   var max = function (value) {    return A2(stringProperty,"max",value);};
-   var min = function (value) {    return A2(stringProperty,"min",value);};
-   var step = function (n) {    return A2(stringProperty,"step",n);};
-   var cols = function (n) {    return A2(stringProperty,"cols",$Basics.toString(n));};
-   var rows = function (n) {    return A2(stringProperty,"rows",$Basics.toString(n));};
-   var wrap = function (value) {    return A2(stringProperty,"wrap",value);};
-   var usemap = function (value) {    return A2(stringProperty,"useMap",value);};
-   var shape = function (value) {    return A2(stringProperty,"shape",value);};
-   var coords = function (value) {    return A2(stringProperty,"coords",value);};
-   var challenge = function (value) {    return A2(stringProperty,"challenge",value);};
-   var keytype = function (value) {    return A2(stringProperty,"keytype",value);};
-   var align = function (value) {    return A2(stringProperty,"align",value);};
-   var cite = function (value) {    return A2(stringProperty,"cite",value);};
-   var href = function (value) {    return A2(stringProperty,"href",value);};
-   var target = function (value) {    return A2(stringProperty,"target",value);};
-   var downloadAs = function (value) {    return A2(stringProperty,"download",value);};
-   var hreflang = function (value) {    return A2(stringProperty,"hreflang",value);};
-   var media = function (value) {    return A2(stringProperty,"media",value);};
-   var ping = function (value) {    return A2(stringProperty,"ping",value);};
-   var rel = function (value) {    return A2(stringProperty,"rel",value);};
-   var datetime = function (value) {    return A2(stringProperty,"datetime",value);};
-   var pubdate = function (value) {    return A2(stringProperty,"pubdate",value);};
-   var start = function (n) {    return A2(stringProperty,"start",$Basics.toString(n));};
-   var colspan = function (n) {    return A2(stringProperty,"colSpan",$Basics.toString(n));};
-   var headers = function (value) {    return A2(stringProperty,"headers",value);};
-   var rowspan = function (n) {    return A2(stringProperty,"rowSpan",$Basics.toString(n));};
-   var scope = function (value) {    return A2(stringProperty,"scope",value);};
-   var manifest = function (value) {    return A2(stringProperty,"manifest",value);};
-   var boolProperty = F2(function (name,bool) {    return A2(property,name,$Json$Encode.bool(bool));});
-   var hidden = function (bool) {    return A2(boolProperty,"hidden",bool);};
-   var contenteditable = function (bool) {    return A2(boolProperty,"contentEditable",bool);};
-   var spellcheck = function (bool) {    return A2(boolProperty,"spellcheck",bool);};
-   var async = function (bool) {    return A2(boolProperty,"async",bool);};
-   var defer = function (bool) {    return A2(boolProperty,"defer",bool);};
-   var scoped = function (bool) {    return A2(boolProperty,"scoped",bool);};
-   var autoplay = function (bool) {    return A2(boolProperty,"autoplay",bool);};
-   var controls = function (bool) {    return A2(boolProperty,"controls",bool);};
-   var loop = function (bool) {    return A2(boolProperty,"loop",bool);};
-   var $default = function (bool) {    return A2(boolProperty,"default",bool);};
-   var seamless = function (bool) {    return A2(boolProperty,"seamless",bool);};
-   var checked = function (bool) {    return A2(boolProperty,"checked",bool);};
-   var selected = function (bool) {    return A2(boolProperty,"selected",bool);};
-   var autofocus = function (bool) {    return A2(boolProperty,"autofocus",bool);};
-   var disabled = function (bool) {    return A2(boolProperty,"disabled",bool);};
-   var multiple = function (bool) {    return A2(boolProperty,"multiple",bool);};
-   var novalidate = function (bool) {    return A2(boolProperty,"noValidate",bool);};
-   var readonly = function (bool) {    return A2(boolProperty,"readOnly",bool);};
-   var required = function (bool) {    return A2(boolProperty,"required",bool);};
-   var ismap = function (value) {    return A2(boolProperty,"isMap",value);};
-   var download = function (bool) {    return A2(boolProperty,"download",bool);};
-   var reversed = function (bool) {    return A2(boolProperty,"reversed",bool);};
-   var classList = function (list) {    return $class(A2($String.join," ",A2($List.map,$Basics.fst,A2($List.filter,$Basics.snd,list))));};
-   var style = function (props) {
-      return A2(property,
-      "style",
-      $Json$Encode.object(A2($List.map,function (_p0) {    var _p1 = _p0;return {ctor: "_Tuple2",_0: _p1._0,_1: $Json$Encode.string(_p1._1)};},props)));
-   };
-   var key = function (k) {    return A2(stringProperty,"key",k);};
-   return _elm.Html.Attributes.values = {_op: _op
-                                        ,key: key
-                                        ,style: style
-                                        ,$class: $class
-                                        ,classList: classList
-                                        ,id: id
-                                        ,title: title
-                                        ,hidden: hidden
-                                        ,type$: type$
-                                        ,value: value
-                                        ,checked: checked
-                                        ,placeholder: placeholder
-                                        ,selected: selected
-                                        ,accept: accept
-                                        ,acceptCharset: acceptCharset
-                                        ,action: action
-                                        ,autocomplete: autocomplete
-                                        ,autofocus: autofocus
-                                        ,autosave: autosave
-                                        ,disabled: disabled
-                                        ,enctype: enctype
-                                        ,formaction: formaction
-                                        ,list: list
-                                        ,maxlength: maxlength
-                                        ,minlength: minlength
-                                        ,method: method
-                                        ,multiple: multiple
-                                        ,name: name
-                                        ,novalidate: novalidate
-                                        ,pattern: pattern
-                                        ,readonly: readonly
-                                        ,required: required
-                                        ,size: size
-                                        ,$for: $for
-                                        ,form: form
-                                        ,max: max
-                                        ,min: min
-                                        ,step: step
-                                        ,cols: cols
-                                        ,rows: rows
-                                        ,wrap: wrap
-                                        ,href: href
-                                        ,target: target
-                                        ,download: download
-                                        ,downloadAs: downloadAs
-                                        ,hreflang: hreflang
-                                        ,media: media
-                                        ,ping: ping
-                                        ,rel: rel
-                                        ,ismap: ismap
-                                        ,usemap: usemap
-                                        ,shape: shape
-                                        ,coords: coords
-                                        ,src: src
-                                        ,height: height
-                                        ,width: width
-                                        ,alt: alt
-                                        ,autoplay: autoplay
-                                        ,controls: controls
-                                        ,loop: loop
-                                        ,preload: preload
-                                        ,poster: poster
-                                        ,$default: $default
-                                        ,kind: kind
-                                        ,srclang: srclang
-                                        ,sandbox: sandbox
-                                        ,seamless: seamless
-                                        ,srcdoc: srcdoc
-                                        ,reversed: reversed
-                                        ,start: start
-                                        ,align: align
-                                        ,colspan: colspan
-                                        ,rowspan: rowspan
-                                        ,headers: headers
-                                        ,scope: scope
-                                        ,async: async
-                                        ,charset: charset
-                                        ,content: content
-                                        ,defer: defer
-                                        ,httpEquiv: httpEquiv
-                                        ,language: language
-                                        ,scoped: scoped
-                                        ,accesskey: accesskey
-                                        ,contenteditable: contenteditable
-                                        ,contextmenu: contextmenu
-                                        ,dir: dir
-                                        ,draggable: draggable
-                                        ,dropzone: dropzone
-                                        ,itemprop: itemprop
-                                        ,lang: lang
-                                        ,spellcheck: spellcheck
-                                        ,tabindex: tabindex
-                                        ,challenge: challenge
-                                        ,keytype: keytype
-                                        ,cite: cite
-                                        ,datetime: datetime
-                                        ,pubdate: pubdate
-                                        ,manifest: manifest
-                                        ,property: property
-                                        ,attribute: attribute};
-};
-Elm.Html = Elm.Html || {};
-Elm.Html.Events = Elm.Html.Events || {};
-Elm.Html.Events.make = function (_elm) {
-   "use strict";
-   _elm.Html = _elm.Html || {};
-   _elm.Html.Events = _elm.Html.Events || {};
-   if (_elm.Html.Events.values) return _elm.Html.Events.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $VirtualDom = Elm.VirtualDom.make(_elm);
-   var _op = {};
-   var keyCode = A2($Json$Decode._op[":="],"keyCode",$Json$Decode.$int);
-   var targetChecked = A2($Json$Decode.at,_U.list(["target","checked"]),$Json$Decode.bool);
-   var targetValue = A2($Json$Decode.at,_U.list(["target","value"]),$Json$Decode.string);
-   var defaultOptions = $VirtualDom.defaultOptions;
-   var Options = F2(function (a,b) {    return {stopPropagation: a,preventDefault: b};});
-   var onWithOptions = $VirtualDom.onWithOptions;
-   var on = $VirtualDom.on;
-   var messageOn = F3(function (name,addr,msg) {    return A3(on,name,$Json$Decode.value,function (_p0) {    return A2($Signal.message,addr,msg);});});
-   var onClick = messageOn("click");
-   var onDoubleClick = messageOn("dblclick");
-   var onMouseMove = messageOn("mousemove");
-   var onMouseDown = messageOn("mousedown");
-   var onMouseUp = messageOn("mouseup");
-   var onMouseEnter = messageOn("mouseenter");
-   var onMouseLeave = messageOn("mouseleave");
-   var onMouseOver = messageOn("mouseover");
-   var onMouseOut = messageOn("mouseout");
-   var onBlur = messageOn("blur");
-   var onFocus = messageOn("focus");
-   var onSubmit = messageOn("submit");
-   var onKey = F3(function (name,addr,handler) {    return A3(on,name,keyCode,function (code) {    return A2($Signal.message,addr,handler(code));});});
-   var onKeyUp = onKey("keyup");
-   var onKeyDown = onKey("keydown");
-   var onKeyPress = onKey("keypress");
-   return _elm.Html.Events.values = {_op: _op
-                                    ,onBlur: onBlur
-                                    ,onFocus: onFocus
-                                    ,onSubmit: onSubmit
-                                    ,onKeyUp: onKeyUp
-                                    ,onKeyDown: onKeyDown
-                                    ,onKeyPress: onKeyPress
-                                    ,onClick: onClick
-                                    ,onDoubleClick: onDoubleClick
-                                    ,onMouseMove: onMouseMove
-                                    ,onMouseDown: onMouseDown
-                                    ,onMouseUp: onMouseUp
-                                    ,onMouseEnter: onMouseEnter
-                                    ,onMouseLeave: onMouseLeave
-                                    ,onMouseOver: onMouseOver
-                                    ,onMouseOut: onMouseOut
-                                    ,on: on
-                                    ,onWithOptions: onWithOptions
-                                    ,defaultOptions: defaultOptions
-                                    ,targetValue: targetValue
-                                    ,targetChecked: targetChecked
-                                    ,keyCode: keyCode
-                                    ,Options: Options};
-};
-Elm.Svg = Elm.Svg || {};
-Elm.Svg.make = function (_elm) {
-   "use strict";
-   _elm.Svg = _elm.Svg || {};
-   if (_elm.Svg.values) return _elm.Svg.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Json$Encode = Elm.Json.Encode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $VirtualDom = Elm.VirtualDom.make(_elm);
-   var _op = {};
-   var text = $VirtualDom.text;
-   var svgNamespace = A2($VirtualDom.property,"namespace",$Json$Encode.string("http://www.w3.org/2000/svg"));
-   var node = F3(function (name,attributes,children) {    return A3($VirtualDom.node,name,A2($List._op["::"],svgNamespace,attributes),children);});
-   var svg = node("svg");
-   var foreignObject = node("foreignObject");
-   var animate = node("animate");
-   var animateColor = node("animateColor");
-   var animateMotion = node("animateMotion");
-   var animateTransform = node("animateTransform");
-   var mpath = node("mpath");
-   var set = node("set");
-   var a = node("a");
-   var defs = node("defs");
-   var g = node("g");
-   var marker = node("marker");
-   var mask = node("mask");
-   var missingGlyph = node("missingGlyph");
-   var pattern = node("pattern");
-   var $switch = node("switch");
-   var symbol = node("symbol");
-   var desc = node("desc");
-   var metadata = node("metadata");
-   var title = node("title");
-   var feBlend = node("feBlend");
-   var feColorMatrix = node("feColorMatrix");
-   var feComponentTransfer = node("feComponentTransfer");
-   var feComposite = node("feComposite");
-   var feConvolveMatrix = node("feConvolveMatrix");
-   var feDiffuseLighting = node("feDiffuseLighting");
-   var feDisplacementMap = node("feDisplacementMap");
-   var feFlood = node("feFlood");
-   var feFuncA = node("feFuncA");
-   var feFuncB = node("feFuncB");
-   var feFuncG = node("feFuncG");
-   var feFuncR = node("feFuncR");
-   var feGaussianBlur = node("feGaussianBlur");
-   var feImage = node("feImage");
-   var feMerge = node("feMerge");
-   var feMergeNode = node("feMergeNode");
-   var feMorphology = node("feMorphology");
-   var feOffset = node("feOffset");
-   var feSpecularLighting = node("feSpecularLighting");
-   var feTile = node("feTile");
-   var feTurbulence = node("feTurbulence");
-   var font = node("font");
-   var fontFace = node("fontFace");
-   var fontFaceFormat = node("fontFaceFormat");
-   var fontFaceName = node("fontFaceName");
-   var fontFaceSrc = node("fontFaceSrc");
-   var fontFaceUri = node("fontFaceUri");
-   var hkern = node("hkern");
-   var vkern = node("vkern");
-   var linearGradient = node("linearGradient");
-   var radialGradient = node("radialGradient");
-   var stop = node("stop");
-   var circle = node("circle");
-   var ellipse = node("ellipse");
-   var image = node("image");
-   var line = node("line");
-   var path = node("path");
-   var polygon = node("polygon");
-   var polyline = node("polyline");
-   var rect = node("rect");
-   var use = node("use");
-   var feDistantLight = node("feDistantLight");
-   var fePointLight = node("fePointLight");
-   var feSpotLight = node("feSpotLight");
-   var altGlyph = node("altGlyph");
-   var altGlyphDef = node("altGlyphDef");
-   var altGlyphItem = node("altGlyphItem");
-   var glyph = node("glyph");
-   var glyphRef = node("glyphRef");
-   var textPath = node("textPath");
-   var text$ = node("text");
-   var tref = node("tref");
-   var tspan = node("tspan");
-   var clipPath = node("clipPath");
-   var colorProfile = node("colorProfile");
-   var cursor = node("cursor");
-   var filter = node("filter");
-   var script = node("script");
-   var style = node("style");
-   var view = node("view");
-   return _elm.Svg.values = {_op: _op
-                            ,text: text
-                            ,node: node
-                            ,svg: svg
-                            ,foreignObject: foreignObject
-                            ,circle: circle
-                            ,ellipse: ellipse
-                            ,image: image
-                            ,line: line
-                            ,path: path
-                            ,polygon: polygon
-                            ,polyline: polyline
-                            ,rect: rect
-                            ,use: use
-                            ,animate: animate
-                            ,animateColor: animateColor
-                            ,animateMotion: animateMotion
-                            ,animateTransform: animateTransform
-                            ,mpath: mpath
-                            ,set: set
-                            ,desc: desc
-                            ,metadata: metadata
-                            ,title: title
-                            ,a: a
-                            ,defs: defs
-                            ,g: g
-                            ,marker: marker
-                            ,mask: mask
-                            ,missingGlyph: missingGlyph
-                            ,pattern: pattern
-                            ,$switch: $switch
-                            ,symbol: symbol
-                            ,altGlyph: altGlyph
-                            ,altGlyphDef: altGlyphDef
-                            ,altGlyphItem: altGlyphItem
-                            ,glyph: glyph
-                            ,glyphRef: glyphRef
-                            ,textPath: textPath
-                            ,text$: text$
-                            ,tref: tref
-                            ,tspan: tspan
-                            ,font: font
-                            ,fontFace: fontFace
-                            ,fontFaceFormat: fontFaceFormat
-                            ,fontFaceName: fontFaceName
-                            ,fontFaceSrc: fontFaceSrc
-                            ,fontFaceUri: fontFaceUri
-                            ,hkern: hkern
-                            ,vkern: vkern
-                            ,linearGradient: linearGradient
-                            ,radialGradient: radialGradient
-                            ,stop: stop
-                            ,feBlend: feBlend
-                            ,feColorMatrix: feColorMatrix
-                            ,feComponentTransfer: feComponentTransfer
-                            ,feComposite: feComposite
-                            ,feConvolveMatrix: feConvolveMatrix
-                            ,feDiffuseLighting: feDiffuseLighting
-                            ,feDisplacementMap: feDisplacementMap
-                            ,feFlood: feFlood
-                            ,feFuncA: feFuncA
-                            ,feFuncB: feFuncB
-                            ,feFuncG: feFuncG
-                            ,feFuncR: feFuncR
-                            ,feGaussianBlur: feGaussianBlur
-                            ,feImage: feImage
-                            ,feMerge: feMerge
-                            ,feMergeNode: feMergeNode
-                            ,feMorphology: feMorphology
-                            ,feOffset: feOffset
-                            ,feSpecularLighting: feSpecularLighting
-                            ,feTile: feTile
-                            ,feTurbulence: feTurbulence
-                            ,feDistantLight: feDistantLight
-                            ,fePointLight: fePointLight
-                            ,feSpotLight: feSpotLight
-                            ,clipPath: clipPath
-                            ,colorProfile: colorProfile
-                            ,cursor: cursor
-                            ,filter: filter
-                            ,script: script
-                            ,style: style
-                            ,view: view};
-};
-Elm.Svg = Elm.Svg || {};
-Elm.Svg.Attributes = Elm.Svg.Attributes || {};
-Elm.Svg.Attributes.make = function (_elm) {
-   "use strict";
-   _elm.Svg = _elm.Svg || {};
-   _elm.Svg.Attributes = _elm.Svg.Attributes || {};
-   if (_elm.Svg.Attributes.values) return _elm.Svg.Attributes.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Svg = Elm.Svg.make(_elm),
-   $VirtualDom = Elm.VirtualDom.make(_elm);
-   var _op = {};
-   var writingMode = $VirtualDom.attribute("writing-mode");
-   var wordSpacing = $VirtualDom.attribute("word-spacing");
-   var visibility = $VirtualDom.attribute("visibility");
-   var unicodeBidi = $VirtualDom.attribute("unicode-bidi");
-   var textRendering = $VirtualDom.attribute("text-rendering");
-   var textDecoration = $VirtualDom.attribute("text-decoration");
-   var textAnchor = $VirtualDom.attribute("text-anchor");
-   var stroke = $VirtualDom.attribute("stroke");
-   var strokeWidth = $VirtualDom.attribute("stroke-width");
-   var strokeOpacity = $VirtualDom.attribute("stroke-opacity");
-   var strokeMiterlimit = $VirtualDom.attribute("stroke-miterlimit");
-   var strokeLinejoin = $VirtualDom.attribute("stroke-linejoin");
-   var strokeLinecap = $VirtualDom.attribute("stroke-linecap");
-   var strokeDashoffset = $VirtualDom.attribute("stroke-dashoffset");
-   var strokeDasharray = $VirtualDom.attribute("stroke-dasharray");
-   var stopOpacity = $VirtualDom.attribute("stop-opacity");
-   var stopColor = $VirtualDom.attribute("stop-color");
-   var shapeRendering = $VirtualDom.attribute("shape-rendering");
-   var pointerEvents = $VirtualDom.attribute("pointer-events");
-   var overflow = $VirtualDom.attribute("overflow");
-   var opacity = $VirtualDom.attribute("opacity");
-   var mask = $VirtualDom.attribute("mask");
-   var markerStart = $VirtualDom.attribute("marker-start");
-   var markerMid = $VirtualDom.attribute("marker-mid");
-   var markerEnd = $VirtualDom.attribute("marker-end");
-   var lightingColor = $VirtualDom.attribute("lighting-color");
-   var letterSpacing = $VirtualDom.attribute("letter-spacing");
-   var kerning = $VirtualDom.attribute("kerning");
-   var imageRendering = $VirtualDom.attribute("image-rendering");
-   var glyphOrientationVertical = $VirtualDom.attribute("glyph-orientation-vertical");
-   var glyphOrientationHorizontal = $VirtualDom.attribute("glyph-orientation-horizontal");
-   var fontWeight = $VirtualDom.attribute("font-weight");
-   var fontVariant = $VirtualDom.attribute("font-variant");
-   var fontStyle = $VirtualDom.attribute("font-style");
-   var fontStretch = $VirtualDom.attribute("font-stretch");
-   var fontSize = $VirtualDom.attribute("font-size");
-   var fontSizeAdjust = $VirtualDom.attribute("font-size-adjust");
-   var fontFamily = $VirtualDom.attribute("font-family");
-   var floodOpacity = $VirtualDom.attribute("flood-opacity");
-   var floodColor = $VirtualDom.attribute("flood-color");
-   var filter = $VirtualDom.attribute("filter");
-   var fill = $VirtualDom.attribute("fill");
-   var fillRule = $VirtualDom.attribute("fill-rule");
-   var fillOpacity = $VirtualDom.attribute("fill-opacity");
-   var enableBackground = $VirtualDom.attribute("enable-background");
-   var dominantBaseline = $VirtualDom.attribute("dominant-baseline");
-   var display = $VirtualDom.attribute("display");
-   var direction = $VirtualDom.attribute("direction");
-   var cursor = $VirtualDom.attribute("cursor");
-   var color = $VirtualDom.attribute("color");
-   var colorRendering = $VirtualDom.attribute("color-rendering");
-   var colorProfile = $VirtualDom.attribute("color-profile");
-   var colorInterpolation = $VirtualDom.attribute("color-interpolation");
-   var colorInterpolationFilters = $VirtualDom.attribute("color-interpolation-filters");
-   var clip = $VirtualDom.attribute("clip");
-   var clipRule = $VirtualDom.attribute("clip-rule");
-   var clipPath = $VirtualDom.attribute("clip-path");
-   var baselineShift = $VirtualDom.attribute("baseline-shift");
-   var alignmentBaseline = $VirtualDom.attribute("alignment-baseline");
-   var zoomAndPan = $VirtualDom.attribute("zoomAndPan");
-   var z = $VirtualDom.attribute("z");
-   var yChannelSelector = $VirtualDom.attribute("yChannelSelector");
-   var y2 = $VirtualDom.attribute("y2");
-   var y1 = $VirtualDom.attribute("y1");
-   var y = $VirtualDom.attribute("y");
-   var xmlSpace = A2($VirtualDom.attributeNS,"http://www.w3.org/XML/1998/namespace","xml:space");
-   var xmlLang = A2($VirtualDom.attributeNS,"http://www.w3.org/XML/1998/namespace","xml:lang");
-   var xmlBase = A2($VirtualDom.attributeNS,"http://www.w3.org/XML/1998/namespace","xml:base");
-   var xlinkType = A2($VirtualDom.attributeNS,"http://www.w3.org/1999/xlink","xlink:type");
-   var xlinkTitle = A2($VirtualDom.attributeNS,"http://www.w3.org/1999/xlink","xlink:title");
-   var xlinkShow = A2($VirtualDom.attributeNS,"http://www.w3.org/1999/xlink","xlink:show");
-   var xlinkRole = A2($VirtualDom.attributeNS,"http://www.w3.org/1999/xlink","xlink:role");
-   var xlinkHref = A2($VirtualDom.attributeNS,"http://www.w3.org/1999/xlink","xlink:href");
-   var xlinkArcrole = A2($VirtualDom.attributeNS,"http://www.w3.org/1999/xlink","xlink:arcrole");
-   var xlinkActuate = A2($VirtualDom.attributeNS,"http://www.w3.org/1999/xlink","xlink:actuate");
-   var xChannelSelector = $VirtualDom.attribute("xChannelSelector");
-   var x2 = $VirtualDom.attribute("x2");
-   var x1 = $VirtualDom.attribute("x1");
-   var xHeight = $VirtualDom.attribute("x-height");
-   var x = $VirtualDom.attribute("x");
-   var widths = $VirtualDom.attribute("widths");
-   var width = $VirtualDom.attribute("width");
-   var viewTarget = $VirtualDom.attribute("viewTarget");
-   var viewBox = $VirtualDom.attribute("viewBox");
-   var vertOriginY = $VirtualDom.attribute("vert-origin-y");
-   var vertOriginX = $VirtualDom.attribute("vert-origin-x");
-   var vertAdvY = $VirtualDom.attribute("vert-adv-y");
-   var version = $VirtualDom.attribute("version");
-   var values = $VirtualDom.attribute("values");
-   var vMathematical = $VirtualDom.attribute("v-mathematical");
-   var vIdeographic = $VirtualDom.attribute("v-ideographic");
-   var vHanging = $VirtualDom.attribute("v-hanging");
-   var vAlphabetic = $VirtualDom.attribute("v-alphabetic");
-   var unitsPerEm = $VirtualDom.attribute("units-per-em");
-   var unicodeRange = $VirtualDom.attribute("unicode-range");
-   var unicode = $VirtualDom.attribute("unicode");
-   var underlineThickness = $VirtualDom.attribute("underline-thickness");
-   var underlinePosition = $VirtualDom.attribute("underline-position");
-   var u2 = $VirtualDom.attribute("u2");
-   var u1 = $VirtualDom.attribute("u1");
-   var type$ = $VirtualDom.attribute("type");
-   var transform = $VirtualDom.attribute("transform");
-   var to = $VirtualDom.attribute("to");
-   var title = $VirtualDom.attribute("title");
-   var textLength = $VirtualDom.attribute("textLength");
-   var targetY = $VirtualDom.attribute("targetY");
-   var targetX = $VirtualDom.attribute("targetX");
-   var target = $VirtualDom.attribute("target");
-   var tableValues = $VirtualDom.attribute("tableValues");
-   var systemLanguage = $VirtualDom.attribute("systemLanguage");
-   var surfaceScale = $VirtualDom.attribute("surfaceScale");
-   var style = $VirtualDom.attribute("style");
-   var string = $VirtualDom.attribute("string");
-   var strikethroughThickness = $VirtualDom.attribute("strikethrough-thickness");
-   var strikethroughPosition = $VirtualDom.attribute("strikethrough-position");
-   var stitchTiles = $VirtualDom.attribute("stitchTiles");
-   var stemv = $VirtualDom.attribute("stemv");
-   var stemh = $VirtualDom.attribute("stemh");
-   var stdDeviation = $VirtualDom.attribute("stdDeviation");
-   var startOffset = $VirtualDom.attribute("startOffset");
-   var spreadMethod = $VirtualDom.attribute("spreadMethod");
-   var speed = $VirtualDom.attribute("speed");
-   var specularExponent = $VirtualDom.attribute("specularExponent");
-   var specularConstant = $VirtualDom.attribute("specularConstant");
-   var spacing = $VirtualDom.attribute("spacing");
-   var slope = $VirtualDom.attribute("slope");
-   var seed = $VirtualDom.attribute("seed");
-   var scale = $VirtualDom.attribute("scale");
-   var ry = $VirtualDom.attribute("ry");
-   var rx = $VirtualDom.attribute("rx");
-   var rotate = $VirtualDom.attribute("rotate");
-   var result = $VirtualDom.attribute("result");
-   var restart = $VirtualDom.attribute("restart");
-   var requiredFeatures = $VirtualDom.attribute("requiredFeatures");
-   var requiredExtensions = $VirtualDom.attribute("requiredExtensions");
-   var repeatDur = $VirtualDom.attribute("repeatDur");
-   var repeatCount = $VirtualDom.attribute("repeatCount");
-   var renderingIntent = $VirtualDom.attribute("rendering-intent");
-   var refY = $VirtualDom.attribute("refY");
-   var refX = $VirtualDom.attribute("refX");
-   var radius = $VirtualDom.attribute("radius");
-   var r = $VirtualDom.attribute("r");
-   var primitiveUnits = $VirtualDom.attribute("primitiveUnits");
-   var preserveAspectRatio = $VirtualDom.attribute("preserveAspectRatio");
-   var preserveAlpha = $VirtualDom.attribute("preserveAlpha");
-   var pointsAtZ = $VirtualDom.attribute("pointsAtZ");
-   var pointsAtY = $VirtualDom.attribute("pointsAtY");
-   var pointsAtX = $VirtualDom.attribute("pointsAtX");
-   var points = $VirtualDom.attribute("points");
-   var pointOrder = $VirtualDom.attribute("point-order");
-   var patternUnits = $VirtualDom.attribute("patternUnits");
-   var patternTransform = $VirtualDom.attribute("patternTransform");
-   var patternContentUnits = $VirtualDom.attribute("patternContentUnits");
-   var pathLength = $VirtualDom.attribute("pathLength");
-   var path = $VirtualDom.attribute("path");
-   var panose1 = $VirtualDom.attribute("panose-1");
-   var overlineThickness = $VirtualDom.attribute("overline-thickness");
-   var overlinePosition = $VirtualDom.attribute("overline-position");
-   var origin = $VirtualDom.attribute("origin");
-   var orientation = $VirtualDom.attribute("orientation");
-   var orient = $VirtualDom.attribute("orient");
-   var order = $VirtualDom.attribute("order");
-   var operator = $VirtualDom.attribute("operator");
-   var offset = $VirtualDom.attribute("offset");
-   var numOctaves = $VirtualDom.attribute("numOctaves");
-   var name = $VirtualDom.attribute("name");
-   var mode = $VirtualDom.attribute("mode");
-   var min = $VirtualDom.attribute("min");
-   var method = $VirtualDom.attribute("method");
-   var media = $VirtualDom.attribute("media");
-   var max = $VirtualDom.attribute("max");
-   var mathematical = $VirtualDom.attribute("mathematical");
-   var maskUnits = $VirtualDom.attribute("maskUnits");
-   var maskContentUnits = $VirtualDom.attribute("maskContentUnits");
-   var markerWidth = $VirtualDom.attribute("markerWidth");
-   var markerUnits = $VirtualDom.attribute("markerUnits");
-   var markerHeight = $VirtualDom.attribute("markerHeight");
-   var local = $VirtualDom.attribute("local");
-   var limitingConeAngle = $VirtualDom.attribute("limitingConeAngle");
-   var lengthAdjust = $VirtualDom.attribute("lengthAdjust");
-   var lang = $VirtualDom.attribute("lang");
-   var keyTimes = $VirtualDom.attribute("keyTimes");
-   var keySplines = $VirtualDom.attribute("keySplines");
-   var keyPoints = $VirtualDom.attribute("keyPoints");
-   var kernelUnitLength = $VirtualDom.attribute("kernelUnitLength");
-   var kernelMatrix = $VirtualDom.attribute("kernelMatrix");
-   var k4 = $VirtualDom.attribute("k4");
-   var k3 = $VirtualDom.attribute("k3");
-   var k2 = $VirtualDom.attribute("k2");
-   var k1 = $VirtualDom.attribute("k1");
-   var k = $VirtualDom.attribute("k");
-   var intercept = $VirtualDom.attribute("intercept");
-   var in2 = $VirtualDom.attribute("in2");
-   var in$ = $VirtualDom.attribute("in");
-   var ideographic = $VirtualDom.attribute("ideographic");
-   var id = $VirtualDom.attribute("id");
-   var horizOriginY = $VirtualDom.attribute("horiz-origin-y");
-   var horizOriginX = $VirtualDom.attribute("horiz-origin-x");
-   var horizAdvX = $VirtualDom.attribute("horiz-adv-x");
-   var height = $VirtualDom.attribute("height");
-   var hanging = $VirtualDom.attribute("hanging");
-   var gradientUnits = $VirtualDom.attribute("gradientUnits");
-   var gradientTransform = $VirtualDom.attribute("gradientTransform");
-   var glyphRef = $VirtualDom.attribute("glyphRef");
-   var glyphName = $VirtualDom.attribute("glyph-name");
-   var g2 = $VirtualDom.attribute("g2");
-   var g1 = $VirtualDom.attribute("g1");
-   var fy = $VirtualDom.attribute("fy");
-   var fx = $VirtualDom.attribute("fx");
-   var from = $VirtualDom.attribute("from");
-   var format = $VirtualDom.attribute("format");
-   var filterUnits = $VirtualDom.attribute("filterUnits");
-   var filterRes = $VirtualDom.attribute("filterRes");
-   var externalResourcesRequired = $VirtualDom.attribute("externalResourcesRequired");
-   var exponent = $VirtualDom.attribute("exponent");
-   var end = $VirtualDom.attribute("end");
-   var elevation = $VirtualDom.attribute("elevation");
-   var edgeMode = $VirtualDom.attribute("edgeMode");
-   var dy = $VirtualDom.attribute("dy");
-   var dx = $VirtualDom.attribute("dx");
-   var dur = $VirtualDom.attribute("dur");
-   var divisor = $VirtualDom.attribute("divisor");
-   var diffuseConstant = $VirtualDom.attribute("diffuseConstant");
-   var descent = $VirtualDom.attribute("descent");
-   var decelerate = $VirtualDom.attribute("decelerate");
-   var d = $VirtualDom.attribute("d");
-   var cy = $VirtualDom.attribute("cy");
-   var cx = $VirtualDom.attribute("cx");
-   var contentStyleType = $VirtualDom.attribute("contentStyleType");
-   var contentScriptType = $VirtualDom.attribute("contentScriptType");
-   var clipPathUnits = $VirtualDom.attribute("clipPathUnits");
-   var $class = $VirtualDom.attribute("class");
-   var capHeight = $VirtualDom.attribute("cap-height");
-   var calcMode = $VirtualDom.attribute("calcMode");
-   var by = $VirtualDom.attribute("by");
-   var bias = $VirtualDom.attribute("bias");
-   var begin = $VirtualDom.attribute("begin");
-   var bbox = $VirtualDom.attribute("bbox");
-   var baseProfile = $VirtualDom.attribute("baseProfile");
-   var baseFrequency = $VirtualDom.attribute("baseFrequency");
-   var azimuth = $VirtualDom.attribute("azimuth");
-   var autoReverse = $VirtualDom.attribute("autoReverse");
-   var attributeType = $VirtualDom.attribute("attributeType");
-   var attributeName = $VirtualDom.attribute("attributeName");
-   var ascent = $VirtualDom.attribute("ascent");
-   var arabicForm = $VirtualDom.attribute("arabic-form");
-   var amplitude = $VirtualDom.attribute("amplitude");
-   var allowReorder = $VirtualDom.attribute("allowReorder");
-   var alphabetic = $VirtualDom.attribute("alphabetic");
-   var additive = $VirtualDom.attribute("additive");
-   var accumulate = $VirtualDom.attribute("accumulate");
-   var accelerate = $VirtualDom.attribute("accelerate");
-   var accentHeight = $VirtualDom.attribute("accent-height");
-   return _elm.Svg.Attributes.values = {_op: _op
-                                       ,accentHeight: accentHeight
-                                       ,accelerate: accelerate
-                                       ,accumulate: accumulate
-                                       ,additive: additive
-                                       ,alphabetic: alphabetic
-                                       ,allowReorder: allowReorder
-                                       ,amplitude: amplitude
-                                       ,arabicForm: arabicForm
-                                       ,ascent: ascent
-                                       ,attributeName: attributeName
-                                       ,attributeType: attributeType
-                                       ,autoReverse: autoReverse
-                                       ,azimuth: azimuth
-                                       ,baseFrequency: baseFrequency
-                                       ,baseProfile: baseProfile
-                                       ,bbox: bbox
-                                       ,begin: begin
-                                       ,bias: bias
-                                       ,by: by
-                                       ,calcMode: calcMode
-                                       ,capHeight: capHeight
-                                       ,$class: $class
-                                       ,clipPathUnits: clipPathUnits
-                                       ,contentScriptType: contentScriptType
-                                       ,contentStyleType: contentStyleType
-                                       ,cx: cx
-                                       ,cy: cy
-                                       ,d: d
-                                       ,decelerate: decelerate
-                                       ,descent: descent
-                                       ,diffuseConstant: diffuseConstant
-                                       ,divisor: divisor
-                                       ,dur: dur
-                                       ,dx: dx
-                                       ,dy: dy
-                                       ,edgeMode: edgeMode
-                                       ,elevation: elevation
-                                       ,end: end
-                                       ,exponent: exponent
-                                       ,externalResourcesRequired: externalResourcesRequired
-                                       ,filterRes: filterRes
-                                       ,filterUnits: filterUnits
-                                       ,format: format
-                                       ,from: from
-                                       ,fx: fx
-                                       ,fy: fy
-                                       ,g1: g1
-                                       ,g2: g2
-                                       ,glyphName: glyphName
-                                       ,glyphRef: glyphRef
-                                       ,gradientTransform: gradientTransform
-                                       ,gradientUnits: gradientUnits
-                                       ,hanging: hanging
-                                       ,height: height
-                                       ,horizAdvX: horizAdvX
-                                       ,horizOriginX: horizOriginX
-                                       ,horizOriginY: horizOriginY
-                                       ,id: id
-                                       ,ideographic: ideographic
-                                       ,in$: in$
-                                       ,in2: in2
-                                       ,intercept: intercept
-                                       ,k: k
-                                       ,k1: k1
-                                       ,k2: k2
-                                       ,k3: k3
-                                       ,k4: k4
-                                       ,kernelMatrix: kernelMatrix
-                                       ,kernelUnitLength: kernelUnitLength
-                                       ,keyPoints: keyPoints
-                                       ,keySplines: keySplines
-                                       ,keyTimes: keyTimes
-                                       ,lang: lang
-                                       ,lengthAdjust: lengthAdjust
-                                       ,limitingConeAngle: limitingConeAngle
-                                       ,local: local
-                                       ,markerHeight: markerHeight
-                                       ,markerUnits: markerUnits
-                                       ,markerWidth: markerWidth
-                                       ,maskContentUnits: maskContentUnits
-                                       ,maskUnits: maskUnits
-                                       ,mathematical: mathematical
-                                       ,max: max
-                                       ,media: media
-                                       ,method: method
-                                       ,min: min
-                                       ,mode: mode
-                                       ,name: name
-                                       ,numOctaves: numOctaves
-                                       ,offset: offset
-                                       ,operator: operator
-                                       ,order: order
-                                       ,orient: orient
-                                       ,orientation: orientation
-                                       ,origin: origin
-                                       ,overlinePosition: overlinePosition
-                                       ,overlineThickness: overlineThickness
-                                       ,panose1: panose1
-                                       ,path: path
-                                       ,pathLength: pathLength
-                                       ,patternContentUnits: patternContentUnits
-                                       ,patternTransform: patternTransform
-                                       ,patternUnits: patternUnits
-                                       ,pointOrder: pointOrder
-                                       ,points: points
-                                       ,pointsAtX: pointsAtX
-                                       ,pointsAtY: pointsAtY
-                                       ,pointsAtZ: pointsAtZ
-                                       ,preserveAlpha: preserveAlpha
-                                       ,preserveAspectRatio: preserveAspectRatio
-                                       ,primitiveUnits: primitiveUnits
-                                       ,r: r
-                                       ,radius: radius
-                                       ,refX: refX
-                                       ,refY: refY
-                                       ,renderingIntent: renderingIntent
-                                       ,repeatCount: repeatCount
-                                       ,repeatDur: repeatDur
-                                       ,requiredExtensions: requiredExtensions
-                                       ,requiredFeatures: requiredFeatures
-                                       ,restart: restart
-                                       ,result: result
-                                       ,rotate: rotate
-                                       ,rx: rx
-                                       ,ry: ry
-                                       ,scale: scale
-                                       ,seed: seed
-                                       ,slope: slope
-                                       ,spacing: spacing
-                                       ,specularConstant: specularConstant
-                                       ,specularExponent: specularExponent
-                                       ,speed: speed
-                                       ,spreadMethod: spreadMethod
-                                       ,startOffset: startOffset
-                                       ,stdDeviation: stdDeviation
-                                       ,stemh: stemh
-                                       ,stemv: stemv
-                                       ,stitchTiles: stitchTiles
-                                       ,strikethroughPosition: strikethroughPosition
-                                       ,strikethroughThickness: strikethroughThickness
-                                       ,string: string
-                                       ,style: style
-                                       ,surfaceScale: surfaceScale
-                                       ,systemLanguage: systemLanguage
-                                       ,tableValues: tableValues
-                                       ,target: target
-                                       ,targetX: targetX
-                                       ,targetY: targetY
-                                       ,textLength: textLength
-                                       ,title: title
-                                       ,to: to
-                                       ,transform: transform
-                                       ,type$: type$
-                                       ,u1: u1
-                                       ,u2: u2
-                                       ,underlinePosition: underlinePosition
-                                       ,underlineThickness: underlineThickness
-                                       ,unicode: unicode
-                                       ,unicodeRange: unicodeRange
-                                       ,unitsPerEm: unitsPerEm
-                                       ,vAlphabetic: vAlphabetic
-                                       ,vHanging: vHanging
-                                       ,vIdeographic: vIdeographic
-                                       ,vMathematical: vMathematical
-                                       ,values: values
-                                       ,version: version
-                                       ,vertAdvY: vertAdvY
-                                       ,vertOriginX: vertOriginX
-                                       ,vertOriginY: vertOriginY
-                                       ,viewBox: viewBox
-                                       ,viewTarget: viewTarget
-                                       ,width: width
-                                       ,widths: widths
-                                       ,x: x
-                                       ,xHeight: xHeight
-                                       ,x1: x1
-                                       ,x2: x2
-                                       ,xChannelSelector: xChannelSelector
-                                       ,xlinkActuate: xlinkActuate
-                                       ,xlinkArcrole: xlinkArcrole
-                                       ,xlinkHref: xlinkHref
-                                       ,xlinkRole: xlinkRole
-                                       ,xlinkShow: xlinkShow
-                                       ,xlinkTitle: xlinkTitle
-                                       ,xlinkType: xlinkType
-                                       ,xmlBase: xmlBase
-                                       ,xmlLang: xmlLang
-                                       ,xmlSpace: xmlSpace
-                                       ,y: y
-                                       ,y1: y1
-                                       ,y2: y2
-                                       ,yChannelSelector: yChannelSelector
-                                       ,z: z
-                                       ,zoomAndPan: zoomAndPan
-                                       ,alignmentBaseline: alignmentBaseline
-                                       ,baselineShift: baselineShift
-                                       ,clipPath: clipPath
-                                       ,clipRule: clipRule
-                                       ,clip: clip
-                                       ,colorInterpolationFilters: colorInterpolationFilters
-                                       ,colorInterpolation: colorInterpolation
-                                       ,colorProfile: colorProfile
-                                       ,colorRendering: colorRendering
-                                       ,color: color
-                                       ,cursor: cursor
-                                       ,direction: direction
-                                       ,display: display
-                                       ,dominantBaseline: dominantBaseline
-                                       ,enableBackground: enableBackground
-                                       ,fillOpacity: fillOpacity
-                                       ,fillRule: fillRule
-                                       ,fill: fill
-                                       ,filter: filter
-                                       ,floodColor: floodColor
-                                       ,floodOpacity: floodOpacity
-                                       ,fontFamily: fontFamily
-                                       ,fontSizeAdjust: fontSizeAdjust
-                                       ,fontSize: fontSize
-                                       ,fontStretch: fontStretch
-                                       ,fontStyle: fontStyle
-                                       ,fontVariant: fontVariant
-                                       ,fontWeight: fontWeight
-                                       ,glyphOrientationHorizontal: glyphOrientationHorizontal
-                                       ,glyphOrientationVertical: glyphOrientationVertical
-                                       ,imageRendering: imageRendering
-                                       ,kerning: kerning
-                                       ,letterSpacing: letterSpacing
-                                       ,lightingColor: lightingColor
-                                       ,markerEnd: markerEnd
-                                       ,markerMid: markerMid
-                                       ,markerStart: markerStart
-                                       ,mask: mask
-                                       ,opacity: opacity
-                                       ,overflow: overflow
-                                       ,pointerEvents: pointerEvents
-                                       ,shapeRendering: shapeRendering
-                                       ,stopColor: stopColor
-                                       ,stopOpacity: stopOpacity
-                                       ,strokeDasharray: strokeDasharray
-                                       ,strokeDashoffset: strokeDashoffset
-                                       ,strokeLinecap: strokeLinecap
-                                       ,strokeLinejoin: strokeLinejoin
-                                       ,strokeMiterlimit: strokeMiterlimit
-                                       ,strokeOpacity: strokeOpacity
-                                       ,strokeWidth: strokeWidth
-                                       ,stroke: stroke
-                                       ,textAnchor: textAnchor
-                                       ,textDecoration: textDecoration
-                                       ,textRendering: textRendering
-                                       ,unicodeBidi: unicodeBidi
-                                       ,visibility: visibility
-                                       ,wordSpacing: wordSpacing
-                                       ,writingMode: writingMode};
-};
-Elm.Svg = Elm.Svg || {};
-Elm.Svg.Events = Elm.Svg.Events || {};
-Elm.Svg.Events.make = function (_elm) {
-   "use strict";
-   _elm.Svg = _elm.Svg || {};
-   _elm.Svg.Events = _elm.Svg.Events || {};
-   if (_elm.Svg.Events.values) return _elm.Svg.Events.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Svg = Elm.Svg.make(_elm),
-   $VirtualDom = Elm.VirtualDom.make(_elm);
-   var _op = {};
-   var on = $VirtualDom.on;
-   var messageOn = F2(function (name,msg) {    return A3(on,name,$Json$Decode.value,$Basics.always(msg));});
-   var onBegin = messageOn("begin");
-   var onEnd = messageOn("end");
-   var onRepeat = messageOn("repeat");
-   var onAbort = messageOn("abort");
-   var onError = messageOn("error");
-   var onResize = messageOn("resize");
-   var onScroll = messageOn("scroll");
-   var onLoad = messageOn("load");
-   var onUnload = messageOn("unload");
-   var onZoom = messageOn("zoom");
-   var onActivate = messageOn("activate");
-   var onClick = messageOn("click");
-   var onFocusIn = messageOn("focusin");
-   var onFocusOut = messageOn("focusout");
-   var onMouseDown = messageOn("mousedown");
-   var onMouseMove = messageOn("mousemove");
-   var onMouseOut = messageOn("mouseout");
-   var onMouseOver = messageOn("mouseover");
-   var onMouseUp = messageOn("mouseup");
-   return _elm.Svg.Events.values = {_op: _op
-                                   ,onBegin: onBegin
-                                   ,onEnd: onEnd
-                                   ,onRepeat: onRepeat
-                                   ,onAbort: onAbort
-                                   ,onError: onError
-                                   ,onResize: onResize
-                                   ,onScroll: onScroll
-                                   ,onLoad: onLoad
-                                   ,onUnload: onUnload
-                                   ,onZoom: onZoom
-                                   ,onActivate: onActivate
-                                   ,onClick: onClick
-                                   ,onFocusIn: onFocusIn
-                                   ,onFocusOut: onFocusOut
-                                   ,onMouseDown: onMouseDown
-                                   ,onMouseMove: onMouseMove
-                                   ,onMouseOut: onMouseOut
-                                   ,onMouseOver: onMouseOver
-                                   ,onMouseUp: onMouseUp};
-};
-Elm.ColorInterpolation = Elm.ColorInterpolation || {};
-Elm.ColorInterpolation.make = function (_elm) {
-   "use strict";
-   _elm.ColorInterpolation = _elm.ColorInterpolation || {};
-   if (_elm.ColorInterpolation.values) return _elm.ColorInterpolation.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Color = Elm.Color.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Matrix = Elm.Matrix.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Random = Elm.Random.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var genColor = function (s) {
-      var colorGen = A4($Random.map3,$Color.rgb,A2($Random.$int,0,255),A2($Random.$int,0,255),A2($Random.$int,0,255));
-      var colorsGen = A2($Random.pair,colorGen,colorGen);
-      return A2($Random.generate,colorsGen,s);
-   };
-   var signalColorSeed = function (sig) {
-      var genColorAndSeed = function (_p0) {    var _p1 = _p0;return genColor(_p1._1);};
-      var init = {ctor: "_Tuple2",_0: {ctor: "_Tuple2",_0: $Color.white,_1: $Color.black},_1: $Random.initialSeed(3487)};
-      return A3($Signal.foldp,F2(function (signal,val) {    return genColorAndSeed(val);}),init,sig);
-   };
-   var signalColor = function (sig) {
-      var extractColors = function (_p2) {    var _p3 = _p2;return _p3._0;};
-      return A2($Signal.map,extractColors,signalColorSeed(sig));
-   };
-   var pruneList = function (ls) {
-      var foo = F3(function (i,acc,ls) {
-         foo: while (true) {
-            var _p4 = ls;
-            if (_p4.ctor === "[]") {
-                  return acc;
-               } else {
-                  var _p5 = _p4._1;
-                  if (_U.eq(A2($Basics._op["%"],i,2),0)) {
-                        var _v3 = i + 1,_v4 = acc,_v5 = _p5;
-                        i = _v3;
-                        acc = _v4;
-                        ls = _v5;
-                        continue foo;
-                     } else {
-                        var _v6 = i + 1,_v7 = A2($List._op["::"],_p4._0,acc),_v8 = _p5;
-                        i = _v6;
-                        acc = _v7;
-                        ls = _v8;
-                        continue foo;
-                     }
-               }
-         }
-      });
-      return $List.reverse(A3(foo,0,_U.list([]),ls));
-   };
-   var interpolateEq = F3(function (p,c1,c2) {
-      var c1Float = $Basics.toFloat(c1);
-      var c2Float = $Basics.toFloat(c2);
-      return $Basics.round(c1Float * p + c2Float * (1 - p));
-   });
-   var interpolateColors = F3(function (p,color1,color2) {
-      var c1 = $Color.toRgb(color1);
-      var c2 = $Color.toRgb(color2);
-      var r = A3(interpolateEq,p,c1.red,c2.red);
-      var g = A3(interpolateEq,p,c1.green,c2.green);
-      var b = A3(interpolateEq,p,c1.blue,c2.blue);
-      return A3($Color.rgb,r,g,b);
-   });
-   var interpList2 = F3(function (num,c1,c2) {
-      var ll = _U.range(0,num * 2);
-      var ps = A2($List.map,function (index) {    return index * (1 / num);},ll);
-      var c = A2($List.map,function (p) {    return A3(interpolateColors,p,c1,c2);},ps);
-      return pruneList(c);
-   });
-   var interpList = F3(function (num,c1,c2) {
-      var ll = _U.range(0,num - 1);
-      var ps = A2($List.map,function (index) {    return index * (1 / num);},ll);
-      return A2($List.map,function (p) {    return A3(interpolateColors,p,c1,c2);},ps);
-   });
-   var colorMatrix = F2(function (_p6,seed) {
-      var _p7 = _p6;
-      var _p10 = _p7._1;
-      var _p8 = genColor(seed);
-      var c1 = _p8._0._0;
-      var c2 = _p8._0._1;
-      var seed2 = _p8._1;
-      var _p9 = genColor(seed2);
-      var c3 = _p9._0._0;
-      var c4 = _p9._0._1;
-      var seed3 = _p9._1;
-      var leftC = A3(interpList,_p10,c1,c2);
-      var rightC = A3(interpList,_p10,c3,c4);
-      var ls = A3($List.map2,F2(function (c,k) {    return A3(interpList,_p7._0,c,k);}),leftC,rightC);
-      return $Matrix.fromList(ls);
-   });
-   var colorMatrixS = F2(function (_p11,seed) {
-      var _p12 = _p11;
-      var _p15 = _p12._1;
-      var _p13 = genColor(seed);
-      var c1 = _p13._0._0;
-      var c2 = _p13._0._1;
-      var seed2 = _p13._1;
-      var _p14 = genColor(seed2);
-      var c3 = _p14._0._0;
-      var c4 = _p14._0._1;
-      var seed3 = _p14._1;
-      var leftC = A3(interpList,_p15,c1,c2);
-      var rightC = A3(interpList,_p15,c3,c4);
-      var ls = A3($List.map2,F2(function (c,k) {    return A3(interpList,_p12._0,c,k);}),leftC,rightC);
-      return {ctor: "_Tuple2",_0: $Matrix.fromList(ls),_1: seed3};
-   });
-   var initState = {ctor: "_Tuple2",_0: $Color.white,_1: $Color.white};
-   return _elm.ColorInterpolation.values = {_op: _op
-                                           ,initState: initState
-                                           ,interpolateEq: interpolateEq
-                                           ,interpolateColors: interpolateColors
-                                           ,pruneList: pruneList
-                                           ,interpList2: interpList2
-                                           ,interpList: interpList
-                                           ,genColor: genColor
-                                           ,signalColorSeed: signalColorSeed
-                                           ,signalColor: signalColor
-                                           ,colorMatrix: colorMatrix
-                                           ,colorMatrixS: colorMatrixS};
-};
-Elm.GlobalVars = Elm.GlobalVars || {};
-Elm.GlobalVars.make = function (_elm) {
-   "use strict";
-   _elm.GlobalVars = _elm.GlobalVars || {};
-   if (_elm.GlobalVars.values) return _elm.GlobalVars.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var justWrap = function (x) {    return A2($Maybe.withDefault,0,x);};
-   var colWidth = 7;
-   var numTiles = 7;
-   var tileSideLen = 45;
-   var getCenterPos = function (_p0) {
-      var _p1 = _p0;
-      var adjX = _p1._0 - (tileSideLen / 3 | 0);
-      var adjY = _p1._1 - (tileSideLen / 3 | 0);
-      return {ctor: "_Tuple2",_0: adjX,_1: adjY};
-   };
-   return _elm.GlobalVars.values = {_op: _op,tileSideLen: tileSideLen,numTiles: numTiles,colWidth: colWidth,justWrap: justWrap,getCenterPos: getCenterPos};
-};
-Elm.Spacing = Elm.Spacing || {};
-Elm.Spacing.make = function (_elm) {
-   "use strict";
-   _elm.Spacing = _elm.Spacing || {};
-   if (_elm.Spacing.values) return _elm.Spacing.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Array = Elm.Array.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $GlobalVars = Elm.GlobalVars.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Matrix = Elm.Matrix.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var tileOffset = function (gap) {    return $GlobalVars.tileSideLen + 2 * gap;};
-   var calcOffset = F3(function (num,offset,midpoint) {
-      var mid = num / 2 | 0;
-      var before = _U.range(0,mid);
-      var after = _U.range(mid + 1,num - 1);
-      var forward = A2($List.map,function (i) {    return midpoint + offset * i;},before);
-      var back = A2($List.map,function (i) {    return midpoint - offset * i;},after);
-      var back$ = $List.reverse(back);
-      return A2($List.append,forward,back$);
-   });
-   var spcMid = F3(function (numTiles,gap,midPoint) {
-      var spaces = A3(calcOffset,numTiles,tileOffset(gap),midPoint);
-      return $Array.fromList(A2($List.take,numTiles,spaces));
-   });
-   var bEq2 = F3(function (i,gap,offset) {    return offset - (gap * i + $GlobalVars.tileSideLen * i);});
-   var fEq2 = F3(function (i,gap,offset) {    return gap * i + $GlobalVars.tileSideLen * i + offset;});
-   var bEq = F3(function (i,gap,offset) {    return offset - (gap * (2 + i) + $GlobalVars.tileSideLen * i);});
-   var fEq = F3(function (i,gap,offset) {    return gap * (1 + i) + $GlobalVars.tileSideLen * i + offset;});
-   var spacing = F5(function (_p0,numTiles,y,gap,isTile) {
-      var _p1 = _p0;
-      var midPoint = _p1._0 / 2 | 0;
-      var midTile = numTiles / 2 | 0;
-      var latterPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A3(fEq,i,gap,midPoint),_1: y};},_U.range(0,midTile));
-      var firstPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A3(bEq,i,gap,midPoint),_1: y};},_U.range(0,midTile - 1));
-      var firstPos$ = isTile ? firstPos : $List.reverse(firstPos);
-      var spaces = A2($List.append,firstPos$,latterPos);
-      return A2($List.take,numTiles,spaces);
-   });
-   var spacingBoard = F2(function (_p2,numTiles) {
-      var _p3 = _p2;
-      return A5(spacing,{ctor: "_Tuple2",_0: _p3._0,_1: _p3._1},numTiles,250,$GlobalVars.tileSideLen / 2 | 0,false);
-   });
-   var spacingTile = F2(function (_p4,numTiles) {    var _p5 = _p4;return A5(spacing,{ctor: "_Tuple2",_0: _p5._0,_1: _p5._1},numTiles,10,10,true);});
-   var spc = F3(function (numTiles,gap,offset) {
-      var eq = function (i) {    return A3(fEq,i,gap,offset);};
-      var tmp = A2($List.map,eq,_U.range(0,numTiles - 1));
-      return $Array.fromList(tmp);
-   });
-   var newSpaceTiles = F3(function (_p6,numTiles,colWidth) {
-      var _p7 = _p6;
-      var rows = $Basics.ceiling($Basics.toFloat(numTiles) / $Basics.toFloat(colWidth));
-      var rows$ = A2($Basics.max,1,rows);
-      var tilesPerRow = $Basics.ceiling($Basics.toFloat(numTiles) / $Basics.toFloat(rows$));
-      var gap = 5;
-      var offsetX = _p7._0 / 3 | 0;
-      var offsetY = 0;
-      var spX = A3(spc,colWidth,gap,offsetX);
-      var spY = A3(spc,rows$,gap,offsetY);
-      var c0 = $GlobalVars.justWrap(A2($Array.get,0,spX));
-      var col0 = A2($List.map,
-      function (i) {
-         return _U.list([{ctor: "_Tuple2",_0: c0,_1: $GlobalVars.justWrap(A2($Array.get,i,spY))}]);
-      },
-      _U.range(0,rows$ - 1));
-      var rows = A2($List.indexedMap,
-      F2(function (i,ts) {
-         return A2($List.append,
-         ts,
-         A2($List.map,
-         function (d) {
-            return {ctor: "_Tuple2",_0: $GlobalVars.justWrap(A2($Array.get,d,spX)),_1: $GlobalVars.justWrap(A2($Array.get,i,spY))};
-         },
-         _U.range(1,tilesPerRow - 1)));
-      }),
-      col0);
-      return A2($List.take,numTiles,$Matrix.flatten($Matrix.fromList(rows)));
-   });
-   return _elm.Spacing.values = {_op: _op
-                                ,fEq: fEq
-                                ,bEq: bEq
-                                ,fEq2: fEq2
-                                ,bEq2: bEq2
-                                ,spacing: spacing
-                                ,spacingBoard: spacingBoard
-                                ,spacingTile: spacingTile
-                                ,spc: spc
-                                ,calcOffset: calcOffset
-                                ,tileOffset: tileOffset
-                                ,spcMid: spcMid
-                                ,newSpaceTiles: newSpaceTiles};
-};
-Elm.BlendokuTiles = Elm.BlendokuTiles || {};
-Elm.BlendokuTiles.make = function (_elm) {
-   "use strict";
-   _elm.BlendokuTiles = _elm.BlendokuTiles || {};
-   if (_elm.BlendokuTiles.values) return _elm.BlendokuTiles.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Color = Elm.Color.make(_elm),
-   $ColorInterpolation = Elm.ColorInterpolation.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $GlobalVars = Elm.GlobalVars.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Random = Elm.Random.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Spacing = Elm.Spacing.make(_elm),
-   $Svg = Elm.Svg.make(_elm),
-   $Svg$Attributes = Elm.Svg.Attributes.make(_elm),
-   $Svg$Events = Elm.Svg.Events.make(_elm);
-   var _op = {};
-   var genRIndex = F2(function (n,s) {
-      var floatList = function (n) {    return A2($Random.list,n,A2($Random.$float,0,5));};
-      return A2($Random.generate,floatList(n),s);
-   });
-   var updateTiles = F2(function (t,tiles) {
-      var _p0 = tiles;
-      if (_p0.ctor === "[]") {
-            return _U.crashCase("BlendokuTiles",{start: {line: 75,column: 5},end: {line: 79,column: 40}},_p0)("updateTile: tile does not exists!");
-         } else {
-            var _p3 = _p0._1;
-            var _p2 = _p0._0;
-            return _U.eq(t.index,_p2.index) ? A2($List._op["::"],t,_p3) : A2($List._op["::"],_p2,A2(updateTiles,t,_p3));
-         }
-   });
-   var getTile = F2(function (index,tiles) {
-      getTile: while (true) {
-         var _p4 = tiles;
-         if (_p4.ctor === "[]") {
-               return _U.crashCase("BlendokuTiles",
-               {start: {line: 68,column: 5},end: {line: 70,column: 66}},
-               _p4)("getTile: looking for tile that doesn\'t exist!");
-            } else {
-               var _p6 = _p4._0;
-               if (_U.eq(_p6.index,index)) return _p6; else {
-                     var _v2 = index,_v3 = _p4._1;
-                     index = _v2;
-                     tiles = _v3;
-                     continue getTile;
-                  }
-            }
-      }
-   });
-   var makeTile = F6(function (i,r,p,op,c,s) {    return {index: i,randI: r,pos: p,originPos: op,color: c,status: s};});
-   var isSet2 = function (t) {
-      var _p7 = t.status;
-      if (_p7.ctor === "Set") {
-            return $Maybe.Just({ctor: "_Tuple2",_0: _p7._0,_1: t.index});
-         } else {
-            return $Maybe.Nothing;
-         }
-   };
-   var isSet = function (t) {    var _p8 = t.status;if (_p8.ctor === "Set") {    return true;} else {    return false;}};
-   var Tile = F6(function (a,b,c,d,e,f) {    return {index: a,randI: b,pos: c,originPos: d,color: e,status: f};});
-   var Set = function (a) {    return {ctor: "Set",_0: a};};
-   var NotPlaced = {ctor: "NotPlaced"};
-   var defaultTile = {index: -20
-                     ,randI: -12.43
-                     ,pos: {ctor: "_Tuple2",_0: 0,_1: 0}
-                     ,originPos: {ctor: "_Tuple2",_0: 34,_1: 23}
-                     ,color: $Color.green
-                     ,status: NotPlaced};
-   var genTiles2 = F4(function (seed,_p9,c,pos) {
-      var _p10 = _p9;
-      var nTile = $List.length(c);
-      var _p11 = A2(genRIndex,nTile,seed);
-      var randList = _p11._0;
-      var s = _p11._1;
-      var tiles = A4($List.map3,
-      F3(function (c,rI,i) {
-         return {index: i,randI: rI,pos: {ctor: "_Tuple2",_0: 0,_1: 0},originPos: {ctor: "_Tuple2",_0: 0,_1: 0},color: c,status: NotPlaced};
-      }),
-      c,
-      randList,
-      _U.range(0,nTile - 1));
-      var tiles1 = A2($List.sortBy,function (_) {    return _.randI;},tiles);
-      var tiles2 = A4($List.map3,
-      F3(function (pos,tile,i) {    return _U.update(tile,{randI: $Basics.toFloat(i),pos: pos,originPos: pos});}),
-      pos,
-      tiles1,
-      _U.range(0,nTile - 1));
-      return tiles2;
-   });
-   var genTiles = F2(function (seed,_p12) {
-      var _p13 = _p12;
-      var _p14 = $ColorInterpolation.genColor(seed);
-      var c1 = _p14._0._0;
-      var c2 = _p14._0._1;
-      var rand = _p14._1;
-      var colorList = A3($ColorInterpolation.interpList,$GlobalVars.numTiles,c1,c2);
-      var _p15 = A2(genRIndex,$GlobalVars.numTiles,seed);
-      var randList = _p15._0;
-      var s = _p15._1;
-      var xPos = A2($Spacing.spacingTile,{ctor: "_Tuple2",_0: _p13._0,_1: _p13._1},$GlobalVars.numTiles);
-      var tiles = A5($List.map4,
-      F4(function (c,rI,i,pos) {    return {index: i,randI: rI,pos: pos,originPos: pos,color: c,status: NotPlaced};}),
-      colorList,
-      randList,
-      _U.range(0,$GlobalVars.numTiles - 1),
-      xPos);
-      var tiles1 = A2($List.sortBy,function (_) {    return _.randI;},tiles);
-      var tiles2 = A2($List.indexedMap,F2(function (i,a) {    return _U.update(a,{randI: $Basics.toFloat(i)});}),tiles1);
-      return tiles2;
-   });
-   var Placed = function (a) {    return {ctor: "Placed",_0: a};};
-   var Drag = function (a) {    return {ctor: "Drag",_0: a};};
-   var Selected = {ctor: "Selected"};
-   var Rest = {ctor: "Rest"};
-   var tileMailbox = $Signal.mailbox({ctor: "_Tuple2",_0: 4,_1: Rest});
-   var tileImage = F2(function (_p17,_p16) {
-      var _p18 = _p17;
-      var _p23 = _p18._0;
-      var _p22 = _p18._1;
-      var _p19 = _p16;
-      var _p21 = _p19.pos;
-      var _p20 = _p19.index;
-      var posX = $Basics.fst(_p21);
-      var posY = $Basics.snd(_p21);
-      var posX$ = _U.cmp(posX,_p23 - 100) > 0 ? _p23 - 100 : posX;
-      var posY$ = _U.cmp(posY,_p22 - 100) > 0 ? _p22 - 100 : posY;
-      var c$ = $Color.toRgb(_p19.color);
-      var color$ = A2($Basics._op["++"],
-      "rgb(",
-      A2($Basics._op["++"],
-      $Basics.toString(c$.red),
-      A2($Basics._op["++"],
-      ",",
-      A2($Basics._op["++"],$Basics.toString(c$.green),A2($Basics._op["++"],",",A2($Basics._op["++"],$Basics.toString(c$.blue),")"))))));
-      var str = A2($Basics._op["++"],
-      "i: ",
-      A2($Basics._op["++"],
-      $Basics.toString(_p20),
-      A2($Basics._op["++"],", rI: ",A2($Basics._op["++"],$Basics.toString(_p19.randI),A2($Basics._op["++"],", st: ",$Basics.toString(_p19.status))))));
-      return A2($Svg.rect,
-      _U.list([$Svg$Attributes.x($Basics.toString(posX$))
-              ,$Svg$Attributes.y($Basics.toString(posY$))
-              ,$Svg$Attributes.rx("4")
-              ,$Svg$Attributes.ry("4")
-              ,$Svg$Attributes.width($Basics.toString($GlobalVars.tileSideLen))
-              ,$Svg$Attributes.height($Basics.toString($GlobalVars.tileSideLen))
-              ,$Svg$Attributes.fill(color$)
-              ,$Svg$Events.onMouseUp(A2($Signal.message,tileMailbox.address,{ctor: "_Tuple2",_0: _p20,_1: Rest}))
-              ,$Svg$Events.onMouseDown(A2($Signal.message,tileMailbox.address,{ctor: "_Tuple2",_0: _p20,_1: Selected}))]),
-      _U.list([$Html.text(str)]));
-   });
-   return _elm.BlendokuTiles.values = {_op: _op
-                                      ,Rest: Rest
-                                      ,Selected: Selected
-                                      ,Drag: Drag
-                                      ,Placed: Placed
-                                      ,NotPlaced: NotPlaced
-                                      ,Set: Set
-                                      ,Tile: Tile
-                                      ,tileMailbox: tileMailbox
-                                      ,isSet: isSet
-                                      ,isSet2: isSet2
-                                      ,defaultTile: defaultTile
-                                      ,makeTile: makeTile
-                                      ,tileImage: tileImage
-                                      ,getTile: getTile
-                                      ,updateTiles: updateTiles
-                                      ,genRIndex: genRIndex
-                                      ,genTiles2: genTiles2
-                                      ,genTiles: genTiles};
-};
-Elm.GameBoard = Elm.GameBoard || {};
-Elm.GameBoard.make = function (_elm) {
-   "use strict";
-   _elm.GameBoard = _elm.GameBoard || {};
-   if (_elm.GameBoard.values) return _elm.GameBoard.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $GlobalVars = Elm.GlobalVars.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Spacing = Elm.Spacing.make(_elm),
-   $Svg = Elm.Svg.make(_elm),
-   $Svg$Attributes = Elm.Svg.Attributes.make(_elm);
-   var _op = {};
-   var boardImage = function (b) {
-      var msg = A2($Basics._op["++"],$Basics.toString(b.index),A2($Basics._op["++"]," ",$Basics.toString(b.status)));
-      var posX = $Basics.toString($Basics.fst(b.pos));
-      var posY = $Basics.toString($Basics.snd(b.pos));
-      var color = "rgb(105, 105, 105)";
-      var sideLen = $GlobalVars.tileSideLen / 3 | 0;
-      return A2($Svg.rect,
-      _U.list([$Svg$Attributes.x(posX)
-              ,$Svg$Attributes.y(posY)
-              ,$Svg$Attributes.rx("2")
-              ,$Svg$Attributes.ry("2")
-              ,$Svg$Attributes.width($Basics.toString(sideLen))
-              ,$Svg$Attributes.height($Basics.toString(sideLen))
-              ,$Svg$Attributes.fill(color)]),
-      _U.list([$Html.text(msg)]));
-   };
-   var updateBSP = F2(function (t,bsp) {
-      var _p0 = bsp;
-      if (_p0.ctor === "[]") {
-            return _U.crashCase("GameBoard",{start: {line: 34,column: 5},end: {line: 38,column: 38}},_p0)("updateBSP: bsp does not exists!");
-         } else {
-            var _p3 = _p0._1;
-            var _p2 = _p0._0;
-            return _U.eq(t.index,_p2.index) ? A2($List._op["::"],t,_p3) : A2($List._op["::"],_p2,A2(updateBSP,t,_p3));
-         }
-   });
-   var getBSP = F2(function (index,bsp) {
-      getBSP: while (true) {
-         var _p4 = bsp;
-         if (_p4.ctor === "[]") {
-               return _U.crashCase("GameBoard",{start: {line: 27,column: 5},end: {line: 29,column: 65}},_p4)("getBSP: looking for bsp that doesn\'t exist!");
-            } else {
-               var _p6 = _p4._0;
-               if (_U.eq(_p6.index,index)) return _p6; else {
-                     var _v2 = index,_v3 = _p4._1;
-                     index = _v2;
-                     bsp = _v3;
-                     continue getBSP;
-                  }
-            }
-      }
-   });
-   var extractBSP = function (_p7) {    var _p8 = _p7;var _p9 = _p8.pos;return {ctor: "_Tuple3",_0: _p9._0,_1: _p9._1,_2: _p8.status};};
-   var BoardSnapPos = F3(function (a,b,c) {    return {index: a,pos: b,status: c};});
-   var Set = function (a) {    return {ctor: "Set",_0: a};};
-   var Occupied = function (a) {    return {ctor: "Occupied",_0: a};};
-   var Empty = {ctor: "Empty"};
-   var genInitGameBoard = F2(function (num,_p10) {
-      var _p11 = _p10;
-      var adjP = A2($Spacing.spacingBoard,{ctor: "_Tuple2",_0: _p11._0,_1: _p11._1},num);
-      return A3($List.map2,F2(function (b,x) {    return {index: b,pos: x,status: Empty};}),_U.range(0,num - 1),adjP);
-   });
-   var cleanBoard = F2(function (n,gb) {
-      var _p12 = gb;
-      if (_p12.ctor === "[]") {
-            return _U.list([]);
-         } else {
-            var _p15 = _p12._1;
-            var _p14 = _p12._0;
-            var _p13 = _p14.status;
-            if (_p13.ctor === "Occupied") {
-                  return _U.eq(n,_p13._0) ? A2($List._op["::"],_U.update(_p14,{status: Empty}),_p15) : A2($List._op["::"],_p14,A2(cleanBoard,n,_p15));
-               } else {
-                  return A2($List._op["::"],_p14,A2(cleanBoard,n,_p15));
-               }
-         }
-   });
-   var resetBoard = function (gb) {
-      var _p16 = gb;
-      if (_p16.ctor === "[]") {
-            return _U.list([]);
-         } else {
-            return A2($List._op["::"],_U.update(_p16._0,{status: Empty}),resetBoard(_p16._1));
-         }
-   };
-   return _elm.GameBoard.values = {_op: _op
-                                  ,Empty: Empty
-                                  ,Occupied: Occupied
-                                  ,Set: Set
-                                  ,BoardSnapPos: BoardSnapPos
-                                  ,extractBSP: extractBSP
-                                  ,genInitGameBoard: genInitGameBoard
-                                  ,getBSP: getBSP
-                                  ,updateBSP: updateBSP
-                                  ,boardImage: boardImage
-                                  ,cleanBoard: cleanBoard
-                                  ,resetBoard: resetBoard};
-};
-Elm.GameUI = Elm.GameUI || {};
-Elm.GameUI.make = function (_elm) {
-   "use strict";
-   _elm.GameUI = _elm.GameUI || {};
-   if (_elm.GameUI.values) return _elm.GameUI.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var Reset = {ctor: "Reset"};
-   var NeedTime = {ctor: "NeedTime"};
-   var uiMailbox = $Signal.mailbox(NeedTime);
-   var resetButton = A2($Html.button,
-   _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "button",_1: true},{ctor: "_Tuple2",_0: "inlineB",_1: true}]))
-           ,A2($Html$Events.onClick,uiMailbox.address,Reset)]),
-   _U.list([$Html.text("Reset Current Game")]));
-   var newGameButton = A2($Html.button,
-   _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "button",_1: true},{ctor: "_Tuple2",_0: "centerB",_1: true}]))
-           ,A2($Html$Events.onClick,uiMailbox.address,NeedTime)]),
-   _U.list([$Html.text("Start New Game")]));
-   var newGameButton2 = A2($Html.button,
-   _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "button",_1: true},{ctor: "_Tuple2",_0: "inlineB",_1: true}]))
-           ,A2($Html$Events.onClick,uiMailbox.address,NeedTime)]),
-   _U.list([$Html.text("Start New Game")]));
-   var buttonGroup = A2($Html.div,_U.list([$Html$Attributes.$class("btn-group")]),_U.list([resetButton,newGameButton2]));
-   var NewGame = function (a) {    return {ctor: "NewGame",_0: a};};
-   return _elm.GameUI.values = {_op: _op
-                               ,NewGame: NewGame
-                               ,NeedTime: NeedTime
-                               ,Reset: Reset
-                               ,uiMailbox: uiMailbox
-                               ,resetButton: resetButton
-                               ,newGameButton: newGameButton
-                               ,newGameButton2: newGameButton2
-                               ,buttonGroup: buttonGroup};
-};
-Elm.Levels = Elm.Levels || {};
-Elm.Levels.make = function (_elm) {
-   "use strict";
-   _elm.Levels = _elm.Levels || {};
-   if (_elm.Levels.values) return _elm.Levels.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $BlendokuTiles = Elm.BlendokuTiles.make(_elm),
-   $Color = Elm.Color.make(_elm),
-   $ColorInterpolation = Elm.ColorInterpolation.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $GameBoard = Elm.GameBoard.make(_elm),
-   $GlobalVars = Elm.GlobalVars.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Matrix = Elm.Matrix.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Random = Elm.Random.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Spacing = Elm.Spacing.make(_elm);
-   var _op = {};
-   var level6SetPts = _U.list([3,4,10,12]);
-   var level6IndexList = _U.list([{ctor: "_Tuple2",_0: 1,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 4,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 1}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 3}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 4}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 4}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 4}]);
-   var level5SetPts = _U.list([0,4,6]);
-   var level5IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 4,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 4}]);
-   var level4SetPts = _U.list([0,3,6,9]);
-   var level4IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 1}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 3}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 1}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 3}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 3}]);
-   var level3SetPts = _U.list([3,0]);
-   var level3IndexList = _U.list([{ctor: "_Tuple2",_0: 3,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 1}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 4,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 3}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 4}]);
-   var level2SetPts = _U.list([1,6,8]);
-   var level2IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 1}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 4,_1: 2}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
-                                 ,{ctor: "_Tuple2",_0: 0,_1: 4}]);
-   var level1SetPts = _U.list([0]);
-   var level1IndexList = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: i,_1: 0};},_U.range(0,5));
-   var getSetTiles = function (lvl) {
-      var _p0 = lvl;
-      switch (_p0)
-      {case 1: return level1SetPts;
-         case 2: return level2SetPts;
-         case 3: return level3SetPts;
-         case 4: return level4SetPts;
-         case 5: return level5SetPts;
-         case 6: return level6SetPts;
-         default: return _U.crashCase("Levels",{start: {line: 93,column: 6},end: {line: 100,column: 63}},_p0)("getSetTiles: erroneous level choice");}
-   };
-   var getTileLevel = function (lvl) {
-      var _p2 = lvl;
-      switch (_p2)
-      {case 1: return level1IndexList;
-         case 2: return level2IndexList;
-         case 3: return level3IndexList;
-         case 4: return level4IndexList;
-         case 5: return level5IndexList;
-         case 6: return level6IndexList;
-         default: return _U.crashCase("Levels",{start: {line: 82,column: 5},end: {line: 89,column: 64}},_p2)("getTileLevel: erroneous level choice");}
-   };
-   var genTiles2 = F3(function (_p4,lvl,sd) {
-      var _p5 = _p4;
-      var _p8 = _p5._0;
-      var _p7 = _p5._1;
-      var _p6 = A2($ColorInterpolation.colorMatrixS,{ctor: "_Tuple2",_0: 6,_1: 6},sd);
-      var colors = _p6._0;
-      var sd$ = _p6._1;
-      var iList = getTileLevel(lvl);
-      var c$ = A2($List.map,function (p) {    return A2($Maybe.withDefault,$Color.white,A2($Matrix.get,p,colors));},iList);
-      var nTiles = $List.length(c$);
-      var pos = A3($Spacing.newSpaceTiles,{ctor: "_Tuple2",_0: _p8,_1: _p7},nTiles,7);
-      return A4($BlendokuTiles.genTiles2,sd$,{ctor: "_Tuple2",_0: _p8,_1: _p7},c$,pos);
-   });
-   var genTileLevels = F3(function (_p9,iList,sd) {
-      var _p10 = _p9;
-      var _p13 = _p10._0;
-      var _p12 = _p10._1;
-      var _p11 = A2($ColorInterpolation.colorMatrixS,{ctor: "_Tuple2",_0: 6,_1: 6},sd);
-      var colors = _p11._0;
-      var sd$ = _p11._1;
-      var c$ = A2($List.map,function (p) {    return A2($Maybe.withDefault,$Color.white,A2($Matrix.get,p,colors));},iList);
-      var nTiles = $List.length(c$);
-      var pos = A3($Spacing.newSpaceTiles,{ctor: "_Tuple2",_0: _p13,_1: _p12},nTiles,$GlobalVars.colWidth);
-      return A4($BlendokuTiles.genTiles2,sd$,{ctor: "_Tuple2",_0: _p13,_1: _p12},c$,pos);
-   });
-   var level1Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level1IndexList,seed);});
-   var level2Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level2IndexList,seed);});
-   var level3Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level3IndexList,seed);});
-   var level4Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level4IndexList,seed);});
-   var level5Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level5IndexList,seed);});
-   var level6Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level6IndexList,seed);});
-   var bEq = F2(function (i,offset) {    return A3($Spacing.bEq2,i,$GlobalVars.tileSideLen / 2 | 0,offset);});
-   var fEq = F2(function (i,offset) {    return A3($Spacing.fEq2,i,$GlobalVars.tileSideLen / 2 | 0,offset);});
-   var level1Pos$ = function (_p14) {
-      var _p15 = _p14;
-      var nTiles = 6;
-      var midW = _p15._0 / 2 | 0;
-      var midH = (_p15._1 / 2 | 0) + 20;
-      var m = nTiles / 2 | 0;
-      var latterPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(fEq,i,midH)};},_U.range(1,m));
-      var firstPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(bEq,i,midH)};},_U.range(0,m));
-      var ls = A2($List.append,$List.reverse(firstPos),latterPos);
-      return A2($List.take,nTiles,ls);
-   };
-   var level1Pos = F2(function (_p16,nTiles) {
-      var _p17 = _p16;
-      var midW = _p17._0 / 2 | 0;
-      var midH = (_p17._1 / 2 | 0) + 20;
-      var m = nTiles / 2 | 0;
-      var latterPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(fEq,i,midH)};},_U.range(1,m));
-      var firstPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(bEq,i,midH)};},_U.range(0,m));
-      var ls = A2($List.append,$List.reverse(firstPos),latterPos);
-      return A2($List.take,nTiles,ls);
-   });
-   var getPos = F2(function (n,ls) {
-      getPos: while (true) {
-         var _p18 = {ctor: "_Tuple2",_0: n,_1: ls};
-         if (_p18._1.ctor === "::") {
-               if (_p18._0 === 0) {
-                     return _p18._1._0;
-                  } else {
-                     var _v7 = n - 1,_v8 = _p18._1._1;
-                     n = _v7;
-                     ls = _v8;
-                     continue getPos;
-                  }
-            } else {
-               return _U.crashCase("Levels",{start: {line: 23,column: 5},end: {line: 26,column: 65}},_p18)("getPos: passing in invalid index");
-            }
-      }
-   });
-   var level2Pos = function (_p20) {
-      var _p21 = _p20;
-      var nTile = 5;
-      var midLine = A2(level1Pos,{ctor: "_Tuple2",_0: _p21._0,_1: _p21._1},nTile);
-      var _p22 = A2(getPos,0,midLine);
-      var x0 = _p22._0;
-      var y0 = _p22._1;
-      var left = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(bEq,i,x0),_1: y0};},_U.list([2,1]));
-      var right = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.list([1,2]));
-      return A2($List.append,A2($List.append,left,midLine),right);
-   };
-   var level3Pos = function (_p23) {
-      var _p24 = _p23;
-      var nTile = 5;
-      var midLine = A2(level1Pos,{ctor: "_Tuple2",_0: _p24._0,_1: _p24._1},nTile);
-      var _p25 = A2(getPos,3,midLine);
-      var x0 = _p25._0;
-      var y0 = _p25._1;
-      var sEq = function (i) {    return ($GlobalVars.tileSideLen / 2 | 0) * i + $GlobalVars.tileSideLen * i + x0;};
-      var sEq2 = function (i) {    return x0 - (($GlobalVars.tileSideLen / 2 | 0) * i + $GlobalVars.tileSideLen * i);};
-      var left = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(bEq,i,x0),_1: y0};},_U.list([2,1]));
-      var right = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.list([1,2]));
-      return A2($List.append,A2($List.append,left,midLine),right);
-   };
-   var level4Pos = function (_p26) {
-      var _p27 = _p26;
-      var _p37 = _p27._0;
-      var nTile = 4;
-      var w1 = _p37 / 3 | 0;
-      var verticalLine = A2(level1Pos,{ctor: "_Tuple2",_0: _p37,_1: _p27._1},nTile);
-      var leftLine = A2($List.map,function (_p28) {    var _p29 = _p28;return {ctor: "_Tuple2",_0: w1,_1: _p29._1};},verticalLine);
-      var _p30 = A2(getPos,0,leftLine);
-      var x0 = _p30._0;
-      var y0 = _p30._1;
-      var sEq = function (i) {    return ($GlobalVars.tileSideLen / 2 | 0) * i + $GlobalVars.tileSideLen * i + x0;};
-      var top = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.range(1,nTile - 1));
-      var _p31 = A2(getPos,3,leftLine);
-      var x3 = _p31._0;
-      var y3 = _p31._1;
-      var bottom = A2($List.map,function (_p32) {    var _p33 = _p32;return {ctor: "_Tuple2",_0: _p33._0,_1: y3};},top);
-      var _p34 = A2(getPos,2,bottom);
-      var xx3 = _p34._0;
-      var yy3 = _p34._1;
-      var rightLine = A2($List.map,function (_p35) {    var _p36 = _p35;return {ctor: "_Tuple2",_0: xx3,_1: _p36._1};},verticalLine);
-      var rL = A2($List.take,2,A2($List.drop,1,rightLine));
-      return A3($List.foldl,$List.append,rL,_U.list([top,bottom,leftLine]));
-   };
-   var level5Pos = function (_p38) {
-      var _p39 = _p38;
-      var _p47 = _p39._0;
-      var _p46 = _p39._1;
-      var nTile = 5;
-      var w1 = _p47 / 3 | 0;
-      var vl1 = A2(level1Pos,{ctor: "_Tuple2",_0: _p47,_1: _p46},nTile);
-      var vl2 = A2(level1Pos,{ctor: "_Tuple2",_0: _p47,_1: _p46},3);
-      var vl3 = A2(level1Pos,{ctor: "_Tuple2",_0: _p47,_1: _p46},1);
-      var ws = A2($List.map,function (i) {    return A2(fEq,i,w1);},_U.list([1,2,3]));
-      var w0 = A2(getPos,0,ws);
-      var w1 = A2(getPos,1,ws);
-      var w2 = A2(getPos,2,ws);
-      var v1 = A2($List.map,function (_p40) {    var _p41 = _p40;return {ctor: "_Tuple2",_0: w0,_1: _p41._1};},vl1);
-      var v2 = A2($List.map,function (_p42) {    var _p43 = _p42;return {ctor: "_Tuple2",_0: w1,_1: _p43._1};},vl2);
-      var v3 = A2($List.map,function (_p44) {    var _p45 = _p44;return {ctor: "_Tuple2",_0: w2,_1: _p45._1};},vl3);
-      return A3($List.foldl,$List.append,v3,_U.list([v2,v1]));
-   };
-   var level6Pos = function (_p48) {
-      var _p49 = _p48;
-      var _p55 = _p49._0;
-      var nTile = 4;
-      var w1 = _p55 / 3 | 0;
-      var vl1 = A2($List.map,
-      function (_p50) {
-         var _p51 = _p50;
-         return {ctor: "_Tuple2",_0: w1,_1: _p51._1};
-      },
-      A2(level1Pos,{ctor: "_Tuple2",_0: _p55,_1: _p49._1},nTile + 1));
-      var _p52 = A2(getPos,0,vl1);
-      var x0 = _p52._0;
-      var y0 = _p52._1;
-      var _p53 = A2(getPos,1,vl1);
-      var x1 = _p53._0;
-      var y1 = _p53._1;
-      var _p54 = A2(getPos,2,vl1);
-      var x2 = _p54._0;
-      var y2 = _p54._1;
-      var hz2 = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x2),_1: y2};},_U.list([1,2,3,4]));
-      var hz1 = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x1),_1: y1};},_U.list([2,4]));
-      var hz0 = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.list([2,3,4]));
-      var vl = A2($List.drop,1,vl1);
-      return A3($List.foldl,$List.append,hz0,_U.list([hz1,hz2,vl]));
-   };
-   var getBoardPos = function (lvl) {
-      var _p56 = lvl;
-      switch (_p56)
-      {case 1: return level1Pos$;
-         case 2: return level2Pos;
-         case 3: return level3Pos;
-         case 4: return level4Pos;
-         case 5: return level5Pos;
-         case 6: return level6Pos;
-         default: return _U.crashCase("Levels",{start: {line: 71,column: 5},end: {line: 78,column: 66}},_p56)("getBoardPos: invalid level, pick 1 - 6");}
-   };
-   var levelToBSP = F2(function (dimens,f) {
-      var pos = f(dimens);
-      return A2($List.indexedMap,F2(function (i,p) {    return {index: i,pos: p,status: $GameBoard.Empty};}),pos);
-   });
-   var level1BSP = function (dims) {    return A2(levelToBSP,dims,level1Pos$);};
-   var level2BSP = function (dimens) {    return A2(levelToBSP,dimens,level2Pos);};
-   var level3BSP = function (dimens) {    return A2(levelToBSP,dimens,level3Pos);};
-   var level4BSP = function (dimens) {    return A2(levelToBSP,dimens,level4Pos);};
-   var level5BSP = function (dimens) {    return A2(levelToBSP,dimens,level5Pos);};
-   var level6BSP = function (dimens) {    return A2(levelToBSP,dimens,level6Pos);};
-   var getLevel = function (lvl) {
-      var msg = A2($Basics._op["++"],"getLevel: invalid level, picked ",$Basics.toString(lvl));
-      var _p58 = lvl;
-      switch (_p58)
-      {case 1: return {ctor: "_Tuple3",_0: level1BSP,_1: level1Tiles,_2: level1SetPts};
-         case 2: return {ctor: "_Tuple3",_0: level2BSP,_1: level2Tiles,_2: level2SetPts};
-         case 3: return {ctor: "_Tuple3",_0: level3BSP,_1: level3Tiles,_2: level3SetPts};
-         case 4: return {ctor: "_Tuple3",_0: level4BSP,_1: level4Tiles,_2: level4SetPts};
-         case 5: return {ctor: "_Tuple3",_0: level5BSP,_1: level5Tiles,_2: level5SetPts};
-         case 6: return {ctor: "_Tuple3",_0: level6BSP,_1: level6Tiles,_2: level6SetPts};
-         default: return _U.crashCase("Levels",{start: {line: 59,column: 5},end: {line: 66,column: 29}},_p58)(msg);}
-   };
-   return _elm.Levels.values = {_op: _op
-                               ,levelToBSP: levelToBSP
-                               ,getPos: getPos
-                               ,fEq: fEq
-                               ,bEq: bEq
-                               ,genTileLevels: genTileLevels
-                               ,genTiles2: genTiles2
-                               ,getLevel: getLevel
-                               ,getBoardPos: getBoardPos
-                               ,getTileLevel: getTileLevel
-                               ,getSetTiles: getSetTiles
-                               ,level1Pos$: level1Pos$
-                               ,level1Pos: level1Pos
-                               ,level1BSP: level1BSP
-                               ,level1IndexList: level1IndexList
-                               ,level1SetPts: level1SetPts
-                               ,level1Tiles: level1Tiles
-                               ,level2Pos: level2Pos
-                               ,level2BSP: level2BSP
-                               ,level2IndexList: level2IndexList
-                               ,level2SetPts: level2SetPts
-                               ,level2Tiles: level2Tiles
-                               ,level3Pos: level3Pos
-                               ,level3BSP: level3BSP
-                               ,level3IndexList: level3IndexList
-                               ,level3SetPts: level3SetPts
-                               ,level3Tiles: level3Tiles
-                               ,level4Pos: level4Pos
-                               ,level4BSP: level4BSP
-                               ,level4IndexList: level4IndexList
-                               ,level4SetPts: level4SetPts
-                               ,level4Tiles: level4Tiles
-                               ,level5Pos: level5Pos
-                               ,level5BSP: level5BSP
-                               ,level5IndexList: level5IndexList
-                               ,level5SetPts: level5SetPts
-                               ,level5Tiles: level5Tiles
-                               ,level6Pos: level6Pos
-                               ,level6BSP: level6BSP
-                               ,level6IndexList: level6IndexList
-                               ,level6SetPts: level6SetPts
-                               ,level6Tiles: level6Tiles};
-};
-Elm.Main = Elm.Main || {};
-Elm.Main.make = function (_elm) {
-   "use strict";
-   _elm.Main = _elm.Main || {};
-   if (_elm.Main.values) return _elm.Main.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Array = Elm.Array.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $BlendokuTiles = Elm.BlendokuTiles.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $GameBoard = Elm.GameBoard.make(_elm),
-   $GameUI = Elm.GameUI.make(_elm),
-   $GlobalVars = Elm.GlobalVars.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Levels = Elm.Levels.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Mouse = Elm.Mouse.make(_elm),
-   $Random = Elm.Random.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Spacing = Elm.Spacing.make(_elm),
-   $Svg = Elm.Svg.make(_elm),
-   $Svg$Attributes = Elm.Svg.Attributes.make(_elm),
+   $Text = Elm.Text.make(_elm),
    $Time = Elm.Time.make(_elm),
    $Window = Elm.Window.make(_elm);
    var _op = {};
-   var genRLevel = function (s) {    var gen = A2($Random.$int,0,189);return A2($Random.generate,gen,s);};
-   var setTiles = F3(function (ss,ts,gbs) {
-      var tiles = A2($List.map,function (i) {    return A2($BlendokuTiles.getTile,i,ts);},ss);
-      var bsp = A2($List.map,function (i) {    return A2($GameBoard.getBSP,i,gbs);},ss);
-      var bPos = A2($List.map,function (b) {    return {ctor: "_Tuple2",_0: $GlobalVars.getCenterPos(b.pos),_1: b.index};},bsp);
-      var tiles$ = A3($List.map2,
-      F2(function (t,_p0) {    var _p1 = _p0;var _p2 = _p1._0;return _U.update(t,{pos: _p2,originPos: _p2,status: $BlendokuTiles.Set(_p1._1)});}),
-      tiles,
-      bPos);
-      var bsp$ = A3($List.map2,F2(function (b,t) {    return _U.update(b,{status: $GameBoard.Set(t.index)});}),bsp,tiles$);
-      var tt = A3($List.foldl,F2(function (a,b) {    return A2($BlendokuTiles.updateTiles,a,b);}),ts,tiles$);
-      var bb = A3($List.foldl,F2(function (a,b) {    return A2($GameBoard.updateBSP,a,b);}),gbs,bsp$);
-      return {ctor: "_Tuple2",_0: tt,_1: bb};
-   });
-   var drawGameBoard = F2(function (_p4,_p3) {
-      var _p5 = _p4;
-      var _p7 = _p5._0;
-      var _p6 = _p3;
-      return A2($Html.div,
-      _U.list([]),
-      _U.list([A2($Svg.svg,
-      _U.list([$Svg$Attributes.width($Basics.toString(_p7)),$Svg$Attributes.height($Basics.toString(500))]),
-      A2($List.append,
-      A2($List.map,$GameBoard.boardImage,_p6._1),
-      A2($List.map,function (b) {    return A2($BlendokuTiles.tileImage,{ctor: "_Tuple2",_0: _p7,_1: _p5._1},b);},_p6._0)))]));
-   });
-   var respaceBoard = F3(function (dimens,lvl,board) {
-      var spaceB = A2($Levels.getBoardPos,lvl,dimens);
-      return A3($List.map2,F2(function (p,b) {    return _U.update(b,{pos: p});}),spaceB,board);
-   });
-   var unwrapJust = function (a) {
-      var _p8 = a;
-      if (_p8.ctor === "Just") {
-            return _p8._0;
-         } else {
-            return _U.crashCase("Main",{start: {line: 243,column: 5},end: {line: 245,column: 57}},_p8)("unwrapJust: got Nothing");
-         }
-   };
-   var rtHelper = F3(function (tiles,coords,gb) {
-      var _p10 = tiles;
-      if (_p10.ctor === "[]") {
-            return _U.list([]);
-         } else {
-            var _p13 = _p10._1;
-            var _p12 = _p10._0;
-            var _p11 = _p12.status;
-            switch (_p11.ctor)
-            {case "NotPlaced": var newOrigin = unwrapJust(A2($Array.get,$Basics.round(_p12.randI),coords));
-                 return A2($List._op["::"],_U.update(_p12,{pos: newOrigin,originPos: newOrigin}),A3(rtHelper,_p13,coords,gb));
-               case "Placed": var newOrigin = unwrapJust(A2($Array.get,$Basics.round(_p12.randI),coords));
-                 var g = unwrapJust(A2($Array.get,_p11._0,gb));
-                 var newPos = $GlobalVars.getCenterPos(g.pos);
-                 return A2($List._op["::"],_U.update(_p12,{pos: newPos,originPos: newOrigin}),A3(rtHelper,_p13,coords,gb));
-               default: var g = unwrapJust(A2($Array.get,_p11._0,gb));
-                 var center = $GlobalVars.getCenterPos(g.pos);
-                 return A2($List._op["::"],_U.update(_p12,{pos: center,originPos: center}),A3(rtHelper,_p13,coords,gb));}
-         }
-   });
-   var respaceTiles = F3(function (dimens,gb,t) {
-      var numTiles = $List.length(t);
-      var newCoords = $Array.fromList(A3($Spacing.newSpaceTiles,dimens,numTiles,$GlobalVars.colWidth));
-      var gb$ = $Array.fromList(gb);
-      return A3(rtHelper,t,newCoords,gb$);
-   });
-   var resetBoard = F2(function (tiles,gb) {
-      var setTiles = A2($List.filterMap,$BlendokuTiles.isSet2,tiles);
-      var setTiles$ = A2($List.filter,$BlendokuTiles.isSet,tiles);
-      var setBSP = A2($List.map,function (_p14) {    var _p15 = _p14;return A2($GameBoard.getBSP,_p15._0,gb);},setTiles);
-      var resetB = $GameBoard.resetBoard(gb);
-      var resetT = A2($List.map,function (t) {    return _U.update(t,{pos: t.originPos,status: $BlendokuTiles.NotPlaced});},tiles);
-      var resetT$ = A3($List.foldl,F2(function (a,b) {    return A2($BlendokuTiles.updateTiles,a,b);}),resetT,setTiles$);
-      var resetB$ = A3($List.foldl,F2(function (a,b) {    return A2($GameBoard.updateBSP,a,b);}),resetB,setBSP);
-      return {ctor: "_Tuple2",_0: resetT$,_1: resetB$};
-   });
-   var snap = F3(function (_p16,tileIndex,bb) {
-      var _p17 = _p16;
-      var _p25 = _p17._1;
-      var _p24 = _p17._0;
-      var _p18 = bb;
-      if (_p18.ctor === "[]") {
-            return {ctor: "_Tuple3",_0: {ctor: "_Tuple2",_0: _p24,_1: _p25},_1: _U.list([]),_2: $BlendokuTiles.NotPlaced};
-         } else {
-            var _p23 = _p18._1;
-            var _p22 = _p18._0;
-            var _p19 = $GameBoard.extractBSP(_p22);
-            var x$ = _p19._0;
-            var y$ = _p19._1;
-            var status = _p19._2;
-            var adjX = x$ - ($GlobalVars.tileSideLen / 3 | 0);
-            var adjY = y$ - ($GlobalVars.tileSideLen / 3 | 0);
-            var deltaX = $Basics.toFloat(Math.pow(_p24 - adjX,2));
-            var deltaY = $Basics.toFloat(Math.pow(_p25 - adjY,2));
-            var dist = $Basics.sqrt(deltaX + deltaY);
-            var ifUpdate = {ctor: "_Tuple3"
-                           ,_0: {ctor: "_Tuple2",_0: adjX,_1: adjY}
-                           ,_1: A2($List._op["::"],_U.update(_p22,{status: $GameBoard.Occupied(tileIndex)}),_p23)
-                           ,_2: $BlendokuTiles.Placed(_p22.index)};
-            var _p20 = {ctor: "_Tuple2",_0: _p22.status,_1: _U.cmp(dist,40) < 0};
-            _v9_2: do {
-               if (_p20.ctor === "_Tuple2" && _p20._1 === true) {
-                     switch (_p20._0.ctor)
-                     {case "Occupied": return ifUpdate;
-                        case "Empty": return ifUpdate;
-                        default: break _v9_2;}
+   var nextBtn = $Signal.mailbox(0);
+   var dialogButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,1),"next");
+   var resetButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,-5627),"Play Again");
+   var extractIndex = F2(function (i,xs) {
+      extractIndex: while (true) {
+         var _p0 = {ctor: "_Tuple2",_0: i,_1: xs};
+         if (_p0._1.ctor === "::") {
+               if (_p0._0 === 0) {
+                     return _p0._1._0;
                   } else {
-                     break _v9_2;
+                     var _v1 = i - 1,_v2 = _p0._1._1;
+                     i = _v1;
+                     xs = _v2;
+                     continue extractIndex;
                   }
-            } while (false);
-            var _p21 = A3(snap,{ctor: "_Tuple2",_0: _p24,_1: _p25},tileIndex,_p23);
-            var pos = _p21._0;
-            var board = _p21._1;
-            var status = _p21._2;
-            return {ctor: "_Tuple3",_0: pos,_1: A2($List._op["::"],_p22,board),_2: status};
-         }
-   });
-   var moveTile = F2(function (_p27,_p26) {
-      var _p28 = _p27;
-      var _p41 = _p28._1;
-      var _p40 = _p28._0;
-      var _p29 = _p26;
-      var _p39 = _p29._2;
-      var _p38 = _p29._3;
-      var _p37 = _p29._1;
-      var _p30 = _p29._0;
-      if (_p30.ctor === "[]") {
-            return {ctor: "_Tuple4",_0: _U.list([]),_1: _p37,_2: _p39,_3: _p38};
-         } else {
-            var _p36 = _p30._1;
-            var _p35 = _p30._0;
-            var _p31 = {ctor: "_Tuple3",_0: _U.eq(_p35.index,_p40),_1: _p41,_2: _p35.status};
-            _v13_3: do {
-               _v13_1: do {
-                  if (_p31.ctor === "_Tuple3" && _p31._0 === true) {
-                        switch (_p31._2.ctor)
-                        {case "Set": var _p32 = A2(moveTile,{ctor: "_Tuple2",_0: _p40,_1: _p41},{ctor: "_Tuple4",_0: _p36,_1: _p37,_2: _p39,_3: _p38});
-                             var tiles = _p32._0;
-                             var board = _p32._1;
-                             var st = _p32._2;
-                             var l = _p32._3;
-                             return {ctor: "_Tuple4",_0: A2($List._op["::"],_p35,tiles),_1: board,_2: st,_3: l};
-                           case "NotPlaced": switch (_p31._1.ctor)
-                             {case "Drag": if (_p31._1._0.ctor === "_Tuple2") {
-                                        break _v13_1;
-                                     } else {
-                                        break _v13_3;
-                                     }
-                                case "Rest": return {ctor: "_Tuple4"
-                                                    ,_0: A2($List._op["::"],_U.update(_p35,{pos: _p35.originPos}),_p36)
-                                                    ,_1: A2($GameBoard.cleanBoard,_p35.index,_p37)
-                                                    ,_2: _p39
-                                                    ,_3: _p38};
-                                default: break _v13_3;}
-                           default: if (_p31._1.ctor === "Drag" && _p31._1._0.ctor === "_Tuple2") {
-                                   break _v13_1;
-                                } else {
-                                   break _v13_3;
-                                }}
-                     } else {
-                        var _p34 = A2(moveTile,{ctor: "_Tuple2",_0: _p40,_1: _p41},{ctor: "_Tuple4",_0: _p36,_1: _p37,_2: _p39,_3: _p38});
-                        var tiles = _p34._0;
-                        var board = _p34._1;
-                        var st = _p34._2;
-                        var l = _p34._3;
-                        return {ctor: "_Tuple4",_0: A2($List._op["::"],_p35,tiles),_1: board,_2: st,_3: l};
-                     }
-               } while (false);
-               var x$ = _p31._1._0._0 - ($GlobalVars.tileSideLen / 2 | 0);
-               var y$ = _p31._1._0._1 - ($GlobalVars.tileSideLen / 2 | 0);
-               var _p33 = A3(snap,{ctor: "_Tuple2",_0: x$,_1: y$},_p40,_p37);
-               var snapx = _p33._0._0;
-               var snapy = _p33._0._1;
-               var newBoard = _p33._1;
-               var newSt = _p33._2;
-               return {ctor: "_Tuple4"
-                      ,_0: A2($List._op["::"],_U.update(_p35,{pos: {ctor: "_Tuple2",_0: snapx,_1: snapy},status: newSt}),_p36)
-                      ,_1: newBoard
-                      ,_2: _p39
-                      ,_3: _p38};
-            } while (false);
-            return {ctor: "_Tuple4",_0: A2($List._op["::"],_p35,_p36),_1: _p37,_2: _p39,_3: _p38};
-         }
-   });
-   var extractLevel = function (_p42) {    var _p43 = _p42;return _p43._3;};
-   var extractState = function (_p44) {    var _p45 = _p44;return {ctor: "_Tuple4",_0: _p45._0,_1: _p45._1,_2: _p45._2,_3: _p45._3};};
-   var view = F2(function (st,windowDim) {
-      var _p46 = extractState(st);
-      var tiles = _p46._0;
-      var board = _p46._1;
-      var status = _p46._2;
-      var l = _p46._3;
-      var _p47 = status;
-      switch (_p47.ctor)
-      {case "UnSeeded": return A2($Html.div,_U.list([]),_U.list([$GameUI.newGameButton]));
-         case "Playing": return A2($Html.div,_U.list([]),_U.list([A2(drawGameBoard,windowDim,st),$GameUI.buttonGroup]));
-         default: return A2($Html.div,
-           _U.list([]),
-           _U.list([A2($Html.div,
-                   _U.list([$Html$Attributes.$class("win-wrapper")]),
-                   _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("winner")]),_U.list([$Html.text("You Win!")]))]))
-                   ,A2(drawGameBoard,windowDim,st)
-                   ,$GameUI.buttonGroup]));}
-   });
-   var buttonMailbox = $GameUI.uiMailbox;
-   var tileMailbox = $BlendokuTiles.tileMailbox;
-   var Swap = function (a) {    return {ctor: "Swap",_0: a};};
-   var Snap = function (a) {    return {ctor: "Snap",_0: a};};
-   var Wnd = function (a) {    return {ctor: "Wnd",_0: a};};
-   var Btn = function (a) {    return {ctor: "Btn",_0: a};};
-   var buttonSignals = A4($Signal.map3,
-   F3(function (sig,time,dims) {
-      var _p48 = sig;
-      if (_p48.ctor === "NeedTime") {
-            return Btn($GameUI.NewGame({ctor: "_Tuple2",_0: time,_1: dims}));
-         } else {
-            return Btn(sig);
-         }
-   }),
-   buttonMailbox.signal,
-   A2($Signal.sampleOn,buttonMailbox.signal,$Time.every($Time.millisecond)),
-   A2($Signal.sampleOn,buttonMailbox.signal,$Window.dimensions));
-   var Mv = function (a) {    return {ctor: "Mv",_0: a};};
-   var mousePosSignal = A3($Signal.map2,
-   F2(function (_p49,mousePos) {
-      var _p50 = _p49;
-      var _p53 = _p50._1;
-      var _p52 = _p50._0;
-      var _p51 = _p53;
-      if (_p51.ctor === "Selected") {
-            return Mv({ctor: "_Tuple2",_0: _p52,_1: $BlendokuTiles.Drag(mousePos)});
-         } else {
-            return Mv({ctor: "_Tuple2",_0: _p52,_1: _p53});
-         }
-   }),
-   tileMailbox.signal,
-   $Mouse.position);
-   var gameSignals = A2($Signal.merge,mousePosSignal,A2($Signal.merge,buttonSignals,A2($Signal.map,Wnd,$Window.dimensions)));
-   var UnSeeded = {ctor: "UnSeeded"};
-   var initState = {ctor: "_Tuple4",_0: _U.list([]),_1: _U.list([]),_2: UnSeeded,_3: $Maybe.Nothing};
-   var Win = {ctor: "Win"};
-   var Playing = {ctor: "Playing"};
-   var checkGame = F2(function (prev,g) {
-      checkGame: while (true) {
-         var _p54 = g;
-         if (_p54.ctor === "[]") {
-               return Win;
             } else {
-               var _p58 = _p54._1;
-               var _p55 = $GameBoard.extractBSP(_p54._0);
-               var x = _p55._0;
-               var y = _p55._1;
-               var st = _p55._2;
-               var _p56 = st;
-               switch (_p56.ctor)
-               {case "Empty": return Playing;
-                  case "Occupied": var _p57 = _p56._0;
-                    if (!_U.eq(_p57,prev + 1)) return Playing; else {
-                          var _v22 = _p57,_v23 = _p58;
-                          prev = _v22;
-                          g = _v23;
-                          continue checkGame;
-                       }
-                  default: var _v24 = _p56._0,_v25 = _p58;
-                    prev = _v24;
-                    g = _v25;
-                    continue checkGame;}
+               return _U.crashCase("BhangraRace",
+               {start: {line: 51,column: 5},end: {line: 54,column: 83}},
+               _p0)("extractIndex: something happened that shouldnt\'ve");
             }
       }
    });
-   var checkWin = function (_p59) {
-      var _p60 = _p59;
-      var _p64 = _p60._0;
-      var _p63 = _p60._3;
-      var _p62 = _p60._1;
-      var _p61 = _p64;
-      if (_p61.ctor === "[]") {
-            return {ctor: "_Tuple4",_0: _p64,_1: _p62,_2: _p60._2,_3: _p63};
-         } else {
-            var w = A2(checkGame,-1,_p62);
-            return {ctor: "_Tuple4",_0: _p64,_1: _p62,_2: w,_3: _p63};
-         }
-   };
-   var generateGameLevels = function (_p65) {
-      var _p66 = _p65;
-      var _p70 = _p66._1._0;
-      var _p67 = genRLevel($Random.initialSeed($Basics.round(_p66._0)));
-      var lvl = _p67._0;
-      var s = _p67._1;
-      var l$ = A2($Basics._op["%"],lvl,6) + 1;
-      var _p68 = $Levels.getLevel(l$);
-      var bf = _p68._0;
-      var tl = _p68._1;
-      var ts = _p68._2;
-      var tiles = A2(tl,{ctor: "_Tuple2",_0: _p70,_1: 550},s);
-      var board = bf({ctor: "_Tuple2",_0: _p70,_1: 550});
-      var _p69 = A3(setTiles,ts,tiles,board);
-      var t$ = _p69._0;
-      var b$ = _p69._1;
-      return {ctor: "_Tuple4",_0: t$,_1: b$,_2: Playing,_3: $Maybe.Just(l$)};
-   };
-   var buttonUpdate = F2(function (sig,_p71) {
-      var _p72 = _p71;
-      var _p77 = _p72._0;
-      var _p76 = _p72._3;
-      var _p75 = _p72._1;
-      var sigStr = $Basics.toString(sig);
-      var _p73 = sig;
-      switch (_p73.ctor)
-      {case "NewGame": return generateGameLevels(_p73._0);
-         case "Reset": var _p74 = A2(resetBoard,_p77,_p75);
-           var tiles$ = _p74._0;
-           var board$ = _p74._1;
-           return {ctor: "_Tuple4",_0: tiles$,_1: board$,_2: Playing,_3: _p76};
-         default: return A2($Debug.log,sigStr,{ctor: "_Tuple4",_0: _p77,_1: _p75,_2: _p72._2,_3: _p76});}
+   var countdown_prompts = _U.list(["3","2","1","Go!"]);
+   var countdown_screen = F2(function (num,_p2) {
+      var _p3 = _p2;
+      var msg = A2(extractIndex,num,countdown_prompts);
+      return A4($Graphics$Element.container,_p3._0,_p3._1,$Graphics$Element.middle,$Graphics$Element.show(msg));
    });
-   var update = F2(function (e,st) {
-      var _p78 = extractState(st);
-      var tiles = _p78._0;
-      var board = _p78._1;
-      var gstate = _p78._2;
-      var l = _p78._3;
-      var lvl = A2($Maybe.withDefault,0,l);
-      var _p79 = gstate;
-      switch (_p79.ctor)
-      {case "Win": var _p80 = e;
-           switch (_p80.ctor)
-           {case "Btn": return A2(buttonUpdate,_p80._0,st);
-              case "Wnd": var _p81 = _p80._0;
-                var newB = A3(respaceBoard,_p81,lvl,board);
-                var newT = A3(respaceTiles,_p81,newB,tiles);
-                return {ctor: "_Tuple4",_0: newT,_1: newB,_2: gstate,_3: l};
-              default: return st;}
-         case "Playing": var _p82 = e;
-           switch (_p82.ctor)
-           {case "Mv": var newState = A2(moveTile,{ctor: "_Tuple2",_0: _p82._0._0,_1: _p82._0._1},st);
-                return checkWin(newState);
-              case "Btn": return A2(buttonUpdate,_p82._0,st);
-              default: var _p83 = _p82._0;
-                var newB = A3(respaceBoard,_p83,lvl,board);
-                var newT = A3(respaceTiles,_p83,newB,tiles);
-                return {ctor: "_Tuple4",_0: newT,_1: newB,_2: gstate,_3: l};}
-         default: var _p84 = e;
-           if (_p84.ctor === "Btn") {
-                 return A2(buttonUpdate,_p84._0,st);
+   var dialog_prompts = _U.list(["Move your player by hitting the L and R keys","Select your opponent"]);
+   var dialog = F2(function (num,_p4) {
+      var _p5 = _p4;
+      var msg = A2(extractIndex,num,dialog_prompts);
+      return A4($Graphics$Element.container,
+      _p5._0,
+      _p5._1,
+      $Graphics$Element.middle,
+      A2($Graphics$Element.color,
+      $Color.green,
+      A3($Graphics$Collage.collage,
+      300,
+      300,
+      _U.list([$Graphics$Collage.text($Text.fromString(msg))
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 70,_1: -70},$Graphics$Collage.toForm(dialogButton))]))));
+   });
+   var num_countdwn = $List.length(countdown_prompts);
+   var num_prompts = $List.length(dialog_prompts);
+   var incr_amount = 20;
+   var board_h = 500;
+   var board_w = 1200;
+   var race_track = function (elems) {    return A2($Graphics$Element.color,$Color.grey,A3($Graphics$Collage.collage,board_w,board_h,elems));};
+   var scl = 4;
+   var img_w = 50 * scl;
+   var start = -1 * (board_w / 2 - img_w / 2) + 20;
+   var end = -1 * start;
+   var total_dist = $Basics.abs(end - start);
+   var third = total_dist / 3 + start;
+   var two_third = total_dist * 3 / 4 + start;
+   var img_h = 60 * scl;
+   var player = function (_p6) {
+      var _p7 = _p6;
+      var _p9 = _p7._0;
+      var ll = 8;
+      var guy = F2(function (left,right) {
+         return $Graphics$Collage.group(_U.list([A2($Graphics$Collage.move,
+                                                {ctor: "_Tuple2",_0: _p9,_1: left},
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"l_leg.png")))
+                                                ,A2($Graphics$Collage.move,
+                                                {ctor: "_Tuple2",_0: _p9,_1: right},
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"r_leg.png")))
+                                                ,A2($Graphics$Collage.moveX,
+                                                _p9,
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"yellow_body.png")))]));
+      });
+      var _p8 = _p7._2;
+      switch (_p8.ctor)
+      {case "Left": return A2(guy,ll,0);
+         case "Right": return A2(guy,0,ll);
+         default: return A2(guy,0,0);}
+   };
+   var opponent = F2(function (_p10,name) {
+      var _p11 = _p10;
+      var _p13 = _p11._0;
+      var ll = 8;
+      var body = "opponents/faceless_blue_body.png";
+      var face = function (x) {
+         return _U.cmp(x,third) < 0 ? A2($Basics._op["++"],"opponents/",A2($Basics._op["++"],name,"_1.png")) : _U.cmp(x,two_third) < 0 ? A2($Basics._op["++"],
+         "opponents/",
+         A2($Basics._op["++"],name,"_2.png")) : A2($Basics._op["++"],"opponents/",A2($Basics._op["++"],name,"_3.png"));
+      };
+      var guy = F2(function (left,right) {
+         return $Graphics$Collage.group(_U.list([A2($Graphics$Collage.move,
+                                                {ctor: "_Tuple2",_0: _p13,_1: left},
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"l_leg.png")))
+                                                ,A2($Graphics$Collage.move,
+                                                {ctor: "_Tuple2",_0: _p13,_1: right},
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"r_leg.png")))
+                                                ,A2($Graphics$Collage.moveX,_p13,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,body)))
+                                                ,A2($Graphics$Collage.moveX,
+                                                _p13,
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,face(_p13))))]));
+      });
+      var _p12 = _p11._2;
+      switch (_p12.ctor)
+      {case "Left": return A2(guy,ll,0);
+         case "Right": return A2(guy,0,ll);
+         default: return A2(guy,0,0);}
+   });
+   var Game = {ctor: "Game"};
+   var Countdown = function (a) {    return {ctor: "Countdown",_0: a};};
+   var Dialog = function (a) {    return {ctor: "Dialog",_0: a};};
+   var CountdownTimer = function (a) {    return {ctor: "CountdownTimer",_0: a};};
+   var Next = function (a) {    return {ctor: "Next",_0: a};};
+   var NewTime = function (a) {    return {ctor: "NewTime",_0: a};};
+   var KeyStroke = function (a) {    return {ctor: "KeyStroke",_0: a};};
+   var game_sig = function () {
+      var map_key = function (_p14) {    var _p15 = _p14;return KeyStroke(_p15.x);};
+      return $Signal.mergeMany(_U.list([A2($Signal.map,NewTime,$Time.fps(8))
+                                       ,A2($Signal.map,CountdownTimer,$Time.every($Time.second))
+                                       ,A2($Signal.map,map_key,$Keyboard.arrows)
+                                       ,A2($Signal.map,Next,nextBtn.signal)]));
+   }();
+   var Lose = {ctor: "Lose"};
+   var Win = {ctor: "Win"};
+   var racers = function (_p16) {
+      var _p17 = _p16;
+      var _p21 = _p17._2;
+      var _p20 = _p17._1;
+      var _p18 = _p20;
+      var x1 = _p18._0;
+      var k1 = _p18._1;
+      var s1 = _p18._2;
+      var _p19 = _p21;
+      var x2 = _p19._0;
+      var k2 = _p19._1;
+      var s2 = _p19._2;
+      var r1 = A2($Graphics$Collage.moveY,-50,player(_p20));
+      var r2 = A2($Graphics$Collage.moveY,130,A2(opponent,_p21,"richard"));
+      var win_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("YOU WIN!")));
+      var lose_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("YOU LOSE!")));
+      var tie_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("IT\'S A TIE!")));
+      return _U.eq(s1,Win) ? !_U.eq(s2,Win) ? _U.list([r2,r1,win_bubble]) : _U.list([r2,r1,tie_bubble]) : _U.eq(s2,Win) ? !_U.eq(s1,Win) ? _U.list([r2
+                                                                                                                                                   ,r1
+                                                                                                                                                   ,lose_bubble]) : _U.list([r2
+                                                                                                                                                                            ,r1
+                                                                                                                                                                            ,tie_bubble]) : _U.list([r2
+                                                                                                                                                                                                    ,r1]);
+   };
+   var display_elements = F2(function (dims,st) {
+      var _p22 = st;
+      var gs = _p22._0;
+      var p1 = _p22._1;
+      var p2 = _p22._2;
+      var _p23 = gs;
+      switch (_p23.ctor)
+      {case "Dialog": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(dialog,_p23._0,dims)]);
+         case "Countdown": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(countdown_screen,_p23._0,dims)]);
+         default: return _U.list([race_track(racers(st)),A2($Graphics$Element.flow,$Graphics$Element.down,_U.list([$Graphics$Element.show(st),resetButton]))]);}
+   });
+   var view = F2(function (dims,st) {    var elems = A2(display_elements,dims,st);return A2($Graphics$Element.flow,$Graphics$Element.outward,elems);});
+   var Right = {ctor: "Right"};
+   var Left = {ctor: "Left"};
+   var up_player_state = F2(function (x,_p24) {
+      var _p25 = _p24;
+      var _p28 = _p25._0;
+      var _p27 = _p25._2;
+      var _p26 = _p25._1;
+      return _U.cmp(_p28,end) > 0 ? !_U.eq(_p27,Lose) ? {ctor: "_Tuple3",_0: _p28,_1: _p26,_2: Win} : {ctor: "_Tuple3",_0: _p28,_1: _p26,_2: Lose} : !_U.eq(x,
+      _p26) && !_U.eq(_p27,Win) ? _U.eq(x,-1) ? {ctor: "_Tuple3",_0: _p28 + incr_amount,_1: x,_2: Left} : _U.eq(x,1) ? {ctor: "_Tuple3"
+                                                                                                                       ,_0: _p28 + incr_amount
+                                                                                                                       ,_1: x
+                                                                                                                       ,_2: Right} : {ctor: "_Tuple3"
+                                                                                                                                     ,_0: _p28
+                                                                                                                                     ,_1: _p26
+                                                                                                                                     ,_2: _p27} : {ctor: "_Tuple3"
+                                                                                                                                                  ,_0: _p28
+                                                                                                                                                  ,_1: _p26
+                                                                                                                                                  ,_2: _p27};
+   });
+   var Stall = {ctor: "Stall"};
+   var initState = {ctor: "_Tuple3",_0: Dialog(0),_1: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall},_2: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall}};
+   var game_update = F2(function (up,_p29) {
+      var _p30 = _p29;
+      var _p38 = _p30._2;
+      var _p37 = _p30._1;
+      var _p36 = _p30._0;
+      var _p31 = _p37;
+      var x1 = _p31._0;
+      var k1 = _p31._1;
+      var s1 = _p31._2;
+      var _p32 = _p38;
+      var x2 = _p32._0;
+      var k2 = _p32._1;
+      var s2 = _p32._2;
+      var _p33 = up;
+      switch (_p33.ctor)
+      {case "KeyStroke": var _p34 = _p33._0;
+           return _U.eq(s1,Win) && !_U.eq(s2,Win) ? {ctor: "_Tuple3"
+                                                    ,_0: _p36
+                                                    ,_1: A2(up_player_state,_p34,_p37)
+                                                    ,_2: {ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose}} : _U.eq(s2,Win) && !_U.eq(s1,Win) ? {ctor: "_Tuple3"
+                                                                                                                                       ,_0: _p36
+                                                                                                                                       ,_1: A2(up_player_state,
+                                                                                                                                       _p34,
+                                                                                                                                       {ctor: "_Tuple3"
+                                                                                                                                       ,_0: x1
+                                                                                                                                       ,_1: k1
+                                                                                                                                       ,_2: Lose})
+                                                                                                                                       ,_2: _p38} : {ctor: "_Tuple3"
+                                                                                                                                                    ,_0: _p36
+                                                                                                                                                    ,_1: A2(up_player_state,
+                                                                                                                                                    _p34,
+                                                                                                                                                    _p37)
+                                                                                                                                                    ,_2: _p38};
+         case "NewTime": return _U.eq(k2,0) ? {ctor: "_Tuple3",_0: _p36,_1: _p37,_2: A2(up_player_state,1,_p38)} : _U.eq(s1,Win) && !_U.eq(s2,
+           Win) ? {ctor: "_Tuple3",_0: _p36,_1: _p37,_2: A2(up_player_state,k2 * -1,{ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose})} : _U.eq(s2,Win) && !_U.eq(s1,
+           Win) ? {ctor: "_Tuple3",_0: _p36,_1: {ctor: "_Tuple3",_0: x1,_1: k1,_2: Lose},_2: A2(up_player_state,k2 * -1,_p38)} : {ctor: "_Tuple3"
+                                                                                                                                 ,_0: _p36
+                                                                                                                                 ,_1: _p37
+                                                                                                                                 ,_2: A2(up_player_state,
+                                                                                                                                 k2 * -1,
+                                                                                                                                 _p38)};
+         case "Next": return _U.eq(_p33._0,-5627) ? initState : _U.crash("BhangraRace",
+           {start: {line: 126,column: 22},end: {line: 126,column: 33}})("game_update shouldn\'t have been called");
+         default: return _U.crashCase("BhangraRace",
+           {start: {line: 112,column: 5},end: {line: 127,column: 81}},
+           _p33)("game_update shouldn\'t have been called");}
+   });
+   var upstate = F2(function (up,st) {
+      var _p39 = st;
+      var gs = _p39._0;
+      var p1 = _p39._1;
+      var p2 = _p39._2;
+      var _p40 = {ctor: "_Tuple2",_0: gs,_1: up};
+      switch (_p40._0.ctor)
+      {case "Dialog": if (_p40._1.ctor === "Next") {
+                 var _p41 = _p40._0._0;
+                 var next = A2($Basics._op["%"],_p41 + _p40._1._0,num_prompts);
+                 return _U.cmp(_p41,num_prompts) > 0 ? _U.crash("BhangraRace",
+                 {start: {line: 147,column: 53},end: {line: 147,column: 64}})("error in calculations") : _U.eq(next,0) ? {ctor: "_Tuple3"
+                                                                                                                         ,_0: Countdown(0)
+                                                                                                                         ,_1: p1
+                                                                                                                         ,_2: p2} : {ctor: "_Tuple3"
+                                                                                                                                    ,_0: Dialog(next)
+                                                                                                                                    ,_1: p1
+                                                                                                                                    ,_2: p2};
               } else {
                  return st;
+              }
+         case "Countdown": if (_p40._1.ctor === "CountdownTimer") {
+                 var next = _p40._0._0 + 1;
+                 return _U.cmp(next,num_countdwn) > -1 ? {ctor: "_Tuple3",_0: Game,_1: p1,_2: p2} : {ctor: "_Tuple3",_0: Countdown(next),_1: p1,_2: p2};
+              } else {
+                 return st;
+              }
+         default: if (_p40._1.ctor === "CountdownTimer") {
+                 return st;
+              } else {
+                 return A2(game_update,up,st);
               }}
    });
-   var main = A3($Signal.map2,view,A3($Signal.foldp,update,initState,gameSignals),$Window.dimensions);
-   return _elm.Main.values = {_op: _op
-                             ,Playing: Playing
-                             ,Win: Win
-                             ,UnSeeded: UnSeeded
-                             ,Mv: Mv
-                             ,Btn: Btn
-                             ,Wnd: Wnd
-                             ,Snap: Snap
-                             ,Swap: Swap
-                             ,tileMailbox: tileMailbox
-                             ,buttonMailbox: buttonMailbox
-                             ,extractState: extractState
-                             ,extractLevel: extractLevel
-                             ,mousePosSignal: mousePosSignal
-                             ,buttonSignals: buttonSignals
-                             ,gameSignals: gameSignals
-                             ,snap: snap
-                             ,checkGame: checkGame
-                             ,checkWin: checkWin
-                             ,moveTile: moveTile
-                             ,resetBoard: resetBoard
-                             ,buttonUpdate: buttonUpdate
-                             ,update: update
-                             ,unwrapJust: unwrapJust
-                             ,rtHelper: rtHelper
-                             ,respaceBoard: respaceBoard
-                             ,respaceTiles: respaceTiles
-                             ,drawGameBoard: drawGameBoard
-                             ,view: view
-                             ,initState: initState
-                             ,setTiles: setTiles
-                             ,genRLevel: genRLevel
-                             ,generateGameLevels: generateGameLevels
-                             ,main: main};
+   var main = A3($Signal.map2,view,$Window.dimensions,A3($Signal.foldp,upstate,initState,game_sig));
+   return _elm.BhangraRace.values = {_op: _op
+                                    ,Stall: Stall
+                                    ,Left: Left
+                                    ,Right: Right
+                                    ,Win: Win
+                                    ,Lose: Lose
+                                    ,KeyStroke: KeyStroke
+                                    ,NewTime: NewTime
+                                    ,Next: Next
+                                    ,CountdownTimer: CountdownTimer
+                                    ,Dialog: Dialog
+                                    ,Countdown: Countdown
+                                    ,Game: Game
+                                    ,scl: scl
+                                    ,board_w: board_w
+                                    ,board_h: board_h
+                                    ,img_w: img_w
+                                    ,img_h: img_h
+                                    ,start: start
+                                    ,end: end
+                                    ,total_dist: total_dist
+                                    ,third: third
+                                    ,two_third: two_third
+                                    ,incr_amount: incr_amount
+                                    ,num_prompts: num_prompts
+                                    ,num_countdwn: num_countdwn
+                                    ,dialog_prompts: dialog_prompts
+                                    ,countdown_prompts: countdown_prompts
+                                    ,initState: initState
+                                    ,extractIndex: extractIndex
+                                    ,nextBtn: nextBtn
+                                    ,dialogButton: dialogButton
+                                    ,resetButton: resetButton
+                                    ,game_sig: game_sig
+                                    ,up_player_state: up_player_state
+                                    ,game_update: game_update
+                                    ,upstate: upstate
+                                    ,player: player
+                                    ,opponent: opponent
+                                    ,racers: racers
+                                    ,race_track: race_track
+                                    ,dialog: dialog
+                                    ,countdown_screen: countdown_screen
+                                    ,display_elements: display_elements
+                                    ,view: view
+                                    ,main: main};
 };

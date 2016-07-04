@@ -1,0 +1,167 @@
+Elm.ImgTest = Elm.ImgTest || {};
+Elm.ImgTest.make = function (_elm) {
+   "use strict";
+   _elm.ImgTest = _elm.ImgTest || {};
+   if (_elm.ImgTest.values) return _elm.ImgTest.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Graphics$Input = Elm.Graphics.Input.make(_elm),
+   $Keyboard = Elm.Keyboard.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Text = Elm.Text.make(_elm),
+   $Time = Elm.Time.make(_elm),
+   $Window = Elm.Window.make(_elm);
+   var _op = {};
+   var extractIndex = F2(function (i,xs) {
+      extractIndex: while (true) {
+         var _p0 = {ctor: "_Tuple2",_0: i,_1: xs};
+         if (_p0._1.ctor === "::") {
+               if (_p0._0 === 0) {
+                     return _p0._1._0;
+                  } else {
+                     var _v1 = i - 1,_v2 = _p0._1._1;
+                     i = _v1;
+                     xs = _v2;
+                     continue extractIndex;
+                  }
+            } else {
+               return _U.crashCase("ImgTest",
+               {start: {line: 109,column: 5},end: {line: 112,column: 83}},
+               _p0)("extractIndex: something happened that shouldnt\'ve");
+            }
+      }
+   });
+   var countdown = _U.list(["3","2","1","Go!"]);
+   var countdown_screen = F2(function (num,_p2) {
+      var _p3 = _p2;
+      var msg = A2(extractIndex,num,countdown);
+      return A4($Graphics$Element.container,_p3._0,_p3._1,$Graphics$Element.middle,$Graphics$Element.show(msg));
+   });
+   var dialog_prompts = _U.list(["Move your player by hitting the L and R keys","Select your opponent"]);
+   var opponentBtn = $Signal.mailbox({ctor: "_Tuple2",_0: "blah",_1: 0});
+   var christina = A2($Graphics$Input.button,A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "christina",_1: 10}),"Christina");
+   var richard = A2($Graphics$Input.button,A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "richard",_1: 10}),"Richard");
+   var mai = A2($Graphics$Input.button,A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "mai",_1: 10}),"Mai");
+   var sayri = A2($Graphics$Input.button,A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "sayri",_1: 10}),"Sayri");
+   var nextBtn = $Signal.mailbox(0);
+   var dialogButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,1),"next");
+   var dialog = F2(function (num,_p4) {
+      var _p5 = _p4;
+      var msg = A2(extractIndex,num,dialog_prompts);
+      return A4($Graphics$Element.container,
+      _p5._0,
+      _p5._1,
+      $Graphics$Element.middle,
+      A2($Graphics$Element.color,
+      $Color.green,
+      A3($Graphics$Collage.collage,
+      300,
+      300,
+      _U.list([$Graphics$Collage.text($Text.fromString(msg))
+              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 70,_1: -70},$Graphics$Collage.toForm(dialogButton))]))));
+   });
+   var resetButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,-5627),"Play Again");
+   var Game = {ctor: "Game"};
+   var Countdown = function (a) {    return {ctor: "Countdown",_0: a};};
+   var Dialog = function (a) {    return {ctor: "Dialog",_0: a};};
+   var initState = Dialog(0);
+   var CountdownTimer = function (a) {    return {ctor: "CountdownTimer",_0: a};};
+   var Next = function (a) {    return {ctor: "Next",_0: a};};
+   var NewTime = function (a) {    return {ctor: "NewTime",_0: a};};
+   var KeyStroke = function (a) {    return {ctor: "KeyStroke",_0: a};};
+   var signals = function () {
+      var map_key = function (_p6) {    var _p7 = _p6;return KeyStroke(_p7.x);};
+      return $Signal.mergeMany(_U.list([A2($Signal.map,CountdownTimer,$Time.every($Time.second))
+                                       ,A2($Signal.map,NewTime,$Time.fps(8))
+                                       ,A2($Signal.map,map_key,$Keyboard.arrows)
+                                       ,A2($Signal.map,Next,nextBtn.signal)]));
+   }();
+   var num_countdwn = $List.length(countdown);
+   var num_prompts = $List.length(dialog_prompts);
+   var update = F2(function (up,st) {
+      var _p8 = {ctor: "_Tuple2",_0: up,_1: st};
+      _v6_3: do {
+         if (_p8.ctor === "_Tuple2") {
+               switch (_p8._0.ctor)
+               {case "Next": switch (_p8._1.ctor)
+                    {case "Game": return _U.eq(_p8._0._0,-5627) ? initState : _U.crash("ImgTest",
+                         {start: {line: 75,column: 30},end: {line: 75,column: 41}})("Shouldn\'t be able to hit \'next\' while in game mode");
+                       case "Dialog": var _p9 = _p8._1._0;
+                         var next = A2($Basics._op["%"],_p9 + _p8._0._0,num_prompts);
+                         return _U.cmp(_p9,num_prompts) > -1 ? _U.crash("ImgTest",
+                         {start: {line: 77,column: 54},end: {line: 77,column: 65}})("Error in calculation") : _U.eq(next,0) ? Countdown(0) : Dialog(next);
+                       default: break _v6_3;}
+                  case "CountdownTimer": if (_p8._1.ctor === "Countdown") {
+                          var next = _p8._1._0 + 1;
+                          return _U.cmp(next,num_countdwn) > -1 ? Game : Countdown(next);
+                       } else {
+                          break _v6_3;
+                       }
+                  default: break _v6_3;}
+            } else {
+               break _v6_3;
+            }
+      } while (false);
+      return st;
+   });
+   var scl = 4;
+   var img_w = 50 * scl;
+   var img_h = 60 * scl;
+   var racer_fig = F2(function (left,right) {
+      return A3($Graphics$Collage.collage,
+      600,
+      600,
+      _U.list([A2($Graphics$Collage.moveY,left,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"l_leg.png")))
+              ,A2($Graphics$Collage.moveY,right,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"r_leg.png")))
+              ,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"yellow_body.png"))]));
+   });
+   var display_elements = F2(function (dims,st) {
+      var _p10 = st;
+      switch (_p10.ctor)
+      {case "Dialog": return _U.list([A2(racer_fig,0,5),$Graphics$Element.show(st),A2(dialog,_p10._0,dims)]);
+         case "Game": return _U.list([A2(racer_fig,0,5),A2($Graphics$Element.flow,$Graphics$Element.down,_U.list([$Graphics$Element.show(st),resetButton]))]);
+         default: return _U.list([A2(racer_fig,0,5),$Graphics$Element.show(st),A2(countdown_screen,_p10._0,dims)]);}
+   });
+   var view = F2(function (dims,st) {    var elems = A2(display_elements,dims,st);return A2($Graphics$Element.flow,$Graphics$Element.outward,elems);});
+   var main = A3($Signal.map2,view,$Window.dimensions,A3($Signal.foldp,update,initState,signals));
+   return _elm.ImgTest.values = {_op: _op
+                                ,scl: scl
+                                ,img_w: img_w
+                                ,img_h: img_h
+                                ,num_prompts: num_prompts
+                                ,num_countdwn: num_countdwn
+                                ,KeyStroke: KeyStroke
+                                ,NewTime: NewTime
+                                ,Next: Next
+                                ,CountdownTimer: CountdownTimer
+                                ,Dialog: Dialog
+                                ,Countdown: Countdown
+                                ,Game: Game
+                                ,initState: initState
+                                ,nextBtn: nextBtn
+                                ,opponentBtn: opponentBtn
+                                ,christina: christina
+                                ,richard: richard
+                                ,mai: mai
+                                ,sayri: sayri
+                                ,dialogButton: dialogButton
+                                ,resetButton: resetButton
+                                ,signals: signals
+                                ,update: update
+                                ,racer_fig: racer_fig
+                                ,dialog_prompts: dialog_prompts
+                                ,countdown: countdown
+                                ,extractIndex: extractIndex
+                                ,dialog: dialog
+                                ,countdown_screen: countdown_screen
+                                ,display_elements: display_elements
+                                ,view: view
+                                ,main: main};
+};
