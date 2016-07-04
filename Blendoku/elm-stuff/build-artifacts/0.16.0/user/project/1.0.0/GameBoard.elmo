@@ -1,0 +1,106 @@
+Elm.GameBoard = Elm.GameBoard || {};
+Elm.GameBoard.make = function (_elm) {
+   "use strict";
+   _elm.GameBoard = _elm.GameBoard || {};
+   if (_elm.GameBoard.values) return _elm.GameBoard.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $GlobalVars = Elm.GlobalVars.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Spacing = Elm.Spacing.make(_elm),
+   $Svg = Elm.Svg.make(_elm),
+   $Svg$Attributes = Elm.Svg.Attributes.make(_elm);
+   var _op = {};
+   var boardImage = function (b) {
+      var msg = A2($Basics._op["++"],$Basics.toString(b.index),A2($Basics._op["++"]," ",$Basics.toString(b.status)));
+      var posX = $Basics.toString($Basics.fst(b.pos));
+      var posY = $Basics.toString($Basics.snd(b.pos));
+      var color = "rgb(105, 105, 105)";
+      var sideLen = $GlobalVars.tileSideLen / 3 | 0;
+      return A2($Svg.rect,
+      _U.list([$Svg$Attributes.x(posX)
+              ,$Svg$Attributes.y(posY)
+              ,$Svg$Attributes.rx("2")
+              ,$Svg$Attributes.ry("2")
+              ,$Svg$Attributes.width($Basics.toString(sideLen))
+              ,$Svg$Attributes.height($Basics.toString(sideLen))
+              ,$Svg$Attributes.fill(color)]),
+      _U.list([$Html.text(msg)]));
+   };
+   var updateBSP = F2(function (t,bsp) {
+      var _p0 = bsp;
+      if (_p0.ctor === "[]") {
+            return _U.crashCase("GameBoard",{start: {line: 34,column: 5},end: {line: 38,column: 38}},_p0)("updateBSP: bsp does not exists!");
+         } else {
+            var _p3 = _p0._1;
+            var _p2 = _p0._0;
+            return _U.eq(t.index,_p2.index) ? A2($List._op["::"],t,_p3) : A2($List._op["::"],_p2,A2(updateBSP,t,_p3));
+         }
+   });
+   var getBSP = F2(function (index,bsp) {
+      getBSP: while (true) {
+         var _p4 = bsp;
+         if (_p4.ctor === "[]") {
+               return _U.crashCase("GameBoard",{start: {line: 27,column: 5},end: {line: 29,column: 65}},_p4)("getBSP: looking for bsp that doesn\'t exist!");
+            } else {
+               var _p6 = _p4._0;
+               if (_U.eq(_p6.index,index)) return _p6; else {
+                     var _v2 = index,_v3 = _p4._1;
+                     index = _v2;
+                     bsp = _v3;
+                     continue getBSP;
+                  }
+            }
+      }
+   });
+   var extractBSP = function (_p7) {    var _p8 = _p7;var _p9 = _p8.pos;return {ctor: "_Tuple3",_0: _p9._0,_1: _p9._1,_2: _p8.status};};
+   var BoardSnapPos = F3(function (a,b,c) {    return {index: a,pos: b,status: c};});
+   var Set = function (a) {    return {ctor: "Set",_0: a};};
+   var Occupied = function (a) {    return {ctor: "Occupied",_0: a};};
+   var Empty = {ctor: "Empty"};
+   var genInitGameBoard = F2(function (num,_p10) {
+      var _p11 = _p10;
+      var adjP = A2($Spacing.spacingBoard,{ctor: "_Tuple2",_0: _p11._0,_1: _p11._1},num);
+      return A3($List.map2,F2(function (b,x) {    return {index: b,pos: x,status: Empty};}),_U.range(0,num - 1),adjP);
+   });
+   var cleanBoard = F2(function (n,gb) {
+      var _p12 = gb;
+      if (_p12.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            var _p15 = _p12._1;
+            var _p14 = _p12._0;
+            var _p13 = _p14.status;
+            if (_p13.ctor === "Occupied") {
+                  return _U.eq(n,_p13._0) ? A2($List._op["::"],_U.update(_p14,{status: Empty}),_p15) : A2($List._op["::"],_p14,A2(cleanBoard,n,_p15));
+               } else {
+                  return A2($List._op["::"],_p14,A2(cleanBoard,n,_p15));
+               }
+         }
+   });
+   var resetBoard = function (gb) {
+      var _p16 = gb;
+      if (_p16.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            return A2($List._op["::"],_U.update(_p16._0,{status: Empty}),resetBoard(_p16._1));
+         }
+   };
+   return _elm.GameBoard.values = {_op: _op
+                                  ,Empty: Empty
+                                  ,Occupied: Occupied
+                                  ,Set: Set
+                                  ,BoardSnapPos: BoardSnapPos
+                                  ,extractBSP: extractBSP
+                                  ,genInitGameBoard: genInitGameBoard
+                                  ,getBSP: getBSP
+                                  ,updateBSP: updateBSP
+                                  ,boardImage: boardImage
+                                  ,cleanBoard: cleanBoard
+                                  ,resetBoard: resetBoard};
+};

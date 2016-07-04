@@ -1,0 +1,41 @@
+Elm.TempMain = Elm.TempMain || {};
+Elm.TempMain.make = function (_elm) {
+   "use strict";
+   _elm.TempMain = _elm.TempMain || {};
+   if (_elm.TempMain.values) return _elm.TempMain.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $GameBoard = Elm.GameBoard.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Levels = Elm.Levels.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Main = Elm.Main.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Random = Elm.Random.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Window = Elm.Window.make(_elm);
+   var _op = {};
+   var genGameBoard = F2(function (_p0,lvl) {    var _p1 = _p0;return A2($Levels.getBoardLevel,lvl,{ctor: "_Tuple2",_0: _p1._0,_1: _p1._1});});
+   var genRLevel = function (s) {    var gen = A2($Random.$int,1,6);return A2($Random.generate,gen,s);};
+   var generateGame = function (_p2) {
+      var _p3 = _p2;
+      var _p6 = _p3._1;
+      var _p4 = genRLevel($Random.initialSeed($Basics.round(_p3._0)));
+      var lvl = _p4._0;
+      var s = _p4._1;
+      var lev = 6;
+      var tiles = A3($Levels.genTiles2,_p6,lev,s);
+      var board = A2(genGameBoard,_p6,lev);
+      var _p5 = A3($Main.setTiles,$Levels.getSetTiles(lev),tiles,board);
+      var t$ = _p5._0;
+      var b$ = _p5._1;
+      return {ctor: "_Tuple3",_0: t$,_1: b$,_2: $Main.Playing};
+   };
+   var main = A3($Signal.map2,
+   $Main.view,
+   A2($Signal.map,function (dimens) {    return generateGame({ctor: "_Tuple2",_0: 23129389,_1: dimens});},$Window.dimensions),
+   $Window.dimensions);
+   return _elm.TempMain.values = {_op: _op,genRLevel: genRLevel,genGameBoard: genGameBoard,generateGame: generateGame,main: main};
+};

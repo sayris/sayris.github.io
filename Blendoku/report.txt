@@ -1,0 +1,5 @@
+sayris 
+
+
+
+I was able to accomplish a simplistic version of the Blendoku game using elm.  Each level is “randomly” generated — a 6x6 color matrix is generated via the system randomly generating 4 colors, placing them in the corners of this matrix and then interpolating across the columns and rows to generate all the colors.  The board that is shown is randomly picked from the six hard-coded levels 

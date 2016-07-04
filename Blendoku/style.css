@@ -1,0 +1,86 @@
+.game-board-wrapper{
+	display: block;
+	margin: auto;
+}
+
+.button {
+    background-color: #555555;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    border-radius: 5px;
+    font-family: 'Helvetica', 'monospace';
+}
+
+
+.button:hover {
+    background-color: rgba(85, 85, 85, .9);
+}
+
+
+.centerB {
+	display: block;
+	margin: 15px auto;
+}
+
+.inlineB {
+	display: inline-block;
+	margin: 15px 15px;
+}
+
+.btn-group {
+	display: block;
+	margin: 15px auto;
+	width: 370px;
+}
+
+h1 {
+	font-family: 'Helvetica';
+	text-align: center;
+    font-size: 55px;
+    color: white;
+}
+
+
+
+.win-wrapper {
+	position: absolute;
+	left: 50%;
+	top: 26%;
+}
+
+.winner {
+    position: relative;
+    left: -50%;
+    background-color: rgba(109, 109, 109, 1);
+    font-size: 100px;
+    text-align: center;
+    font-family: monospace;
+    padding: 20px 30px;
+    border-radius: 7px;
+    color: white;
+}
+
+
+#blendoku {
+}
+
+body {
+    background-color: #FDFDFD;
+    background-image: url(images/bg4.jpg);
+    /*background-image: url(images/loading-background.png);*/
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.game-wrapper{
+    -webkit-box-shadow: -4px 0px 39px -18px rgba(0,0,0,0.75);
+    -moz-box-shadow: -4px 0px 39px -18px rgba(0,0,0,0.75);
+    box-shadow: -4px 0px 39px -18px rgba(0,0,0,0.75);
+    background: rgba(255, 255, 255, .3);
+
+}

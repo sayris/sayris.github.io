@@ -1,0 +1,126 @@
+Elm.ColorInterpolation = Elm.ColorInterpolation || {};
+Elm.ColorInterpolation.make = function (_elm) {
+   "use strict";
+   _elm.ColorInterpolation = _elm.ColorInterpolation || {};
+   if (_elm.ColorInterpolation.values) return _elm.ColorInterpolation.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Matrix = Elm.Matrix.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Random = Elm.Random.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var genColor = function (s) {
+      var colorGen = A4($Random.map3,$Color.rgb,A2($Random.$int,0,255),A2($Random.$int,0,255),A2($Random.$int,0,255));
+      var colorsGen = A2($Random.pair,colorGen,colorGen);
+      return A2($Random.generate,colorsGen,s);
+   };
+   var signalColorSeed = function (sig) {
+      var genColorAndSeed = function (_p0) {    var _p1 = _p0;return genColor(_p1._1);};
+      var init = {ctor: "_Tuple2",_0: {ctor: "_Tuple2",_0: $Color.white,_1: $Color.black},_1: $Random.initialSeed(3487)};
+      return A3($Signal.foldp,F2(function (signal,val) {    return genColorAndSeed(val);}),init,sig);
+   };
+   var signalColor = function (sig) {
+      var extractColors = function (_p2) {    var _p3 = _p2;return _p3._0;};
+      return A2($Signal.map,extractColors,signalColorSeed(sig));
+   };
+   var pruneList = function (ls) {
+      var foo = F3(function (i,acc,ls) {
+         foo: while (true) {
+            var _p4 = ls;
+            if (_p4.ctor === "[]") {
+                  return acc;
+               } else {
+                  var _p5 = _p4._1;
+                  if (_U.eq(A2($Basics._op["%"],i,2),0)) {
+                        var _v3 = i + 1,_v4 = acc,_v5 = _p5;
+                        i = _v3;
+                        acc = _v4;
+                        ls = _v5;
+                        continue foo;
+                     } else {
+                        var _v6 = i + 1,_v7 = A2($List._op["::"],_p4._0,acc),_v8 = _p5;
+                        i = _v6;
+                        acc = _v7;
+                        ls = _v8;
+                        continue foo;
+                     }
+               }
+         }
+      });
+      return $List.reverse(A3(foo,0,_U.list([]),ls));
+   };
+   var interpolateEq = F3(function (p,c1,c2) {
+      var c1Float = $Basics.toFloat(c1);
+      var c2Float = $Basics.toFloat(c2);
+      return $Basics.round(c1Float * p + c2Float * (1 - p));
+   });
+   var interpolateColors = F3(function (p,color1,color2) {
+      var c1 = $Color.toRgb(color1);
+      var c2 = $Color.toRgb(color2);
+      var r = A3(interpolateEq,p,c1.red,c2.red);
+      var g = A3(interpolateEq,p,c1.green,c2.green);
+      var b = A3(interpolateEq,p,c1.blue,c2.blue);
+      return A3($Color.rgb,r,g,b);
+   });
+   var interpList2 = F3(function (num,c1,c2) {
+      var ll = _U.range(0,num * 2);
+      var ps = A2($List.map,function (index) {    return index * (1 / num);},ll);
+      var c = A2($List.map,function (p) {    return A3(interpolateColors,p,c1,c2);},ps);
+      return pruneList(c);
+   });
+   var interpList = F3(function (num,c1,c2) {
+      var ll = _U.range(0,num - 1);
+      var ps = A2($List.map,function (index) {    return index * (1 / num);},ll);
+      return A2($List.map,function (p) {    return A3(interpolateColors,p,c1,c2);},ps);
+   });
+   var colorMatrix = F2(function (_p6,seed) {
+      var _p7 = _p6;
+      var _p10 = _p7._1;
+      var _p8 = genColor(seed);
+      var c1 = _p8._0._0;
+      var c2 = _p8._0._1;
+      var seed2 = _p8._1;
+      var _p9 = genColor(seed2);
+      var c3 = _p9._0._0;
+      var c4 = _p9._0._1;
+      var seed3 = _p9._1;
+      var leftC = A3(interpList,_p10,c1,c2);
+      var rightC = A3(interpList,_p10,c3,c4);
+      var ls = A3($List.map2,F2(function (c,k) {    return A3(interpList,_p7._0,c,k);}),leftC,rightC);
+      return $Matrix.fromList(ls);
+   });
+   var colorMatrixS = F2(function (_p11,seed) {
+      var _p12 = _p11;
+      var _p15 = _p12._1;
+      var _p13 = genColor(seed);
+      var c1 = _p13._0._0;
+      var c2 = _p13._0._1;
+      var seed2 = _p13._1;
+      var _p14 = genColor(seed2);
+      var c3 = _p14._0._0;
+      var c4 = _p14._0._1;
+      var seed3 = _p14._1;
+      var leftC = A3(interpList,_p15,c1,c2);
+      var rightC = A3(interpList,_p15,c3,c4);
+      var ls = A3($List.map2,F2(function (c,k) {    return A3(interpList,_p12._0,c,k);}),leftC,rightC);
+      return {ctor: "_Tuple2",_0: $Matrix.fromList(ls),_1: seed3};
+   });
+   var initState = {ctor: "_Tuple2",_0: $Color.white,_1: $Color.white};
+   return _elm.ColorInterpolation.values = {_op: _op
+                                           ,initState: initState
+                                           ,interpolateEq: interpolateEq
+                                           ,interpolateColors: interpolateColors
+                                           ,pruneList: pruneList
+                                           ,interpList2: interpList2
+                                           ,interpList: interpList
+                                           ,genColor: genColor
+                                           ,signalColorSeed: signalColorSeed
+                                           ,signalColor: signalColor
+                                           ,colorMatrix: colorMatrix
+                                           ,colorMatrixS: colorMatrixS};
+};

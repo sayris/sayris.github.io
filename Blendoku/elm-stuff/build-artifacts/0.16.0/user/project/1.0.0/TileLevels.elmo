@@ -1,0 +1,98 @@
+Elm.TileLevels = Elm.TileLevels || {};
+Elm.TileLevels.make = function (_elm) {
+   "use strict";
+   _elm.TileLevels = _elm.TileLevels || {};
+   if (_elm.TileLevels.values) return _elm.TileLevels.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var level6SetPts = _U.list([3,4,13,11]);
+   var level6IndexList = _U.list([{ctor: "_Tuple2",_0: 1,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 4}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 4}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 4}]);
+   var level5SetPts = _U.list([0,4,6]);
+   var level5IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 4}]);
+   var level4SetPts = _U.list([0,3,6,9]);
+   var level4IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 3}]);
+   var level3SetPts = _U.list([3,0]);
+   var level3IndexList = _U.list([{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 4}]);
+   var level2SetPts = _U.list([1,6,8]);
+   var level2IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 4}]);
+   var level1SetPts = _U.list([0]);
+   var level1IndexList = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: i,_1: 0};},_U.range(0,5));
+   var chooseLevel = function (i) {
+      var _p0 = i;
+      switch (_p0)
+      {case 1: return level1IndexList;
+         case 2: return level2IndexList;
+         case 3: return level3IndexList;
+         case 4: return level4IndexList;
+         case 5: return level5IndexList;
+         case 6: return level6IndexList;
+         default: return _U.crashCase("TileLevels",{start: {line: 106,column: 5},end: {line: 113,column: 63}},_p0)("chooseLevel: erroneous level choice");}
+   };
+   return _elm.TileLevels.values = {_op: _op
+                                   ,level1IndexList: level1IndexList
+                                   ,level1SetPts: level1SetPts
+                                   ,level2IndexList: level2IndexList
+                                   ,level2SetPts: level2SetPts
+                                   ,level3IndexList: level3IndexList
+                                   ,level3SetPts: level3SetPts
+                                   ,level4IndexList: level4IndexList
+                                   ,level4SetPts: level4SetPts
+                                   ,level5IndexList: level5IndexList
+                                   ,level5SetPts: level5SetPts
+                                   ,level6IndexList: level6IndexList
+                                   ,level6SetPts: level6SetPts
+                                   ,chooseLevel: chooseLevel};
+};

@@ -1,0 +1,80 @@
+Elm.TileMatrix2 = Elm.TileMatrix2 || {};
+Elm.TileMatrix2.make = function (_elm) {
+   "use strict";
+   _elm.TileMatrix2 = _elm.TileMatrix2 || {};
+   if (_elm.TileMatrix2.values) return _elm.TileMatrix2.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $BlendokuTiles = Elm.BlendokuTiles.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $ColorInterpolation = Elm.ColorInterpolation.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Matrix = Elm.Matrix.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Random = Elm.Random.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Spacing = Elm.Spacing.make(_elm),
+   $Svg = Elm.Svg.make(_elm),
+   $Svg$Attributes = Elm.Svg.Attributes.make(_elm),
+   $TileLevels = Elm.TileLevels.make(_elm);
+   var _op = {};
+   var colorMatrixS = F2(function (_p0,seed) {
+      var _p1 = _p0;
+      var _p4 = _p1._1;
+      var _p2 = $ColorInterpolation.genColor(seed);
+      var c1 = _p2._0._0;
+      var c2 = _p2._0._1;
+      var seed2 = _p2._1;
+      var _p3 = $ColorInterpolation.genColor(seed2);
+      var c3 = _p3._0._0;
+      var c4 = _p3._0._1;
+      var seed3 = _p3._1;
+      var leftC = A3($ColorInterpolation.interpList,_p4,c1,c2);
+      var rightC = A3($ColorInterpolation.interpList,_p4,c3,c4);
+      var ls = A3($List.map2,F2(function (c,k) {    return A3($ColorInterpolation.interpList,_p1._0,c,k);}),leftC,rightC);
+      return {ctor: "_Tuple2",_0: $Matrix.fromList(ls),_1: seed3};
+   });
+   var genTiles = F3(function (_p5,lvl,sd) {
+      var _p6 = _p5;
+      var _p9 = _p6._0;
+      var _p8 = _p6._1;
+      var _p7 = A2(colorMatrixS,{ctor: "_Tuple2",_0: 6,_1: 6},sd);
+      var colors = _p7._0;
+      var sd$ = _p7._1;
+      var iList = $TileLevels.chooseLevel(lvl);
+      var c$ = A2($List.map,function (p) {    return A2($Maybe.withDefault,$Color.white,A2($Matrix.get,p,colors));},iList);
+      var nTiles = $List.length(c$);
+      var colWidth = 7;
+      var pos = A3($Spacing.newSpaceTiles,{ctor: "_Tuple2",_0: _p9,_1: _p8},nTiles,colWidth);
+      return A4($BlendokuTiles.genTiles2,sd$,{ctor: "_Tuple2",_0: _p9,_1: _p8},c$,pos);
+   });
+   var main = function () {
+      var seed = $Random.initialSeed(123);
+      var b = A3(genTiles,{ctor: "_Tuple2",_0: 800,_1: 800},6,seed);
+      var bb = A2($List.map,function (t) {    return A2($BlendokuTiles.tileImage,{ctor: "_Tuple2",_0: 800,_1: 800},t);},b);
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Svg.svg,_U.list([$Svg$Attributes.width($Basics.toString(800)),$Svg$Attributes.height($Basics.toString(800))]),bb)]));
+   }();
+   var colorMatrix = F2(function (_p10,seed) {
+      var _p11 = _p10;
+      var _p14 = _p11._1;
+      var _p12 = $ColorInterpolation.genColor(seed);
+      var c1 = _p12._0._0;
+      var c2 = _p12._0._1;
+      var seed2 = _p12._1;
+      var _p13 = $ColorInterpolation.genColor(seed2);
+      var c3 = _p13._0._0;
+      var c4 = _p13._0._1;
+      var seed3 = _p13._1;
+      var leftC = A3($ColorInterpolation.interpList,_p14,c1,c2);
+      var rightC = A3($ColorInterpolation.interpList,_p14,c3,c4);
+      var ls = A3($List.map2,F2(function (c,k) {    return A3($ColorInterpolation.interpList,_p11._0,c,k);}),leftC,rightC);
+      return $Matrix.fromList(ls);
+   });
+   var mTile = F4(function (i,rI,p,st) {    return A6($BlendokuTiles.makeTile,i,rI,p,p,$Color.green,st);});
+   return _elm.TileMatrix2.values = {_op: _op,mTile: mTile,colorMatrix: colorMatrix,colorMatrixS: colorMatrixS,genTiles: genTiles,main: main};
+};

@@ -1,0 +1,340 @@
+Elm.Levels = Elm.Levels || {};
+Elm.Levels.make = function (_elm) {
+   "use strict";
+   _elm.Levels = _elm.Levels || {};
+   if (_elm.Levels.values) return _elm.Levels.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $BlendokuTiles = Elm.BlendokuTiles.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $ColorInterpolation = Elm.ColorInterpolation.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $GameBoard = Elm.GameBoard.make(_elm),
+   $GlobalVars = Elm.GlobalVars.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Matrix = Elm.Matrix.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Random = Elm.Random.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Spacing = Elm.Spacing.make(_elm);
+   var _op = {};
+   var level6SetPts = _U.list([3,4,10,12]);
+   var level6IndexList = _U.list([{ctor: "_Tuple2",_0: 1,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 4}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 4}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 4}]);
+   var level5SetPts = _U.list([0,4,6]);
+   var level5IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 4}]);
+   var level4SetPts = _U.list([0,3,6,9]);
+   var level4IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 3}]);
+   var level3SetPts = _U.list([3,0]);
+   var level3IndexList = _U.list([{ctor: "_Tuple2",_0: 3,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 4}]);
+   var level2SetPts = _U.list([1,6,8]);
+   var level2IndexList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 0}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 1}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 1,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 2,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 3,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 4,_1: 2}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 3}
+                                 ,{ctor: "_Tuple2",_0: 0,_1: 4}]);
+   var level1SetPts = _U.list([0]);
+   var level1IndexList = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: i,_1: 0};},_U.range(0,5));
+   var getSetTiles = function (lvl) {
+      var _p0 = lvl;
+      switch (_p0)
+      {case 1: return level1SetPts;
+         case 2: return level2SetPts;
+         case 3: return level3SetPts;
+         case 4: return level4SetPts;
+         case 5: return level5SetPts;
+         case 6: return level6SetPts;
+         default: return _U.crashCase("Levels",{start: {line: 93,column: 6},end: {line: 100,column: 63}},_p0)("getSetTiles: erroneous level choice");}
+   };
+   var getTileLevel = function (lvl) {
+      var _p2 = lvl;
+      switch (_p2)
+      {case 1: return level1IndexList;
+         case 2: return level2IndexList;
+         case 3: return level3IndexList;
+         case 4: return level4IndexList;
+         case 5: return level5IndexList;
+         case 6: return level6IndexList;
+         default: return _U.crashCase("Levels",{start: {line: 82,column: 5},end: {line: 89,column: 64}},_p2)("getTileLevel: erroneous level choice");}
+   };
+   var genTiles2 = F3(function (_p4,lvl,sd) {
+      var _p5 = _p4;
+      var _p8 = _p5._0;
+      var _p7 = _p5._1;
+      var _p6 = A2($ColorInterpolation.colorMatrixS,{ctor: "_Tuple2",_0: 6,_1: 6},sd);
+      var colors = _p6._0;
+      var sd$ = _p6._1;
+      var iList = getTileLevel(lvl);
+      var c$ = A2($List.map,function (p) {    return A2($Maybe.withDefault,$Color.white,A2($Matrix.get,p,colors));},iList);
+      var nTiles = $List.length(c$);
+      var pos = A3($Spacing.newSpaceTiles,{ctor: "_Tuple2",_0: _p8,_1: _p7},nTiles,7);
+      return A4($BlendokuTiles.genTiles2,sd$,{ctor: "_Tuple2",_0: _p8,_1: _p7},c$,pos);
+   });
+   var genTileLevels = F3(function (_p9,iList,sd) {
+      var _p10 = _p9;
+      var _p13 = _p10._0;
+      var _p12 = _p10._1;
+      var _p11 = A2($ColorInterpolation.colorMatrixS,{ctor: "_Tuple2",_0: 6,_1: 6},sd);
+      var colors = _p11._0;
+      var sd$ = _p11._1;
+      var c$ = A2($List.map,function (p) {    return A2($Maybe.withDefault,$Color.white,A2($Matrix.get,p,colors));},iList);
+      var nTiles = $List.length(c$);
+      var pos = A3($Spacing.newSpaceTiles,{ctor: "_Tuple2",_0: _p13,_1: _p12},nTiles,$GlobalVars.colWidth);
+      return A4($BlendokuTiles.genTiles2,sd$,{ctor: "_Tuple2",_0: _p13,_1: _p12},c$,pos);
+   });
+   var level1Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level1IndexList,seed);});
+   var level2Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level2IndexList,seed);});
+   var level3Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level3IndexList,seed);});
+   var level4Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level4IndexList,seed);});
+   var level5Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level5IndexList,seed);});
+   var level6Tiles = F2(function (dimens,seed) {    return A3(genTileLevels,dimens,level6IndexList,seed);});
+   var bEq = F2(function (i,offset) {    return A3($Spacing.bEq2,i,$GlobalVars.tileSideLen / 2 | 0,offset);});
+   var fEq = F2(function (i,offset) {    return A3($Spacing.fEq2,i,$GlobalVars.tileSideLen / 2 | 0,offset);});
+   var level1Pos$ = function (_p14) {
+      var _p15 = _p14;
+      var nTiles = 6;
+      var midW = _p15._0 / 2 | 0;
+      var midH = (_p15._1 / 2 | 0) + 20;
+      var m = nTiles / 2 | 0;
+      var latterPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(fEq,i,midH)};},_U.range(1,m));
+      var firstPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(bEq,i,midH)};},_U.range(0,m));
+      var ls = A2($List.append,$List.reverse(firstPos),latterPos);
+      return A2($List.take,nTiles,ls);
+   };
+   var level1Pos = F2(function (_p16,nTiles) {
+      var _p17 = _p16;
+      var midW = _p17._0 / 2 | 0;
+      var midH = (_p17._1 / 2 | 0) + 20;
+      var m = nTiles / 2 | 0;
+      var latterPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(fEq,i,midH)};},_U.range(1,m));
+      var firstPos = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: midW,_1: A2(bEq,i,midH)};},_U.range(0,m));
+      var ls = A2($List.append,$List.reverse(firstPos),latterPos);
+      return A2($List.take,nTiles,ls);
+   });
+   var getPos = F2(function (n,ls) {
+      getPos: while (true) {
+         var _p18 = {ctor: "_Tuple2",_0: n,_1: ls};
+         if (_p18._1.ctor === "::") {
+               if (_p18._0 === 0) {
+                     return _p18._1._0;
+                  } else {
+                     var _v7 = n - 1,_v8 = _p18._1._1;
+                     n = _v7;
+                     ls = _v8;
+                     continue getPos;
+                  }
+            } else {
+               return _U.crashCase("Levels",{start: {line: 23,column: 5},end: {line: 26,column: 65}},_p18)("getPos: passing in invalid index");
+            }
+      }
+   });
+   var level2Pos = function (_p20) {
+      var _p21 = _p20;
+      var nTile = 5;
+      var midLine = A2(level1Pos,{ctor: "_Tuple2",_0: _p21._0,_1: _p21._1},nTile);
+      var _p22 = A2(getPos,0,midLine);
+      var x0 = _p22._0;
+      var y0 = _p22._1;
+      var left = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(bEq,i,x0),_1: y0};},_U.list([2,1]));
+      var right = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.list([1,2]));
+      return A2($List.append,A2($List.append,left,midLine),right);
+   };
+   var level3Pos = function (_p23) {
+      var _p24 = _p23;
+      var nTile = 5;
+      var midLine = A2(level1Pos,{ctor: "_Tuple2",_0: _p24._0,_1: _p24._1},nTile);
+      var _p25 = A2(getPos,3,midLine);
+      var x0 = _p25._0;
+      var y0 = _p25._1;
+      var sEq = function (i) {    return ($GlobalVars.tileSideLen / 2 | 0) * i + $GlobalVars.tileSideLen * i + x0;};
+      var sEq2 = function (i) {    return x0 - (($GlobalVars.tileSideLen / 2 | 0) * i + $GlobalVars.tileSideLen * i);};
+      var left = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(bEq,i,x0),_1: y0};},_U.list([2,1]));
+      var right = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.list([1,2]));
+      return A2($List.append,A2($List.append,left,midLine),right);
+   };
+   var level4Pos = function (_p26) {
+      var _p27 = _p26;
+      var _p37 = _p27._0;
+      var nTile = 4;
+      var w1 = _p37 / 3 | 0;
+      var verticalLine = A2(level1Pos,{ctor: "_Tuple2",_0: _p37,_1: _p27._1},nTile);
+      var leftLine = A2($List.map,function (_p28) {    var _p29 = _p28;return {ctor: "_Tuple2",_0: w1,_1: _p29._1};},verticalLine);
+      var _p30 = A2(getPos,0,leftLine);
+      var x0 = _p30._0;
+      var y0 = _p30._1;
+      var sEq = function (i) {    return ($GlobalVars.tileSideLen / 2 | 0) * i + $GlobalVars.tileSideLen * i + x0;};
+      var top = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.range(1,nTile - 1));
+      var _p31 = A2(getPos,3,leftLine);
+      var x3 = _p31._0;
+      var y3 = _p31._1;
+      var bottom = A2($List.map,function (_p32) {    var _p33 = _p32;return {ctor: "_Tuple2",_0: _p33._0,_1: y3};},top);
+      var _p34 = A2(getPos,2,bottom);
+      var xx3 = _p34._0;
+      var yy3 = _p34._1;
+      var rightLine = A2($List.map,function (_p35) {    var _p36 = _p35;return {ctor: "_Tuple2",_0: xx3,_1: _p36._1};},verticalLine);
+      var rL = A2($List.take,2,A2($List.drop,1,rightLine));
+      return A3($List.foldl,$List.append,rL,_U.list([top,bottom,leftLine]));
+   };
+   var level5Pos = function (_p38) {
+      var _p39 = _p38;
+      var _p47 = _p39._0;
+      var _p46 = _p39._1;
+      var nTile = 5;
+      var w1 = _p47 / 3 | 0;
+      var vl1 = A2(level1Pos,{ctor: "_Tuple2",_0: _p47,_1: _p46},nTile);
+      var vl2 = A2(level1Pos,{ctor: "_Tuple2",_0: _p47,_1: _p46},3);
+      var vl3 = A2(level1Pos,{ctor: "_Tuple2",_0: _p47,_1: _p46},1);
+      var ws = A2($List.map,function (i) {    return A2(fEq,i,w1);},_U.list([1,2,3]));
+      var w0 = A2(getPos,0,ws);
+      var w1 = A2(getPos,1,ws);
+      var w2 = A2(getPos,2,ws);
+      var v1 = A2($List.map,function (_p40) {    var _p41 = _p40;return {ctor: "_Tuple2",_0: w0,_1: _p41._1};},vl1);
+      var v2 = A2($List.map,function (_p42) {    var _p43 = _p42;return {ctor: "_Tuple2",_0: w1,_1: _p43._1};},vl2);
+      var v3 = A2($List.map,function (_p44) {    var _p45 = _p44;return {ctor: "_Tuple2",_0: w2,_1: _p45._1};},vl3);
+      return A3($List.foldl,$List.append,v3,_U.list([v2,v1]));
+   };
+   var level6Pos = function (_p48) {
+      var _p49 = _p48;
+      var _p55 = _p49._0;
+      var nTile = 4;
+      var w1 = _p55 / 3 | 0;
+      var vl1 = A2($List.map,
+      function (_p50) {
+         var _p51 = _p50;
+         return {ctor: "_Tuple2",_0: w1,_1: _p51._1};
+      },
+      A2(level1Pos,{ctor: "_Tuple2",_0: _p55,_1: _p49._1},nTile + 1));
+      var _p52 = A2(getPos,0,vl1);
+      var x0 = _p52._0;
+      var y0 = _p52._1;
+      var _p53 = A2(getPos,1,vl1);
+      var x1 = _p53._0;
+      var y1 = _p53._1;
+      var _p54 = A2(getPos,2,vl1);
+      var x2 = _p54._0;
+      var y2 = _p54._1;
+      var hz2 = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x2),_1: y2};},_U.list([1,2,3,4]));
+      var hz1 = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x1),_1: y1};},_U.list([2,4]));
+      var hz0 = A2($List.map,function (i) {    return {ctor: "_Tuple2",_0: A2(fEq,i,x0),_1: y0};},_U.list([2,3,4]));
+      var vl = A2($List.drop,1,vl1);
+      return A3($List.foldl,$List.append,hz0,_U.list([hz1,hz2,vl]));
+   };
+   var getBoardPos = function (lvl) {
+      var _p56 = lvl;
+      switch (_p56)
+      {case 1: return level1Pos$;
+         case 2: return level2Pos;
+         case 3: return level3Pos;
+         case 4: return level4Pos;
+         case 5: return level5Pos;
+         case 6: return level6Pos;
+         default: return _U.crashCase("Levels",{start: {line: 71,column: 5},end: {line: 78,column: 66}},_p56)("getBoardPos: invalid level, pick 1 - 6");}
+   };
+   var levelToBSP = F2(function (dimens,f) {
+      var pos = f(dimens);
+      return A2($List.indexedMap,F2(function (i,p) {    return {index: i,pos: p,status: $GameBoard.Empty};}),pos);
+   });
+   var level1BSP = function (dims) {    return A2(levelToBSP,dims,level1Pos$);};
+   var level2BSP = function (dimens) {    return A2(levelToBSP,dimens,level2Pos);};
+   var level3BSP = function (dimens) {    return A2(levelToBSP,dimens,level3Pos);};
+   var level4BSP = function (dimens) {    return A2(levelToBSP,dimens,level4Pos);};
+   var level5BSP = function (dimens) {    return A2(levelToBSP,dimens,level5Pos);};
+   var level6BSP = function (dimens) {    return A2(levelToBSP,dimens,level6Pos);};
+   var getLevel = function (lvl) {
+      var msg = A2($Basics._op["++"],"getLevel: invalid level, picked ",$Basics.toString(lvl));
+      var _p58 = lvl;
+      switch (_p58)
+      {case 1: return {ctor: "_Tuple3",_0: level1BSP,_1: level1Tiles,_2: level1SetPts};
+         case 2: return {ctor: "_Tuple3",_0: level2BSP,_1: level2Tiles,_2: level2SetPts};
+         case 3: return {ctor: "_Tuple3",_0: level3BSP,_1: level3Tiles,_2: level3SetPts};
+         case 4: return {ctor: "_Tuple3",_0: level4BSP,_1: level4Tiles,_2: level4SetPts};
+         case 5: return {ctor: "_Tuple3",_0: level5BSP,_1: level5Tiles,_2: level5SetPts};
+         case 6: return {ctor: "_Tuple3",_0: level6BSP,_1: level6Tiles,_2: level6SetPts};
+         default: return _U.crashCase("Levels",{start: {line: 59,column: 5},end: {line: 66,column: 29}},_p58)(msg);}
+   };
+   return _elm.Levels.values = {_op: _op
+                               ,levelToBSP: levelToBSP
+                               ,getPos: getPos
+                               ,fEq: fEq
+                               ,bEq: bEq
+                               ,genTileLevels: genTileLevels
+                               ,genTiles2: genTiles2
+                               ,getLevel: getLevel
+                               ,getBoardPos: getBoardPos
+                               ,getTileLevel: getTileLevel
+                               ,getSetTiles: getSetTiles
+                               ,level1Pos$: level1Pos$
+                               ,level1Pos: level1Pos
+                               ,level1BSP: level1BSP
+                               ,level1IndexList: level1IndexList
+                               ,level1SetPts: level1SetPts
+                               ,level1Tiles: level1Tiles
+                               ,level2Pos: level2Pos
+                               ,level2BSP: level2BSP
+                               ,level2IndexList: level2IndexList
+                               ,level2SetPts: level2SetPts
+                               ,level2Tiles: level2Tiles
+                               ,level3Pos: level3Pos
+                               ,level3BSP: level3BSP
+                               ,level3IndexList: level3IndexList
+                               ,level3SetPts: level3SetPts
+                               ,level3Tiles: level3Tiles
+                               ,level4Pos: level4Pos
+                               ,level4BSP: level4BSP
+                               ,level4IndexList: level4IndexList
+                               ,level4SetPts: level4SetPts
+                               ,level4Tiles: level4Tiles
+                               ,level5Pos: level5Pos
+                               ,level5BSP: level5BSP
+                               ,level5IndexList: level5IndexList
+                               ,level5SetPts: level5SetPts
+                               ,level5Tiles: level5Tiles
+                               ,level6Pos: level6Pos
+                               ,level6BSP: level6BSP
+                               ,level6IndexList: level6IndexList
+                               ,level6SetPts: level6SetPts
+                               ,level6Tiles: level6Tiles};
+};
