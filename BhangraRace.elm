@@ -12,8 +12,10 @@ import Time
 
 
 type RacerState = Stall | Left | Right | Win | Lose
-type Update = KeyStroke Int | NewTime Time.Time | Next Int | CountdownTimer Time.Time
-type GameState = Dialog Int | Countdown Int | Game 
+type alias OppStat = (String, Float)
+
+type Update = KeyStroke Int | NewTime Time.Time | Next Int | CountdownTimer Time.Time | OppChoice OppStat
+type GameState = Dialog Int | Countdown (Int, OppStat) | Game OppStat
 
 type alias PlayerState = (Float, Int, RacerState)
 type alias State = (GameState, PlayerState, PlayerState)
@@ -36,7 +38,7 @@ num_countdwn = List.length countdown_prompts
 
 dialog_prompts : List String 
 dialog_prompts =
-    [ "Move your player by hitting the L and R keys"
+    [ "Move your player by hitting the L and R arrow keys"
     , "Select your opponent"
     ]
 
@@ -59,6 +61,9 @@ extractIndex i xs =
 nextBtn : Signal.Mailbox Int
 nextBtn = Signal.mailbox 0
 
+-- (opponent name, "speed"/difficultly level)
+opponentBtn : Signal.Mailbox OppStat
+opponentBtn = Signal.mailbox ("blah", 0)
 
 dialogButton : E.Element
 dialogButton = 
@@ -68,15 +73,44 @@ resetButton : E.Element
 resetButton =
     I.button (Signal.message nextBtn.address -5627) "Play Again"
 
+richard : E.Element
+richard =
+    I.customButton (Signal.message opponentBtn.address ("richard", 0.5))
+        (E.image 100 100 "/button_pic/button_richard.png")
+        (E.image 100 100 "/button_pic/highlight_richard.png")
+        (E.image 100 100 "/button_pic/button_richard.png")
+
+christina : E.Element
+christina =
+    I.customButton (Signal.message opponentBtn.address ("christina", 0.8)) 
+        (E.image 100 100 "/button_pic/button_christina.png")
+        (E.image 100 100 "/button_pic/highlight_christina.png")
+        (E.image 100 100 "/button_pic/button_christina.png")
+
+mai : E.Element
+mai =
+    I.customButton (Signal.message opponentBtn.address ("mai", 0.7))
+        (E.image 100 100 "/button_pic/button_mai.png")
+        (E.image 100 100 "/button_pic/highlight_mai.png")
+        (E.image 100 100 "/button_pic/button_mai.png")
+
+
+sayri : E.Element
+sayri =
+    I.customButton (Signal.message opponentBtn.address ("sayri", 1))
+        (E.image 100 100 "/button_pic/button_sayri.png")
+        (E.image 100 100 "/button_pic/highlight_sayri.png")
+        (E.image 100 100 "/button_pic/button_sayri.png")
 
 game_sig : Signal Update
 game_sig =
     let map_key {x, y} = KeyStroke x in
     Signal.mergeMany
-    [ Signal.map NewTime (Time.fps 8)
+    [ Signal.map NewTime (Time.fps 11)
     , Signal.map CountdownTimer (Time.every Time.second)
     , Signal.map map_key Keyboard.arrows
     , Signal.map Next nextBtn.signal
+    , Signal.map OppChoice opponentBtn.signal
     ]
 
 
@@ -84,8 +118,8 @@ game_sig =
 ------------------- Game State Updates -------------------
 
 -- updating and indivual Bhangra Racer's state on the board
-up_player_state : Int -> PlayerState -> PlayerState 
-up_player_state x (x_val, prev_key, state) =
+up_player_state : Int -> PlayerState -> Float -> PlayerState 
+up_player_state x (x_val, prev_key, state) speed =
     if x_val > end then
         if state /= Lose then
             (x_val, prev_key, Win)
@@ -93,9 +127,9 @@ up_player_state x (x_val, prev_key, state) =
             (x_val, prev_key, Lose)
     else if x /= prev_key && state /= Win then
         if x == -1 then
-            (x_val + incr_amount, x, Left) -- left key
+            (x_val + (incr_amount * speed), x, Left) -- left key
         else if x == 1 then
-            (x_val + incr_amount, x, Right) -- right key
+            (x_val + (incr_amount * speed), x, Right) -- right key
         else (x_val, prev_key, state)
     else (x_val, prev_key, state)
 
@@ -105,38 +139,29 @@ up_player_state x (x_val, prev_key, state) =
 -- and the "actual" player).
 -- Determines if there is a winner and if so
 -- also designates the loser
-game_update : Update -> State -> State
-game_update up (gs, p1, p2) =
+game_update : Update -> State -> Float -> State
+game_update up (gs, p1, p2) opp_speed =
     let (x1, k1, s1) = p1 in 
     let (x2, k2, s2) = p2 in 
     case up of
         KeyStroke k -> if s1 == Win && s2 /= Win then 
-                            (gs, up_player_state k p1, (x2, k2, Lose))
+                            (gs, up_player_state k p1 1, (x2, k2, Lose))
                         else if s2 == Win && s1 /= Win then
-                            (gs, up_player_state k (x1, k1, Lose), p2)
-                        else (gs, up_player_state k p1, p2)
-        NewTime t -> if k2 == 0 then (gs, p1, up_player_state 1 p2)
+                            (gs, up_player_state k (x1, k1, Lose) 1, p2)
+                        else (gs, up_player_state k p1 1, p2)
+        NewTime t -> if k2 == 0 then (gs, p1, up_player_state 1 p2 opp_speed)
                      else 
                         if s1 == Win && s2 /= Win then 
-                            (gs, p1, up_player_state (k2 * -1) (x2, k2, Lose))
+                            (gs, p1, up_player_state (k2 * -1) (x2, k2, Lose) opp_speed)
                         else if s2 == Win && s1 /= Win then
-                            (gs, (x1, k1, Lose), up_player_state (k2 * -1) p2)
-                        else (gs, p1, up_player_state (k2 * -1) p2)
+                            (gs, (x1, k1, Lose), up_player_state (k2 * -1) p2 opp_speed)
+                        else (gs, p1, up_player_state (k2 * -1) p2 opp_speed)
         Next i -> if i == -5627 then initState
                 else Debug.crash "game_update shouldn't have been called"
-        CountdownTimer i -> Debug.crash "game_update shouldn't have been called"
+        _ -> Debug.crash "game_update shoudln't have been called"
+        --CountdownTimer i -> Debug.crash "game_update shouldn't have been called"
+        --OppChoice bleh -> Debug.crash "game_update shouldn't have been called"
 
-
--- If game is in the Dialog/instruction phase
--- increments which dialog message to show
---dialog_update : Int -> State -> State 
---dialog_update i (gs, p1, p2) = 
---    case gs of 
---        Dialog x -> let next = (x + i)%num_prompts in
---                            if x >= num_prompts then Debug.crash "Error in calculation"
---                            else if next == 0 then (Countdown 0, p1, p2) 
---                            else (Dialog next, p1, p2) 
---        Game -> Debug.crash "I don't think this should happen?"
 
 -- general function for updating the state
 upstate : Update -> State -> State 
@@ -145,15 +170,16 @@ upstate up st =
     case (gs, up) of 
         (Dialog d, Next i) -> let next = (d + i) % num_prompts in 
                             if d > num_prompts then Debug.crash "error in calculations"
-                            else if next == 0 then (Countdown 0, p1, p2)
+                            else if next == 0 then (Countdown (0, ("blah", 0)), p1, p2)
                             else (Dialog next, p1, p2)
+        (Dialog d, OppChoice choice) -> (Countdown (0, choice), p1, p2)
         (Dialog d, _) -> st
-        (Countdown d, CountdownTimer i) -> let next = d + 1 in 
-                                        if next >= num_countdwn then (Game, p1, p2)
-                                        else (Countdown next, p1, p2)
-        (Countdown d, _) -> st  
-        (Game, CountdownTimer i) -> st
-        (Game, _) -> game_update up st 
+        (Countdown (d, choice), CountdownTimer i) -> let next = d + 1 in 
+                                        if next >= num_countdwn then (Game choice, p1, p2)
+                                        else (Countdown (next, choice), p1, p2)
+        (Countdown (d, choice), _) -> st  
+        (Game (opp_name, opp_speed), CountdownTimer i) -> st
+        (Game (opp_name, opp_speed), _) -> game_update up st opp_speed
 
 ------------------- View Functions -------------------
 
@@ -174,14 +200,14 @@ player (x, _, st) =
         Right -> guy 0 ll
         _     -> guy 0 0 
 
-opponent : PlayerState -> String -> C.Form
-opponent (x, _, st) name =
+opponent : PlayerState -> GameState -> C.Form
+opponent (x, _, st) gs =
     let ll = 8 in 
     let body = "opponents/faceless_blue_body.png" in
-    let face x = if x < third then ("opponents/" ++ name ++ "_1.png") 
+    let face x name = if x < third then ("opponents/" ++ name ++ "_1.png") 
                  else if x < two_third then ("opponents/" ++ name ++ "_2.png")
                  else ("opponents/" ++ name ++ "_3.png") in
-    let guy left right = 
+    let guy left right name = 
         C.group 
             [C.toForm (E.image img_w img_h "l_leg.png")
                 |> C.move (x, left), 
@@ -189,20 +215,22 @@ opponent (x, _, st) name =
                 |> C.move (x, right),
              C.toForm (E.image img_w img_h body)
                 |> C.moveX x,
-             C.toForm (E.image img_w img_h (face x))
+             C.toForm (E.image img_w img_h (face x name))
                 |> C.moveX x
             ] in
-    case st of
-        Left  -> guy ll 0
-        Right -> guy 0 ll
-        _     -> guy 0 0 
+    case (st, gs) of
+        (Left, Game (nm, spd))  -> guy ll 0 nm
+        (Right, Game (nm, spd)) -> guy 0 ll nm
+        (_, Game (nm, spd))     -> guy 0 0 nm
+        (_, Countdown (_, (nm, spd))) -> guy 0 0 nm
+        (_, _)                  -> guy 0 0 "head"
 
 racers : State -> List C.Form
 racers (gs, p1, p2) =
     let (x1, k1, s1) = p1 in 
     let (x2, k2, s2) = p2 in 
     let r1 = (player p1) |> C.moveY -50 in 
-    let r2 = (opponent p2 "richard") |> C.moveY 130 in 
+    let r2 = (opponent p2 gs) |> C.moveY 130 in 
     let win_bubble = C.text (Text.height 80 (Text.fromString "YOU WIN!")) in 
     let lose_bubble = C.text (Text.height 80 (Text.fromString "YOU LOSE!")) in 
     let tie_bubble = C.text (Text.height 80 (Text.fromString "IT'S A TIE!")) in 
@@ -223,12 +251,16 @@ race_track elems =
 dialog : Int -> (Int, Int) -> E.Element
 dialog num (w, h)= 
     let msg = extractIndex num dialog_prompts in
-    C.collage 300 300
-        [ C.text (Text.fromString msg)
-        , C.move (70, -70) (C.toForm dialogButton)  
-        ]
-    |> E.color Color.green
-    |> E.container w h E.middle 
+    let reg_elems = [C.text (Text.fromString msg), C.move (70, -70) (C.toForm dialogButton)] in 
+    let opponent_btns = C.toForm (E.flow E.right [richard, christina, mai, sayri]) in 
+    if num == 1 then 
+        C.collage 600 400 (reg_elems ++ [opponent_btns])
+        |> E.color Color.green
+        |> E.container w h E.middle 
+    else
+        C.collage 300 300 reg_elems
+        |> E.color Color.green
+        |> E.container w h E.middle 
 
 countdown_screen : Int -> (Int, Int) -> E.Element
 countdown_screen num (w, h) =
@@ -240,8 +272,8 @@ display_elements dims st =
     let (gs, p1, p2) = st in
     case gs of 
         Dialog i -> [race_track (racers st), E.show st, dialog i dims]
-        Countdown i -> [race_track (racers st), E.show st, countdown_screen i dims]
-        Game -> [race_track (racers st), (E.flow E.down [E.show st, resetButton])]
+        Countdown (i, choice) -> [race_track (racers st), E.show st, countdown_screen i dims]
+        Game nm -> [race_track (racers st), (E.flow E.down [E.show st, resetButton])]
 
 view : (Int, Int) -> State -> E.Element
 view dims st =
