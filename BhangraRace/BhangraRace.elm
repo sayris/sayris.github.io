@@ -4,7 +4,7 @@ import Signal
 import Window
 import Color
 import Keyboard
-import Text
+import Text exposing (defaultStyle)
 import Graphics.Element as E
 import Graphics.Collage as C
 import Graphics.Input as I
@@ -23,27 +23,42 @@ type alias State = (GameState, PlayerState, PlayerState)
 
 ------------------- Global Variables -------------------
 scl = 4
-board_w = 1200 
-board_h = 500
 img_w = 50 * scl
 img_h = 60 * scl
+
+board_w = 1200 
+
 start = (-1 * ((board_w/2) - (img_w/2))) + 20
 end = -1 * start
+
 total_dist = abs (end - start)
 third = (total_dist / 3) + start
 two_third = ((total_dist * 3) / 4) + start
+
 incr_amount = 20
-num_prompts = List.length dialog_prompts
+
+num_prompts = List.length (dialog_prompts (3, 3))
 num_countdwn = List.length countdown_prompts
 
-dialog_prompts : List String 
-dialog_prompts =
-    [ "Move your player by hitting the L and R arrow keys"
-    , "Select your opponent"
+
+dialog_prompts : (Int, Int) -> List E.Element 
+dialog_prompts dims =
+    [title_dialog dims
+    , instruction_dialog dims
+    , pick_opponent dims
     ]
 
-countdown_prompts : List String
-countdown_prompts = ["3", "2", "1", "Go!"]
+dialogColor : Color.Color 
+dialogColor = Color.rgba 0 0 0 0.03
+
+countdown_prompts : List Text.Text 
+countdown_prompts = 
+    let ha = { defaultStyle | typeface = ["Calibri", "Arial"] } in 
+    [ Text.style {ha | height = Just 100 } (Text.fromString "Bhangra")
+    , Text.style {ha | height = Just 150 } (Text.fromString "Bhangra")
+    , Text.style {ha | height = Just 200 } (Text.fromString "Bhangra")
+    , Text.style {ha | height = Just 200 } (Text.fromString "Brrrrraaaaaah!")
+    ]
 
 initState = (Dialog 0, (start, 0, Stall), (start, 0, Stall))
 
@@ -56,51 +71,75 @@ extractIndex i xs =
         (_, _) -> Debug.crash("extractIndex: something happened that shouldnt've") 
 
 
+textStyle : String -> Text.Text 
+textStyle msg =
+    Text.style { defaultStyle | typeface = ["Calibri", "Arial"], height = Just 35 } (Text.fromString msg) 
+
+textStyle2 : String -> Text.Text 
+textStyle2 msg =
+    Text.style { defaultStyle | typeface = ["Calibri", "Arial"], height = Just 300 } (Text.fromString msg) 
+
+
 ------------------- Signal Functions / Mailboxes / Buttons -------------------
 
 nextBtn : Signal.Mailbox Int
 nextBtn = Signal.mailbox 0
 
+dialogButton : E.Element
+dialogButton = 
+    I.customButton (Signal.message nextBtn.address 1)
+        (E.image 100 50 "button_pic/btn.png")
+        (E.image 100 50 "button_pic/btn_highlight.png")
+        (E.image 100 50 "button_pic/btn.png")
+
+sm_dialogButton : E.Element
+sm_dialogButton = 
+    I.customButton (Signal.message nextBtn.address 1)
+        (E.image 60 30 "button_pic/btn.png")
+        (E.image 60 30 "button_pic/btn_highlight.png")
+        (E.image 60 30 "button_pic/btn.png")
+ 
+resetButton : E.Element
+resetButton =
+    let w = round (5.5 * 25) in
+    let h = round (2.5 * 25) in 
+    I.customButton (Signal.message nextBtn.address -5627) 
+        (E.image w h "button_pic/again.png")
+        (E.image w h "button_pic/again_highlight.png")
+        (E.image w h "button_pic/again.png")
+
 -- (opponent name, "speed"/difficultly level)
 opponentBtn : Signal.Mailbox OppStat
 opponentBtn = Signal.mailbox ("blah", 0)
 
-dialogButton : E.Element
-dialogButton = 
-    I.button (Signal.message nextBtn.address 1) "next"
-
-resetButton : E.Element
-resetButton =
-    I.button (Signal.message nextBtn.address -5627) "Play Again"
-
 richard : E.Element
 richard =
     I.customButton (Signal.message opponentBtn.address ("richard", 0.5))
-        (E.image 100 100 "/button_pic/button_richard.png")
-        (E.image 100 100 "/button_pic/highlight_richard.png")
-        (E.image 100 100 "/button_pic/button_richard.png")
+        (E.image 150 150 "button_pic/button_richard.png")
+        (E.image 150 150 "button_pic/highlight_richard.png")
+        (E.image 150 150 "button_pic/button_richard.png")
 
 christina : E.Element
 christina =
     I.customButton (Signal.message opponentBtn.address ("christina", 0.8)) 
-        (E.image 100 100 "/button_pic/button_christina.png")
-        (E.image 100 100 "/button_pic/highlight_christina.png")
-        (E.image 100 100 "/button_pic/button_christina.png")
+        (E.image 150 150 "button_pic/button_christina.png")
+        (E.image 150 150 "button_pic/highlight_christina.png")
+        (E.image 150 150 "button_pic/button_christina.png")
 
 mai : E.Element
 mai =
     I.customButton (Signal.message opponentBtn.address ("mai", 0.7))
-        (E.image 100 100 "/button_pic/button_mai.png")
-        (E.image 100 100 "/button_pic/highlight_mai.png")
-        (E.image 100 100 "/button_pic/button_mai.png")
+        (E.image 150 150 "button_pic/button_mai.png")
+        (E.image 150 150 "button_pic/highlight_mai.png")
+        (E.image 150 150 "button_pic/button_mai.png")
 
 
 sayri : E.Element
 sayri =
     I.customButton (Signal.message opponentBtn.address ("sayri", 1))
-        (E.image 100 100 "/button_pic/button_sayri.png")
-        (E.image 100 100 "/button_pic/highlight_sayri.png")
-        (E.image 100 100 "/button_pic/button_sayri.png")
+        (E.image 150 150 "button_pic/button_sayri.png")
+        (E.image 150 150 "button_pic/highlight_sayri.png")
+        (E.image 150 150 "button_pic/button_sayri.png")
 
 game_sig : Signal Update
 game_sig =
@@ -156,7 +195,7 @@ game_update up (gs, p1, p2) opp_speed =
                         else if s2 == Win && s1 /= Win then
                             (gs, (x1, k1, Lose), up_player_state (k2 * -1) p2 opp_speed)
                         else (gs, p1, up_player_state (k2 * -1) p2 opp_speed)
-        Next i -> if i == -5627 then initState
+        Next i -> if i == -5627 then (Dialog 2, (start, 0, Stall), (start, 0, Stall))
                 else Debug.crash "game_update shouldn't have been called"
         _ -> Debug.crash "game_update shoudln't have been called"
         --CountdownTimer i -> Debug.crash "game_update shouldn't have been called"
@@ -225,60 +264,101 @@ opponent (x, _, st) gs =
         (_, Countdown (_, (nm, spd))) -> guy 0 0 nm
         (_, _)                  -> guy 0 0 "head"
 
-racers : State -> List C.Form
-racers (gs, p1, p2) =
+
+just_racers : State -> Int -> E.Element
+just_racers (gs, p1, p2) h =
     let (x1, k1, s1) = p1 in 
     let (x2, k2, s2) = p2 in 
-    let r1 = (player p1) |> C.moveY -50 in 
-    let r2 = (opponent p2 gs) |> C.moveY 130 in 
-    let win_bubble = C.text (Text.height 80 (Text.fromString "YOU WIN!")) in 
-    let lose_bubble = C.text (Text.height 80 (Text.fromString "YOU LOSE!")) in 
-    let tie_bubble = C.text (Text.height 80 (Text.fromString "IT'S A TIE!")) in 
-    if s1 == Win then
-        if s2 /= Win then [r2, r1, win_bubble]
-        else [r2, r1, tie_bubble]
-    else if s2 == Win then
-        if s1 /= Win then [r2, r1, lose_bubble]
-        else [r2, r1, tie_bubble]
-    else
-       [r2, r1]
+    C.collage board_w h [C.moveY 130 (opponent p2 gs), C.moveY -100 (player p1)]
+        |> E.color Color.white
+
+outcome_racers : (Int, Int) -> State -> E.Element
+outcome_racers (w, h) (gs, (_, _, s1), (_, _, s2)) =
+    let ww = 7 * 85 in 
+    let hh = round (4.5 * 85) in 
+    if s1 == Win then 
+        E.flow E.down 
+            [ E.spacer 1 120
+            , (E.image ww hh "win.png") 
+                |> E.container w 385 E.middle
+            , E.container w 60 E.middle resetButton
+            ]
+    else if s2 == Win then 
+        E.flow E.down 
+            [ E.spacer 1 110
+            , (E.image ww hh "lose.png") 
+                |> E.container w 395 E.middle
+            , E.container w 80 E.middle resetButton
+            ]
+    else E.spacer 0 0
 
 
-race_track : List C.Form -> E.Element
-race_track elems =
-    (E.color Color.grey (C.collage board_w board_h elems))
+title_dialog : (Int, Int) -> E.Element 
+title_dialog (w, h) = 
+    E.flow E.inward
+        [E.flow E.down 
+                    [E.image 400 400 "button_pic/title.png"
+                    , E.spacer 1 40
+                    , E.flow E.right 
+                        [E.spacer 140 100, dialogButton]]
+                |> E.container w h E.middle
+        , C.collage 500 600 [C.filled dialogColor (C.rect 450 550) |> C.moveY 20]
+            |> E.container w h E.middle
+        ]
+
+instruction_dialog : (Int, Int) -> E.Element
+instruction_dialog (w, h) =
+    let msg =  "Move your player by hitting\n the L and R arrow keys" in
+    E.flow E.down 
+        [E.spacer 1 30
+        , E.centered (textStyle msg) 
+            |> E.size 630 80 
+        , E.container 630 150 E.middle (E.image 240 150 "button_pic/arrow.gif")
+        , E.container 550 50 E.topRight dialogButton
+        ]
+    |> E.size 630 320 
+    |> E.color dialogColor
+    |> E.container w h E.middle
+
+pick_opponent : (Int, Int) -> E.Element
+pick_opponent (w, h) = 
+    let msg = "Pick your opponent:" in 
+    E.flow E.down
+        [E.spacer 1 30
+        , E.centered (textStyle msg)
+            |> E.size 600 70
+        , E.flow E.right [richard, mai, christina, sayri]
+            |> E.container 630 150 E.middle
+        ]
+    |> E.size 630 300
+    |> E.color dialogColor
+    |> E.container w h E.middle
+
 
 dialog : Int -> (Int, Int) -> E.Element
-dialog num (w, h)= 
-    let msg = extractIndex num dialog_prompts in
-    let reg_elems = [C.text (Text.fromString msg), C.move (70, -70) (C.toForm dialogButton)] in 
-    let opponent_btns = C.toForm (E.flow E.right [richard, christina, mai, sayri]) in 
-    if num == 1 then 
-        C.collage 600 400 (reg_elems ++ [opponent_btns])
-        |> E.color Color.green
-        |> E.container w h E.middle 
-    else
-        C.collage 300 300 reg_elems
-        |> E.color Color.green
-        |> E.container w h E.middle 
+dialog num dim = 
+    extractIndex num (dialog_prompts dim)
 
 countdown_screen : Int -> (Int, Int) -> E.Element
 countdown_screen num (w, h) =
     let msg = extractIndex num countdown_prompts in 
-    E.show msg |> E.container w h E.middle
+    E.container w h E.middle (E.centered msg)
 
 display_elements : (Int, Int) -> State -> List E.Element 
 display_elements dims st = 
+    let (w, h) = dims in 
     let (gs, p1, p2) = st in
+    let centered_racers = E.container w h E.middle (just_racers st h) in
+    let outcome = outcome_racers dims st in 
     case gs of 
-        Dialog i -> [race_track (racers st), E.show st, dialog i dims]
-        Countdown (i, choice) -> [race_track (racers st), E.show st, countdown_screen i dims]
-        Game nm -> [race_track (racers st), (E.flow E.down [E.show st, resetButton])]
+        Dialog i -> [centered_racers, dialog i dims]
+        Countdown (i, choice) -> [centered_racers, countdown_screen i dims]
+        Game nm -> [centered_racers, outcome]
 
 view : (Int, Int) -> State -> E.Element
 view dims st =
     let elems = display_elements dims st in
-    E.flow E.outward elems
+    E.flow E.outward elems |> E.color (Color.rgba 242 212 121 1)
 
 ------------------- Main -------------------
 

@@ -1,6 +1,5 @@
-<!DOCTYPE HTML>
-<html><head><meta charset="UTF-8"><title>BhangraRace</title><style>html,head,body { padding:0; margin:0; }
-body { font-family: calibri, helvetica, arial, sans-serif; }</style><script type="text/javascript">var Elm = Elm || { Native: {} };Elm.Native.Basics = {};
+var Elm = Elm || { Native: {} };
+Elm.Native.Basics = {};
 Elm.Native.Basics.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
 	localRuntime.Native.Basics = localRuntime.Native.Basics || {};
@@ -136,6 +135,7 @@ Elm.Native.Basics.make = function(localRuntime) {
 		isInfinite: isInfinite
 	};
 };
+
 Elm.Native.Port = {};
 
 Elm.Native.Port.make = function(localRuntime) {
@@ -267,6 +267,7 @@ Elm.Native.Port.make = function(localRuntime) {
 		outboundSignal: outboundSignal
 	};
 };
+
 if (!Elm.fullscreen) {
 	(function() {
 		'use strict';
@@ -903,6 +904,7 @@ if (!Elm.fullscreen) {
 			: fun(a)(b)(c)(d)(e)(f)(g)(h)(i);
 	}
 }
+
 Elm.Native = Elm.Native || {};
 Elm.Native.Utils = {};
 Elm.Native.Utils.make = function(localRuntime) {
@@ -1433,6 +1435,7 @@ Elm.Native.Utils.make = function(localRuntime) {
 		toString: toString
 	};
 };
+
 Elm.Basics = Elm.Basics || {};
 Elm.Basics.make = function (_elm) {
    "use strict";
@@ -1547,7 +1550,8 @@ Elm.Basics.make = function (_elm) {
                                ,LT: LT
                                ,EQ: EQ
                                ,GT: GT};
-};Elm.Maybe = Elm.Maybe || {};
+};
+Elm.Maybe = Elm.Maybe || {};
 Elm.Maybe.make = function (_elm) {
    "use strict";
    _elm.Maybe = _elm.Maybe || {};
@@ -1628,7 +1632,8 @@ Elm.Maybe.make = function (_elm) {
                               ,oneOf: oneOf
                               ,Just: Just
                               ,Nothing: Nothing};
-};Elm.Native.List = {};
+};
+Elm.Native.List = {};
 Elm.Native.List.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
 	localRuntime.Native.List = localRuntime.Native.List || {};
@@ -1792,6 +1797,7 @@ Elm.Native.List.make = function(localRuntime) {
 	};
 	return localRuntime.Native.List.values = Elm.Native.List.values;
 };
+
 Elm.List = Elm.List || {};
 Elm.List.make = function (_elm) {
    "use strict";
@@ -1965,7 +1971,8 @@ Elm.List.make = function (_elm) {
                              ,sort: sort
                              ,sortBy: sortBy
                              ,sortWith: sortWith};
-};Elm.Native.Char = {};
+};
+Elm.Native.Char = {};
 Elm.Native.Char.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
 	localRuntime.Native.Char = localRuntime.Native.Char || {};
@@ -1985,6 +1992,7 @@ Elm.Native.Char.make = function(localRuntime) {
 		toLocaleLower: function(c) { return Utils.chr(c.toLocaleLowerCase()); }
 	};
 };
+
 Elm.Char = Elm.Char || {};
 Elm.Char.make = function (_elm) {
    "use strict";
@@ -2018,7 +2026,8 @@ Elm.Char.make = function (_elm) {
                              ,toLocaleLower: toLocaleLower
                              ,toCode: toCode
                              ,fromCode: fromCode};
-};Elm.Native.Color = {};
+};
+Elm.Native.Color = {};
 Elm.Native.Color.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
 	localRuntime.Native.Color = localRuntime.Native.Color || {};
@@ -2057,6 +2066,7 @@ Elm.Native.Color.make = function(localRuntime) {
 		toCss: toCss
 	};
 };
+
 Elm.Color = Elm.Color || {};
 Elm.Color.make = function (_elm) {
    "use strict";
@@ -2219,7 +2229,8 @@ Elm.Color.make = function (_elm) {
                               ,lightGray: lightGray
                               ,gray: gray
                               ,darkGray: darkGray};
-};Elm.Native.Signal = {};
+};
+Elm.Native.Signal = {};
 
 Elm.Native.Signal.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -2689,6 +2700,7 @@ Elm.Native.Signal.make = function(localRuntime) {
 		delay: F2(delay)
 	};
 };
+
 Elm.Native.Time = {};
 
 Elm.Native.Time.make = function(localRuntime)
@@ -2798,6 +2810,7 @@ Elm.Native.Time.make = function(localRuntime)
 		read: read
 	};
 };
+
 Elm.Native.Transform2D = {};
 Elm.Native.Transform2D.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -2908,6 +2921,7 @@ Elm.Native.Transform2D.make = function(localRuntime) {
 		*/
 	};
 };
+
 Elm.Transform2D = Elm.Transform2D || {};
 Elm.Transform2D.make = function (_elm) {
    "use strict";
@@ -2934,6 +2948,7 @@ Elm.Transform2D.make = function (_elm) {
                                     ,scaleX: scaleX
                                     ,scaleY: scaleY};
 };
+
 // setup
 Elm.Native = Elm.Native || {};
 Elm.Native.Graphics = Elm.Native.Graphics || {};
@@ -3597,6 +3612,7 @@ Elm.Native.Graphics.Collage.make = function(localRuntime) {
 		collage: F3(collage)
 	};
 };
+
 
 // setup
 Elm.Native = Elm.Native || {};
@@ -4333,6 +4349,7 @@ Elm.Native.Graphics.Element.make = function(localRuntime) {
 		markdown: markdown
 	};
 };
+
 Elm.Native.Text = {};
 Elm.Native.Text.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -4620,6 +4637,7 @@ Elm.Native.Text.make = function(localRuntime) {
 		renderHtml: renderHtml
 	};
 };
+
 Elm.Text = Elm.Text || {};
 Elm.Text.make = function (_elm) {
    "use strict";
@@ -4671,7 +4689,8 @@ Elm.Text.make = function (_elm) {
                              ,Under: Under
                              ,Over: Over
                              ,Through: Through};
-};Elm.Graphics = Elm.Graphics || {};
+};
+Elm.Graphics = Elm.Graphics || {};
 Elm.Graphics.Element = Elm.Graphics.Element || {};
 Elm.Graphics.Element.make = function (_elm) {
    "use strict";
@@ -4868,7 +4887,8 @@ Elm.Graphics.Element.make = function (_elm) {
                                          ,topRightAt: topRightAt
                                          ,bottomLeftAt: bottomLeftAt
                                          ,bottomRightAt: bottomRightAt};
-};Elm.Graphics = Elm.Graphics || {};
+};
+Elm.Graphics = Elm.Graphics || {};
 Elm.Graphics.Collage = Elm.Graphics.Collage || {};
 Elm.Graphics.Collage.make = function (_elm) {
    "use strict";
@@ -4999,7 +5019,8 @@ Elm.Graphics.Collage.make = function (_elm) {
                                          ,Smooth: Smooth
                                          ,Sharp: Sharp
                                          ,Clipped: Clipped};
-};Elm.Native.Debug = {};
+};
+Elm.Native.Debug = {};
 Elm.Native.Debug.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
 	localRuntime.Native.Debug = localRuntime.Native.Debug || {};
@@ -5065,6 +5086,7 @@ Elm.Native.Debug.make = function(localRuntime) {
 		watchSummary: F3(watchSummary)
 	};
 };
+
 Elm.Debug = Elm.Debug || {};
 Elm.Debug.make = function (_elm) {
    "use strict";
@@ -5078,7 +5100,8 @@ Elm.Debug.make = function (_elm) {
    var crash = $Native$Debug.crash;
    var log = $Native$Debug.log;
    return _elm.Debug.values = {_op: _op,log: log,crash: crash,watch: watch,watchSummary: watchSummary,trace: trace};
-};Elm.Native.Task = {};
+};
+Elm.Native.Task = {};
 
 Elm.Native.Task.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -5303,6 +5326,7 @@ Elm.Native.Task.make = function(localRuntime) {
 		sleep: sleep
 	};
 };
+
 Elm.Result = Elm.Result || {};
 Elm.Result.make = function (_elm) {
    "use strict";
@@ -5403,7 +5427,8 @@ Elm.Result.make = function (_elm) {
                                ,formatError: formatError
                                ,Ok: Ok
                                ,Err: Err};
-};Elm.Task = Elm.Task || {};
+};
+Elm.Task = Elm.Task || {};
 Elm.Task.make = function (_elm) {
    "use strict";
    _elm.Task = _elm.Task || {};
@@ -5494,7 +5519,8 @@ Elm.Task.make = function (_elm) {
                              ,fromResult: fromResult
                              ,spawn: spawn
                              ,sleep: sleep};
-};Elm.Signal = Elm.Signal || {};
+};
+Elm.Signal = Elm.Signal || {};
 Elm.Signal.make = function (_elm) {
    "use strict";
    _elm.Signal = _elm.Signal || {};
@@ -5559,7 +5585,8 @@ Elm.Signal.make = function (_elm) {
                                ,message: message
                                ,forwardTo: forwardTo
                                ,Mailbox: Mailbox};
-};Elm.Time = Elm.Time || {};
+};
+Elm.Time = Elm.Time || {};
 Elm.Time.make = function (_elm) {
    "use strict";
    _elm.Time = _elm.Time || {};
@@ -5604,7 +5631,8 @@ Elm.Time.make = function (_elm) {
                              ,timestamp: timestamp
                              ,delay: delay
                              ,since: since};
-};Elm.Native.String = {};
+};
+Elm.Native.String = {};
 
 Elm.Native.String.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -5945,6 +5973,7 @@ Elm.Native.String.make = function(localRuntime) {
 		fromList: fromList
 	};
 };
+
 Elm.String = Elm.String || {};
 Elm.String.make = function (_elm) {
    "use strict";
@@ -6035,7 +6064,8 @@ Elm.String.make = function (_elm) {
                                ,foldr: foldr
                                ,any: any
                                ,all: all};
-};Elm.Dict = Elm.Dict || {};
+};
+Elm.Dict = Elm.Dict || {};
 Elm.Dict.make = function (_elm) {
    "use strict";
    _elm.Dict = _elm.Dict || {};
@@ -6595,7 +6625,8 @@ Elm.Dict.make = function (_elm) {
                              ,values: values
                              ,toList: toList
                              ,fromList: fromList};
-};// setup
+};
+// setup
 Elm.Native = Elm.Native || {};
 Elm.Native.Graphics = Elm.Native.Graphics || {};
 Elm.Native.Graphics.Input = Elm.Native.Graphics.Input || {};
@@ -7072,6 +7103,7 @@ Elm.Native.Graphics.Input.make = function(localRuntime) {
 		clickable: F2(clickable)
 	};
 };
+
 Elm.Graphics = Elm.Graphics || {};
 Elm.Graphics.Input = Elm.Graphics.Input || {};
 Elm.Graphics.Input.make = function (_elm) {
@@ -7097,7 +7129,8 @@ Elm.Graphics.Input.make = function (_elm) {
                                        ,dropDown: dropDown
                                        ,hoverable: hoverable
                                        ,clickable: clickable};
-};Elm.Set = Elm.Set || {};
+};
+Elm.Set = Elm.Set || {};
 Elm.Set.make = function (_elm) {
    "use strict";
    _elm.Set = _elm.Set || {};
@@ -7146,7 +7179,8 @@ Elm.Set.make = function (_elm) {
                             ,diff: diff
                             ,toList: toList
                             ,fromList: fromList};
-};Elm.Native.Keyboard = {};
+};
+Elm.Native.Keyboard = {};
 
 Elm.Native.Keyboard.make = function(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -7193,6 +7227,7 @@ Elm.Native.Keyboard.make = function(localRuntime) {
 		presses: presses
 	};
 };
+
 Elm.Keyboard = Elm.Keyboard || {};
 Elm.Keyboard.make = function (_elm) {
    "use strict";
@@ -7254,7 +7289,8 @@ Elm.Keyboard.make = function (_elm) {
                                  ,isDown: isDown
                                  ,keysDown: keysDown
                                  ,presses: presses};
-};Elm.Native = Elm.Native || {};
+};
+Elm.Native = Elm.Native || {};
 Elm.Native.Window = {};
 Elm.Native.Window.make = function make(localRuntime) {
 	localRuntime.Native = localRuntime.Native || {};
@@ -7321,6 +7357,7 @@ Elm.Native.Window.make = function make(localRuntime) {
 		resizeIfNeeded: resizeIfNeeded
 	};
 };
+
 Elm.Window = Elm.Window || {};
 Elm.Window.make = function (_elm) {
    "use strict";
@@ -7332,7 +7369,8 @@ Elm.Window.make = function (_elm) {
    var width = A2($Signal.map,$Basics.fst,dimensions);
    var height = A2($Signal.map,$Basics.snd,dimensions);
    return _elm.Window.values = {_op: _op,dimensions: dimensions,width: width,height: height};
-};Elm.BhangraRace = Elm.BhangraRace || {};
+};
+Elm.BhangraRace = Elm.BhangraRace || {};
 Elm.BhangraRace.make = function (_elm) {
    "use strict";
    _elm.BhangraRace = _elm.BhangraRace || {};
@@ -7356,27 +7394,50 @@ Elm.BhangraRace.make = function (_elm) {
    var opponentBtn = $Signal.mailbox({ctor: "_Tuple2",_0: "blah",_1: 0});
    var richard = A4($Graphics$Input.customButton,
    A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "richard",_1: 0.5}),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_richard.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/highlight_richard.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_richard.png"));
+   A3($Graphics$Element.image,150,150,"button_pic/button_richard.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/highlight_richard.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/button_richard.png"));
    var christina = A4($Graphics$Input.customButton,
    A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "christina",_1: 0.8}),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_christina.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/highlight_christina.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_christina.png"));
+   A3($Graphics$Element.image,150,150,"button_pic/button_christina.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/highlight_christina.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/button_christina.png"));
    var mai = A4($Graphics$Input.customButton,
    A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "mai",_1: 0.7}),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_mai.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/highlight_mai.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_mai.png"));
+   A3($Graphics$Element.image,150,150,"button_pic/button_mai.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/highlight_mai.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/button_mai.png"));
    var sayri = A4($Graphics$Input.customButton,
    A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "sayri",_1: 1}),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_sayri.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/highlight_sayri.png"),
-   A3($Graphics$Element.image,100,100,"/button_pic/button_sayri.png"));
+   A3($Graphics$Element.image,150,150,"button_pic/button_sayri.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/highlight_sayri.png"),
+   A3($Graphics$Element.image,150,150,"button_pic/button_sayri.png"));
    var nextBtn = $Signal.mailbox(0);
-   var dialogButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,1),"next");
-   var resetButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,-5627),"Play Again");
+   var dialogButton = A4($Graphics$Input.customButton,
+   A2($Signal.message,nextBtn.address,1),
+   A3($Graphics$Element.image,100,50,"button_pic/btn.png"),
+   A3($Graphics$Element.image,100,50,"button_pic/btn_highlight.png"),
+   A3($Graphics$Element.image,100,50,"button_pic/btn.png"));
+   var sm_dialogButton = A4($Graphics$Input.customButton,
+   A2($Signal.message,nextBtn.address,1),
+   A3($Graphics$Element.image,60,30,"button_pic/btn.png"),
+   A3($Graphics$Element.image,60,30,"button_pic/btn_highlight.png"),
+   A3($Graphics$Element.image,60,30,"button_pic/btn.png"));
+   var resetButton = function () {
+      var w = $Basics.round(5.5 * 25);
+      var h = $Basics.round(2.5 * 25);
+      return A4($Graphics$Input.customButton,
+      A2($Signal.message,nextBtn.address,-5627),
+      A3($Graphics$Element.image,w,h,"button_pic/again.png"),
+      A3($Graphics$Element.image,w,h,"button_pic/again_highlight.png"),
+      A3($Graphics$Element.image,w,h,"button_pic/again.png"));
+   }();
+   var textStyle2 = function (msg) {
+      return A2($Text.style,_U.update($Text.defaultStyle,{typeface: _U.list(["Calibri","Arial"]),height: $Maybe.Just(300)}),$Text.fromString(msg));
+   };
+   var textStyle = function (msg) {
+      return A2($Text.style,_U.update($Text.defaultStyle,{typeface: _U.list(["Calibri","Arial"]),height: $Maybe.Just(35)}),$Text.fromString(msg));
+   };
    var extractIndex = F2(function (i,xs) {
       extractIndex: while (true) {
          var _p0 = {ctor: "_Tuple2",_0: i,_1: xs};
@@ -7391,44 +7452,95 @@ Elm.BhangraRace.make = function (_elm) {
                   }
             } else {
                return _U.crashCase("BhangraRace",
-               {start: {line: 53,column: 5},end: {line: 56,column: 83}},
+               {start: {line: 68,column: 5},end: {line: 71,column: 83}},
                _p0)("extractIndex: something happened that shouldnt\'ve");
             }
       }
    });
-   var countdown_prompts = _U.list(["3","2","1","Go!"]);
+   var countdown_prompts = function () {
+      var ha = _U.update($Text.defaultStyle,{typeface: _U.list(["Calibri","Arial"])});
+      return _U.list([A2($Text.style,_U.update(ha,{height: $Maybe.Just(100)}),$Text.fromString("Bhangra"))
+                     ,A2($Text.style,_U.update(ha,{height: $Maybe.Just(150)}),$Text.fromString("Bhangra"))
+                     ,A2($Text.style,_U.update(ha,{height: $Maybe.Just(200)}),$Text.fromString("Bhangra"))
+                     ,A2($Text.style,_U.update(ha,{height: $Maybe.Just(200)}),$Text.fromString("Brrrrraaaaaah!"))]);
+   }();
    var countdown_screen = F2(function (num,_p2) {
       var _p3 = _p2;
       var msg = A2(extractIndex,num,countdown_prompts);
-      return A4($Graphics$Element.container,_p3._0,_p3._1,$Graphics$Element.middle,$Graphics$Element.show(msg));
+      return A4($Graphics$Element.container,_p3._0,_p3._1,$Graphics$Element.middle,$Graphics$Element.centered(msg));
    });
-   var dialog_prompts = _U.list(["Move your player by hitting the L and R arrow keys","Select your opponent"]);
-   var dialog = F2(function (num,_p4) {
+   var dialogColor = A4($Color.rgba,0,0,0,3.0e-2);
+   var title_dialog = function (_p4) {
       var _p5 = _p4;
       var _p7 = _p5._0;
       var _p6 = _p5._1;
-      var msg = A2(extractIndex,num,dialog_prompts);
-      var reg_elems = _U.list([$Graphics$Collage.text($Text.fromString(msg))
-                              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 70,_1: -70},$Graphics$Collage.toForm(dialogButton))]);
-      var opponent_btns = $Graphics$Collage.toForm(A2($Graphics$Element.flow,$Graphics$Element.right,_U.list([richard,christina,mai,sayri])));
-      return _U.eq(num,1) ? A4($Graphics$Element.container,
-      _p7,
-      _p6,
+      return A2($Graphics$Element.flow,
+      $Graphics$Element.inward,
+      _U.list([A4($Graphics$Element.container,
+              _p7,
+              _p6,
+              $Graphics$Element.middle,
+              A2($Graphics$Element.flow,
+              $Graphics$Element.down,
+              _U.list([A3($Graphics$Element.image,400,400,"button_pic/title.png")
+                      ,A2($Graphics$Element.spacer,1,40)
+                      ,A2($Graphics$Element.flow,$Graphics$Element.right,_U.list([A2($Graphics$Element.spacer,140,100),dialogButton]))])))
+              ,A4($Graphics$Element.container,
+              _p7,
+              _p6,
+              $Graphics$Element.middle,
+              A3($Graphics$Collage.collage,
+              500,
+              600,
+              _U.list([A2($Graphics$Collage.moveY,20,A2($Graphics$Collage.filled,dialogColor,A2($Graphics$Collage.rect,450,550)))])))]));
+   };
+   var instruction_dialog = function (_p8) {
+      var _p9 = _p8;
+      var msg = "Move your player by hitting\n the L and R arrow keys";
+      return A4($Graphics$Element.container,
+      _p9._0,
+      _p9._1,
       $Graphics$Element.middle,
       A2($Graphics$Element.color,
-      $Color.green,
-      A3($Graphics$Collage.collage,600,400,A2($Basics._op["++"],reg_elems,_U.list([opponent_btns]))))) : A4($Graphics$Element.container,
-      _p7,
-      _p6,
+      dialogColor,
+      A3($Graphics$Element.size,
+      630,
+      320,
+      A2($Graphics$Element.flow,
+      $Graphics$Element.down,
+      _U.list([A2($Graphics$Element.spacer,1,30)
+              ,A3($Graphics$Element.size,630,80,$Graphics$Element.centered(textStyle(msg)))
+              ,A4($Graphics$Element.container,630,150,$Graphics$Element.middle,A3($Graphics$Element.image,240,150,"button_pic/arrow.gif"))
+              ,A4($Graphics$Element.container,550,50,$Graphics$Element.topRight,dialogButton)])))));
+   };
+   var pick_opponent = function (_p10) {
+      var _p11 = _p10;
+      var msg = "Pick your opponent:";
+      return A4($Graphics$Element.container,
+      _p11._0,
+      _p11._1,
       $Graphics$Element.middle,
-      A2($Graphics$Element.color,$Color.green,A3($Graphics$Collage.collage,300,300,reg_elems)));
-   });
+      A2($Graphics$Element.color,
+      dialogColor,
+      A3($Graphics$Element.size,
+      630,
+      300,
+      A2($Graphics$Element.flow,
+      $Graphics$Element.down,
+      _U.list([A2($Graphics$Element.spacer,1,30)
+              ,A3($Graphics$Element.size,600,70,$Graphics$Element.centered(textStyle(msg)))
+              ,A4($Graphics$Element.container,
+              630,
+              150,
+              $Graphics$Element.middle,
+              A2($Graphics$Element.flow,$Graphics$Element.right,_U.list([richard,mai,christina,sayri])))])))));
+   };
+   var dialog_prompts = function (dims) {    return _U.list([title_dialog(dims),instruction_dialog(dims),pick_opponent(dims)]);};
+   var dialog = F2(function (num,dim) {    return A2(extractIndex,num,dialog_prompts(dim));});
    var num_countdwn = $List.length(countdown_prompts);
-   var num_prompts = $List.length(dialog_prompts);
+   var num_prompts = $List.length(dialog_prompts({ctor: "_Tuple2",_0: 3,_1: 3}));
    var incr_amount = 20;
-   var board_h = 500;
    var board_w = 1200;
-   var race_track = function (elems) {    return A2($Graphics$Element.color,$Color.grey,A3($Graphics$Collage.collage,board_w,board_h,elems));};
    var scl = 4;
    var img_w = 50 * scl;
    var start = -1 * (board_w / 2 - img_w / 2) + 20;
@@ -7437,30 +7549,30 @@ Elm.BhangraRace.make = function (_elm) {
    var third = total_dist / 3 + start;
    var two_third = total_dist * 3 / 4 + start;
    var img_h = 60 * scl;
-   var player = function (_p8) {
-      var _p9 = _p8;
-      var _p11 = _p9._0;
+   var player = function (_p12) {
+      var _p13 = _p12;
+      var _p15 = _p13._0;
       var ll = 8;
       var guy = F2(function (left,right) {
          return $Graphics$Collage.group(_U.list([A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p11,_1: left},
+                                                {ctor: "_Tuple2",_0: _p15,_1: left},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"l_leg.png")))
                                                 ,A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p11,_1: right},
+                                                {ctor: "_Tuple2",_0: _p15,_1: right},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"r_leg.png")))
                                                 ,A2($Graphics$Collage.moveX,
-                                                _p11,
+                                                _p15,
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"yellow_body.png")))]));
       });
-      var _p10 = _p9._2;
-      switch (_p10.ctor)
+      var _p14 = _p13._2;
+      switch (_p14.ctor)
       {case "Left": return A2(guy,ll,0);
          case "Right": return A2(guy,0,ll);
          default: return A2(guy,0,0);}
    };
-   var opponent = F2(function (_p12,gs) {
-      var _p13 = _p12;
-      var _p15 = _p13._0;
+   var opponent = F2(function (_p16,gs) {
+      var _p17 = _p16;
+      var _p19 = _p17._0;
       var ll = 8;
       var body = "opponents/faceless_blue_body.png";
       var face = F2(function (x,name) {
@@ -7470,35 +7582,54 @@ Elm.BhangraRace.make = function (_elm) {
       });
       var guy = F3(function (left,right,name) {
          return $Graphics$Collage.group(_U.list([A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p15,_1: left},
+                                                {ctor: "_Tuple2",_0: _p19,_1: left},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"l_leg.png")))
                                                 ,A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p15,_1: right},
+                                                {ctor: "_Tuple2",_0: _p19,_1: right},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"r_leg.png")))
-                                                ,A2($Graphics$Collage.moveX,_p15,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,body)))
+                                                ,A2($Graphics$Collage.moveX,_p19,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,body)))
                                                 ,A2($Graphics$Collage.moveX,
-                                                _p15,
-                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,A2(face,_p15,name))))]));
+                                                _p19,
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,A2(face,_p19,name))))]));
       });
-      var _p14 = {ctor: "_Tuple2",_0: _p13._2,_1: gs};
-      _v8_4: do {
-         switch (_p14._1.ctor)
-         {case "Game": if (_p14._1._0.ctor === "_Tuple2") {
-                    switch (_p14._0.ctor)
-                    {case "Left": return A3(guy,ll,0,_p14._1._0._0);
-                       case "Right": return A3(guy,0,ll,_p14._1._0._0);
-                       default: return A3(guy,0,0,_p14._1._0._0);}
+      var _p18 = {ctor: "_Tuple2",_0: _p17._2,_1: gs};
+      _v10_4: do {
+         switch (_p18._1.ctor)
+         {case "Game": if (_p18._1._0.ctor === "_Tuple2") {
+                    switch (_p18._0.ctor)
+                    {case "Left": return A3(guy,ll,0,_p18._1._0._0);
+                       case "Right": return A3(guy,0,ll,_p18._1._0._0);
+                       default: return A3(guy,0,0,_p18._1._0._0);}
                  } else {
-                    break _v8_4;
+                    break _v10_4;
                  }
-            case "Countdown": if (_p14._1._0.ctor === "_Tuple2" && _p14._1._0._1.ctor === "_Tuple2") {
-                    return A3(guy,0,0,_p14._1._0._1._0);
+            case "Countdown": if (_p18._1._0.ctor === "_Tuple2" && _p18._1._0._1.ctor === "_Tuple2") {
+                    return A3(guy,0,0,_p18._1._0._1._0);
                  } else {
-                    break _v8_4;
+                    break _v10_4;
                  }
-            default: break _v8_4;}
+            default: break _v10_4;}
       } while (false);
       return A3(guy,0,0,"head");
+   });
+   var just_racers = F2(function (_p20,h) {
+      var _p21 = _p20;
+      var _p25 = _p21._2;
+      var _p24 = _p21._1;
+      var _p22 = _p24;
+      var x1 = _p22._0;
+      var k1 = _p22._1;
+      var s1 = _p22._2;
+      var _p23 = _p25;
+      var x2 = _p23._0;
+      var k2 = _p23._1;
+      var s2 = _p23._2;
+      return A2($Graphics$Element.color,
+      $Color.white,
+      A3($Graphics$Collage.collage,
+      board_w,
+      h,
+      _U.list([A2($Graphics$Collage.moveY,130,A2(opponent,_p25,_p21._0)),A2($Graphics$Collage.moveY,-100,player(_p24))])));
    });
    var Game = function (a) {    return {ctor: "Game",_0: a};};
    var Countdown = function (a) {    return {ctor: "Countdown",_0: a};};
@@ -7509,7 +7640,7 @@ Elm.BhangraRace.make = function (_elm) {
    var NewTime = function (a) {    return {ctor: "NewTime",_0: a};};
    var KeyStroke = function (a) {    return {ctor: "KeyStroke",_0: a};};
    var game_sig = function () {
-      var map_key = function (_p16) {    var _p17 = _p16;return KeyStroke(_p17.x);};
+      var map_key = function (_p26) {    var _p27 = _p26;return KeyStroke(_p27.x);};
       return $Signal.mergeMany(_U.list([A2($Signal.map,NewTime,$Time.fps(11))
                                        ,A2($Signal.map,CountdownTimer,$Time.every($Time.second))
                                        ,A2($Signal.map,map_key,$Keyboard.arrows)
@@ -7518,125 +7649,128 @@ Elm.BhangraRace.make = function (_elm) {
    }();
    var Lose = {ctor: "Lose"};
    var Win = {ctor: "Win"};
-   var racers = function (_p18) {
-      var _p19 = _p18;
-      var _p23 = _p19._2;
-      var _p22 = _p19._1;
-      var _p20 = _p22;
-      var x1 = _p20._0;
-      var k1 = _p20._1;
-      var s1 = _p20._2;
-      var _p21 = _p23;
-      var x2 = _p21._0;
-      var k2 = _p21._1;
-      var s2 = _p21._2;
-      var r1 = A2($Graphics$Collage.moveY,-50,player(_p22));
-      var r2 = A2($Graphics$Collage.moveY,130,A2(opponent,_p23,_p19._0));
-      var win_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("YOU WIN!")));
-      var lose_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("YOU LOSE!")));
-      var tie_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("IT\'S A TIE!")));
-      return _U.eq(s1,Win) ? !_U.eq(s2,Win) ? _U.list([r2,r1,win_bubble]) : _U.list([r2,r1,tie_bubble]) : _U.eq(s2,Win) ? !_U.eq(s1,Win) ? _U.list([r2
-                                                                                                                                                   ,r1
-                                                                                                                                                   ,lose_bubble]) : _U.list([r2
-                                                                                                                                                                            ,r1
-                                                                                                                                                                            ,tie_bubble]) : _U.list([r2
-                                                                                                                                                                                                    ,r1]);
-   };
-   var display_elements = F2(function (dims,st) {
-      var _p24 = st;
-      var gs = _p24._0;
-      var p1 = _p24._1;
-      var p2 = _p24._2;
-      var _p25 = gs;
-      switch (_p25.ctor)
-      {case "Dialog": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(dialog,_p25._0,dims)]);
-         case "Countdown": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(countdown_screen,_p25._0._0,dims)]);
-         default: return _U.list([race_track(racers(st)),A2($Graphics$Element.flow,$Graphics$Element.down,_U.list([$Graphics$Element.show(st),resetButton]))]);}
+   var outcome_racers = F2(function (_p29,_p28) {
+      var _p30 = _p29;
+      var _p32 = _p30._0;
+      var _p31 = _p28;
+      var ww = 7 * 85;
+      var hh = $Basics.round(4.5 * 85);
+      return _U.eq(_p31._1._2,Win) ? A2($Graphics$Element.flow,
+      $Graphics$Element.down,
+      _U.list([A2($Graphics$Element.spacer,1,120)
+              ,A4($Graphics$Element.container,_p32,385,$Graphics$Element.middle,A3($Graphics$Element.image,ww,hh,"win.png"))
+              ,A4($Graphics$Element.container,_p32,60,$Graphics$Element.middle,resetButton)])) : _U.eq(_p31._2._2,Win) ? A2($Graphics$Element.flow,
+      $Graphics$Element.down,
+      _U.list([A2($Graphics$Element.spacer,1,110)
+              ,A4($Graphics$Element.container,_p32,395,$Graphics$Element.middle,A3($Graphics$Element.image,ww,hh,"lose.png"))
+              ,A4($Graphics$Element.container,_p32,80,$Graphics$Element.middle,resetButton)])) : A2($Graphics$Element.spacer,0,0);
    });
-   var view = F2(function (dims,st) {    var elems = A2(display_elements,dims,st);return A2($Graphics$Element.flow,$Graphics$Element.outward,elems);});
+   var display_elements = F2(function (dims,st) {
+      var _p33 = dims;
+      var w = _p33._0;
+      var h = _p33._1;
+      var _p34 = st;
+      var gs = _p34._0;
+      var p1 = _p34._1;
+      var p2 = _p34._2;
+      var centered_racers = A4($Graphics$Element.container,w,h,$Graphics$Element.middle,A2(just_racers,st,h));
+      var outcome = A2(outcome_racers,dims,st);
+      var _p35 = gs;
+      switch (_p35.ctor)
+      {case "Dialog": return _U.list([centered_racers,A2(dialog,_p35._0,dims)]);
+         case "Countdown": return _U.list([centered_racers,A2(countdown_screen,_p35._0._0,dims)]);
+         default: return _U.list([centered_racers,outcome]);}
+   });
+   var view = F2(function (dims,st) {
+      var elems = A2(display_elements,dims,st);
+      return A2($Graphics$Element.color,A4($Color.rgba,242,212,121,1),A2($Graphics$Element.flow,$Graphics$Element.outward,elems));
+   });
    var Right = {ctor: "Right"};
    var Left = {ctor: "Left"};
-   var up_player_state = F3(function (x,_p26,speed) {
-      var _p27 = _p26;
-      var _p30 = _p27._0;
-      var _p29 = _p27._2;
-      var _p28 = _p27._1;
-      return _U.cmp(_p30,end) > 0 ? !_U.eq(_p29,Lose) ? {ctor: "_Tuple3",_0: _p30,_1: _p28,_2: Win} : {ctor: "_Tuple3",_0: _p30,_1: _p28,_2: Lose} : !_U.eq(x,
-      _p28) && !_U.eq(_p29,Win) ? _U.eq(x,-1) ? {ctor: "_Tuple3",_0: _p30 + incr_amount * speed,_1: x,_2: Left} : _U.eq(x,1) ? {ctor: "_Tuple3"
-                                                                                                                               ,_0: _p30 + incr_amount * speed
+   var up_player_state = F3(function (x,_p36,speed) {
+      var _p37 = _p36;
+      var _p40 = _p37._0;
+      var _p39 = _p37._2;
+      var _p38 = _p37._1;
+      return _U.cmp(_p40,end) > 0 ? !_U.eq(_p39,Lose) ? {ctor: "_Tuple3",_0: _p40,_1: _p38,_2: Win} : {ctor: "_Tuple3",_0: _p40,_1: _p38,_2: Lose} : !_U.eq(x,
+      _p38) && !_U.eq(_p39,Win) ? _U.eq(x,-1) ? {ctor: "_Tuple3",_0: _p40 + incr_amount * speed,_1: x,_2: Left} : _U.eq(x,1) ? {ctor: "_Tuple3"
+                                                                                                                               ,_0: _p40 + incr_amount * speed
                                                                                                                                ,_1: x
                                                                                                                                ,_2: Right} : {ctor: "_Tuple3"
-                                                                                                                                             ,_0: _p30
-                                                                                                                                             ,_1: _p28
-                                                                                                                                             ,_2: _p29} : {ctor: "_Tuple3"
-                                                                                                                                                          ,_0: _p30
-                                                                                                                                                          ,_1: _p28
-                                                                                                                                                          ,_2: _p29};
+                                                                                                                                             ,_0: _p40
+                                                                                                                                             ,_1: _p38
+                                                                                                                                             ,_2: _p39} : {ctor: "_Tuple3"
+                                                                                                                                                          ,_0: _p40
+                                                                                                                                                          ,_1: _p38
+                                                                                                                                                          ,_2: _p39};
    });
    var Stall = {ctor: "Stall"};
    var initState = {ctor: "_Tuple3",_0: Dialog(0),_1: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall},_2: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall}};
-   var game_update = F3(function (up,_p31,opp_speed) {
-      var _p32 = _p31;
-      var _p40 = _p32._2;
-      var _p39 = _p32._1;
-      var _p38 = _p32._0;
-      var _p33 = _p39;
-      var x1 = _p33._0;
-      var k1 = _p33._1;
-      var s1 = _p33._2;
-      var _p34 = _p40;
-      var x2 = _p34._0;
-      var k2 = _p34._1;
-      var s2 = _p34._2;
-      var _p35 = up;
-      switch (_p35.ctor)
-      {case "KeyStroke": var _p36 = _p35._0;
+   var game_update = F3(function (up,_p41,opp_speed) {
+      var _p42 = _p41;
+      var _p50 = _p42._2;
+      var _p49 = _p42._1;
+      var _p48 = _p42._0;
+      var _p43 = _p49;
+      var x1 = _p43._0;
+      var k1 = _p43._1;
+      var s1 = _p43._2;
+      var _p44 = _p50;
+      var x2 = _p44._0;
+      var k2 = _p44._1;
+      var s2 = _p44._2;
+      var _p45 = up;
+      switch (_p45.ctor)
+      {case "KeyStroke": var _p46 = _p45._0;
            return _U.eq(s1,Win) && !_U.eq(s2,Win) ? {ctor: "_Tuple3"
-                                                    ,_0: _p38
-                                                    ,_1: A3(up_player_state,_p36,_p39,1)
+                                                    ,_0: _p48
+                                                    ,_1: A3(up_player_state,_p46,_p49,1)
                                                     ,_2: {ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose}} : _U.eq(s2,Win) && !_U.eq(s1,Win) ? {ctor: "_Tuple3"
-                                                                                                                                       ,_0: _p38
+                                                                                                                                       ,_0: _p48
                                                                                                                                        ,_1: A3(up_player_state,
-                                                                                                                                       _p36,
+                                                                                                                                       _p46,
                                                                                                                                        {ctor: "_Tuple3"
                                                                                                                                        ,_0: x1
                                                                                                                                        ,_1: k1
                                                                                                                                        ,_2: Lose},
                                                                                                                                        1)
-                                                                                                                                       ,_2: _p40} : {ctor: "_Tuple3"
-                                                                                                                                                    ,_0: _p38
+                                                                                                                                       ,_2: _p50} : {ctor: "_Tuple3"
+                                                                                                                                                    ,_0: _p48
                                                                                                                                                     ,_1: A3(up_player_state,
-                                                                                                                                                    _p36,
-                                                                                                                                                    _p39,
+                                                                                                                                                    _p46,
+                                                                                                                                                    _p49,
                                                                                                                                                     1)
-                                                                                                                                                    ,_2: _p40};
-         case "NewTime": return _U.eq(k2,0) ? {ctor: "_Tuple3",_0: _p38,_1: _p39,_2: A3(up_player_state,1,_p40,opp_speed)} : _U.eq(s1,Win) && !_U.eq(s2,
-           Win) ? {ctor: "_Tuple3",_0: _p38,_1: _p39,_2: A3(up_player_state,k2 * -1,{ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose},opp_speed)} : _U.eq(s2,
+                                                                                                                                                    ,_2: _p50};
+         case "NewTime": return _U.eq(k2,0) ? {ctor: "_Tuple3",_0: _p48,_1: _p49,_2: A3(up_player_state,1,_p50,opp_speed)} : _U.eq(s1,Win) && !_U.eq(s2,
+           Win) ? {ctor: "_Tuple3",_0: _p48,_1: _p49,_2: A3(up_player_state,k2 * -1,{ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose},opp_speed)} : _U.eq(s2,
            Win) && !_U.eq(s1,Win) ? {ctor: "_Tuple3"
-                                    ,_0: _p38
+                                    ,_0: _p48
                                     ,_1: {ctor: "_Tuple3",_0: x1,_1: k1,_2: Lose}
-                                    ,_2: A3(up_player_state,k2 * -1,_p40,opp_speed)} : {ctor: "_Tuple3"
-                                                                                       ,_0: _p38
-                                                                                       ,_1: _p39
-                                                                                       ,_2: A3(up_player_state,k2 * -1,_p40,opp_speed)};
-         case "Next": return _U.eq(_p35._0,-5627) ? initState : _U.crash("BhangraRace",
-           {start: {line: 160,column: 22},end: {line: 160,column: 33}})("game_update shouldn\'t have been called");
+                                    ,_2: A3(up_player_state,k2 * -1,_p50,opp_speed)} : {ctor: "_Tuple3"
+                                                                                       ,_0: _p48
+                                                                                       ,_1: _p49
+                                                                                       ,_2: A3(up_player_state,k2 * -1,_p50,opp_speed)};
+         case "Next": return _U.eq(_p45._0,-5627) ? {ctor: "_Tuple3"
+                                                    ,_0: Dialog(2)
+                                                    ,_1: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall}
+                                                    ,_2: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall}} : _U.crash("BhangraRace",
+           {start: {line: 199,column: 22},end: {line: 199,column: 33}})("game_update shouldn\'t have been called");
          default: return _U.crashCase("BhangraRace",
-           {start: {line: 146,column: 5},end: {line: 161,column: 66}},
-           _p35)("game_update shoudln\'t have been called");}
+           {start: {line: 185,column: 5},end: {line: 200,column: 66}},
+           _p45)("game_update shoudln\'t have been called");}
    });
    var upstate = F2(function (up,st) {
-      var _p41 = st;
-      var gs = _p41._0;
-      var p1 = _p41._1;
-      var p2 = _p41._2;
-      var _p42 = {ctor: "_Tuple2",_0: gs,_1: up};
-      switch (_p42._0.ctor)
-      {case "Dialog": switch (_p42._1.ctor)
-           {case "Next": var _p43 = _p42._0._0;
-                var next = A2($Basics._op["%"],_p43 + _p42._1._0,num_prompts);
-                return _U.cmp(_p43,num_prompts) > 0 ? _U.crash("BhangraRace",
-                {start: {line: 172,column: 53},end: {line: 172,column: 64}})("error in calculations") : _U.eq(next,0) ? {ctor: "_Tuple3"
+      var _p51 = st;
+      var gs = _p51._0;
+      var p1 = _p51._1;
+      var p2 = _p51._2;
+      var _p52 = {ctor: "_Tuple2",_0: gs,_1: up};
+      switch (_p52._0.ctor)
+      {case "Dialog": switch (_p52._1.ctor)
+           {case "Next": var _p53 = _p52._0._0;
+                var next = A2($Basics._op["%"],_p53 + _p52._1._0,num_prompts);
+                return _U.cmp(_p53,num_prompts) > 0 ? _U.crash("BhangraRace",
+                {start: {line: 211,column: 53},end: {line: 211,column: 64}})("error in calculations") : _U.eq(next,0) ? {ctor: "_Tuple3"
                                                                                                                         ,_0: Countdown({ctor: "_Tuple2"
                                                                                                                                        ,_0: 0
                                                                                                                                        ,_1: {ctor: "_Tuple2"
@@ -7647,22 +7781,22 @@ Elm.BhangraRace.make = function (_elm) {
                                                                                                                                    ,_0: Dialog(next)
                                                                                                                                    ,_1: p1
                                                                                                                                    ,_2: p2};
-              case "OppChoice": return {ctor: "_Tuple3",_0: Countdown({ctor: "_Tuple2",_0: 0,_1: _p42._1._0}),_1: p1,_2: p2};
+              case "OppChoice": return {ctor: "_Tuple3",_0: Countdown({ctor: "_Tuple2",_0: 0,_1: _p52._1._0}),_1: p1,_2: p2};
               default: return st;}
-         case "Countdown": if (_p42._1.ctor === "CountdownTimer") {
-                 var _p44 = _p42._0._0._1;
-                 var next = _p42._0._0._0 + 1;
-                 return _U.cmp(next,num_countdwn) > -1 ? {ctor: "_Tuple3",_0: Game(_p44),_1: p1,_2: p2} : {ctor: "_Tuple3"
-                                                                                                          ,_0: Countdown({ctor: "_Tuple2",_0: next,_1: _p44})
+         case "Countdown": if (_p52._1.ctor === "CountdownTimer") {
+                 var _p54 = _p52._0._0._1;
+                 var next = _p52._0._0._0 + 1;
+                 return _U.cmp(next,num_countdwn) > -1 ? {ctor: "_Tuple3",_0: Game(_p54),_1: p1,_2: p2} : {ctor: "_Tuple3"
+                                                                                                          ,_0: Countdown({ctor: "_Tuple2",_0: next,_1: _p54})
                                                                                                           ,_1: p1
                                                                                                           ,_2: p2};
               } else {
                  return st;
               }
-         default: if (_p42._1.ctor === "CountdownTimer") {
+         default: if (_p52._1.ctor === "CountdownTimer") {
                  return st;
               } else {
-                 return A3(game_update,up,st,_p42._0._0._1);
+                 return A3(game_update,up,st,_p52._0._0._1);
               }}
    });
    var main = A3($Signal.map2,view,$Window.dimensions,A3($Signal.foldp,upstate,initState,game_sig));
@@ -7681,10 +7815,9 @@ Elm.BhangraRace.make = function (_elm) {
                                     ,Countdown: Countdown
                                     ,Game: Game
                                     ,scl: scl
-                                    ,board_w: board_w
-                                    ,board_h: board_h
                                     ,img_w: img_w
                                     ,img_h: img_h
+                                    ,board_w: board_w
                                     ,start: start
                                     ,end: end
                                     ,total_dist: total_dist
@@ -7694,13 +7827,17 @@ Elm.BhangraRace.make = function (_elm) {
                                     ,num_prompts: num_prompts
                                     ,num_countdwn: num_countdwn
                                     ,dialog_prompts: dialog_prompts
+                                    ,dialogColor: dialogColor
                                     ,countdown_prompts: countdown_prompts
                                     ,initState: initState
                                     ,extractIndex: extractIndex
+                                    ,textStyle: textStyle
+                                    ,textStyle2: textStyle2
                                     ,nextBtn: nextBtn
-                                    ,opponentBtn: opponentBtn
                                     ,dialogButton: dialogButton
+                                    ,sm_dialogButton: sm_dialogButton
                                     ,resetButton: resetButton
+                                    ,opponentBtn: opponentBtn
                                     ,richard: richard
                                     ,christina: christina
                                     ,mai: mai
@@ -7711,11 +7848,14 @@ Elm.BhangraRace.make = function (_elm) {
                                     ,upstate: upstate
                                     ,player: player
                                     ,opponent: opponent
-                                    ,racers: racers
-                                    ,race_track: race_track
+                                    ,just_racers: just_racers
+                                    ,outcome_racers: outcome_racers
+                                    ,title_dialog: title_dialog
+                                    ,instruction_dialog: instruction_dialog
+                                    ,pick_opponent: pick_opponent
                                     ,dialog: dialog
                                     ,countdown_screen: countdown_screen
                                     ,display_elements: display_elements
                                     ,view: view
                                     ,main: main};
-};</script></head><body><script type="text/javascript">Elm.fullscreen(Elm.BhangraRace)</script></body></html>
+};
