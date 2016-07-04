@@ -7353,6 +7353,27 @@ Elm.BhangraRace.make = function (_elm) {
    $Time = Elm.Time.make(_elm),
    $Window = Elm.Window.make(_elm);
    var _op = {};
+   var opponentBtn = $Signal.mailbox({ctor: "_Tuple2",_0: "blah",_1: 0});
+   var richard = A4($Graphics$Input.customButton,
+   A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "richard",_1: 0.5}),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_richard.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/highlight_richard.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_richard.png"));
+   var christina = A4($Graphics$Input.customButton,
+   A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "christina",_1: 0.8}),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_christina.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/highlight_christina.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_christina.png"));
+   var mai = A4($Graphics$Input.customButton,
+   A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "mai",_1: 0.7}),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_mai.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/highlight_mai.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_mai.png"));
+   var sayri = A4($Graphics$Input.customButton,
+   A2($Signal.message,opponentBtn.address,{ctor: "_Tuple2",_0: "sayri",_1: 1}),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_sayri.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/highlight_sayri.png"),
+   A3($Graphics$Element.image,100,100,"/button_pic/button_sayri.png"));
    var nextBtn = $Signal.mailbox(0);
    var dialogButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,1),"next");
    var resetButton = A2($Graphics$Input.button,A2($Signal.message,nextBtn.address,-5627),"Play Again");
@@ -7370,7 +7391,7 @@ Elm.BhangraRace.make = function (_elm) {
                   }
             } else {
                return _U.crashCase("BhangraRace",
-               {start: {line: 51,column: 5},end: {line: 54,column: 83}},
+               {start: {line: 53,column: 5},end: {line: 56,column: 83}},
                _p0)("extractIndex: something happened that shouldnt\'ve");
             }
       }
@@ -7381,21 +7402,26 @@ Elm.BhangraRace.make = function (_elm) {
       var msg = A2(extractIndex,num,countdown_prompts);
       return A4($Graphics$Element.container,_p3._0,_p3._1,$Graphics$Element.middle,$Graphics$Element.show(msg));
    });
-   var dialog_prompts = _U.list(["Move your player by hitting the L and R keys","Select your opponent"]);
+   var dialog_prompts = _U.list(["Move your player by hitting the L and R arrow keys","Select your opponent"]);
    var dialog = F2(function (num,_p4) {
       var _p5 = _p4;
+      var _p7 = _p5._0;
+      var _p6 = _p5._1;
       var msg = A2(extractIndex,num,dialog_prompts);
-      return A4($Graphics$Element.container,
-      _p5._0,
-      _p5._1,
+      var reg_elems = _U.list([$Graphics$Collage.text($Text.fromString(msg))
+                              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 70,_1: -70},$Graphics$Collage.toForm(dialogButton))]);
+      var opponent_btns = $Graphics$Collage.toForm(A2($Graphics$Element.flow,$Graphics$Element.right,_U.list([richard,christina,mai,sayri])));
+      return _U.eq(num,1) ? A4($Graphics$Element.container,
+      _p7,
+      _p6,
       $Graphics$Element.middle,
       A2($Graphics$Element.color,
       $Color.green,
-      A3($Graphics$Collage.collage,
-      300,
-      300,
-      _U.list([$Graphics$Collage.text($Text.fromString(msg))
-              ,A2($Graphics$Collage.move,{ctor: "_Tuple2",_0: 70,_1: -70},$Graphics$Collage.toForm(dialogButton))]))));
+      A3($Graphics$Collage.collage,600,400,A2($Basics._op["++"],reg_elems,_U.list([opponent_btns]))))) : A4($Graphics$Element.container,
+      _p7,
+      _p6,
+      $Graphics$Element.middle,
+      A2($Graphics$Element.color,$Color.green,A3($Graphics$Collage.collage,300,300,reg_elems)));
    });
    var num_countdwn = $List.length(countdown_prompts);
    var num_prompts = $List.length(dialog_prompts);
@@ -7411,85 +7437,101 @@ Elm.BhangraRace.make = function (_elm) {
    var third = total_dist / 3 + start;
    var two_third = total_dist * 3 / 4 + start;
    var img_h = 60 * scl;
-   var player = function (_p6) {
-      var _p7 = _p6;
-      var _p9 = _p7._0;
+   var player = function (_p8) {
+      var _p9 = _p8;
+      var _p11 = _p9._0;
       var ll = 8;
       var guy = F2(function (left,right) {
          return $Graphics$Collage.group(_U.list([A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p9,_1: left},
+                                                {ctor: "_Tuple2",_0: _p11,_1: left},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"l_leg.png")))
                                                 ,A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p9,_1: right},
+                                                {ctor: "_Tuple2",_0: _p11,_1: right},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"r_leg.png")))
                                                 ,A2($Graphics$Collage.moveX,
-                                                _p9,
+                                                _p11,
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"yellow_body.png")))]));
       });
-      var _p8 = _p7._2;
-      switch (_p8.ctor)
+      var _p10 = _p9._2;
+      switch (_p10.ctor)
       {case "Left": return A2(guy,ll,0);
          case "Right": return A2(guy,0,ll);
          default: return A2(guy,0,0);}
    };
-   var opponent = F2(function (_p10,name) {
-      var _p11 = _p10;
-      var _p13 = _p11._0;
+   var opponent = F2(function (_p12,gs) {
+      var _p13 = _p12;
+      var _p15 = _p13._0;
       var ll = 8;
       var body = "opponents/faceless_blue_body.png";
-      var face = function (x) {
+      var face = F2(function (x,name) {
          return _U.cmp(x,third) < 0 ? A2($Basics._op["++"],"opponents/",A2($Basics._op["++"],name,"_1.png")) : _U.cmp(x,two_third) < 0 ? A2($Basics._op["++"],
          "opponents/",
          A2($Basics._op["++"],name,"_2.png")) : A2($Basics._op["++"],"opponents/",A2($Basics._op["++"],name,"_3.png"));
-      };
-      var guy = F2(function (left,right) {
+      });
+      var guy = F3(function (left,right,name) {
          return $Graphics$Collage.group(_U.list([A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p13,_1: left},
+                                                {ctor: "_Tuple2",_0: _p15,_1: left},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"l_leg.png")))
                                                 ,A2($Graphics$Collage.move,
-                                                {ctor: "_Tuple2",_0: _p13,_1: right},
+                                                {ctor: "_Tuple2",_0: _p15,_1: right},
                                                 $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,"r_leg.png")))
-                                                ,A2($Graphics$Collage.moveX,_p13,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,body)))
+                                                ,A2($Graphics$Collage.moveX,_p15,$Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,body)))
                                                 ,A2($Graphics$Collage.moveX,
-                                                _p13,
-                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,face(_p13))))]));
+                                                _p15,
+                                                $Graphics$Collage.toForm(A3($Graphics$Element.image,img_w,img_h,A2(face,_p15,name))))]));
       });
-      var _p12 = _p11._2;
-      switch (_p12.ctor)
-      {case "Left": return A2(guy,ll,0);
-         case "Right": return A2(guy,0,ll);
-         default: return A2(guy,0,0);}
+      var _p14 = {ctor: "_Tuple2",_0: _p13._2,_1: gs};
+      _v8_4: do {
+         switch (_p14._1.ctor)
+         {case "Game": if (_p14._1._0.ctor === "_Tuple2") {
+                    switch (_p14._0.ctor)
+                    {case "Left": return A3(guy,ll,0,_p14._1._0._0);
+                       case "Right": return A3(guy,0,ll,_p14._1._0._0);
+                       default: return A3(guy,0,0,_p14._1._0._0);}
+                 } else {
+                    break _v8_4;
+                 }
+            case "Countdown": if (_p14._1._0.ctor === "_Tuple2" && _p14._1._0._1.ctor === "_Tuple2") {
+                    return A3(guy,0,0,_p14._1._0._1._0);
+                 } else {
+                    break _v8_4;
+                 }
+            default: break _v8_4;}
+      } while (false);
+      return A3(guy,0,0,"head");
    });
-   var Game = {ctor: "Game"};
+   var Game = function (a) {    return {ctor: "Game",_0: a};};
    var Countdown = function (a) {    return {ctor: "Countdown",_0: a};};
    var Dialog = function (a) {    return {ctor: "Dialog",_0: a};};
+   var OppChoice = function (a) {    return {ctor: "OppChoice",_0: a};};
    var CountdownTimer = function (a) {    return {ctor: "CountdownTimer",_0: a};};
    var Next = function (a) {    return {ctor: "Next",_0: a};};
    var NewTime = function (a) {    return {ctor: "NewTime",_0: a};};
    var KeyStroke = function (a) {    return {ctor: "KeyStroke",_0: a};};
    var game_sig = function () {
-      var map_key = function (_p14) {    var _p15 = _p14;return KeyStroke(_p15.x);};
-      return $Signal.mergeMany(_U.list([A2($Signal.map,NewTime,$Time.fps(8))
+      var map_key = function (_p16) {    var _p17 = _p16;return KeyStroke(_p17.x);};
+      return $Signal.mergeMany(_U.list([A2($Signal.map,NewTime,$Time.fps(11))
                                        ,A2($Signal.map,CountdownTimer,$Time.every($Time.second))
                                        ,A2($Signal.map,map_key,$Keyboard.arrows)
-                                       ,A2($Signal.map,Next,nextBtn.signal)]));
+                                       ,A2($Signal.map,Next,nextBtn.signal)
+                                       ,A2($Signal.map,OppChoice,opponentBtn.signal)]));
    }();
    var Lose = {ctor: "Lose"};
    var Win = {ctor: "Win"};
-   var racers = function (_p16) {
-      var _p17 = _p16;
-      var _p21 = _p17._2;
-      var _p20 = _p17._1;
-      var _p18 = _p20;
-      var x1 = _p18._0;
-      var k1 = _p18._1;
-      var s1 = _p18._2;
-      var _p19 = _p21;
-      var x2 = _p19._0;
-      var k2 = _p19._1;
-      var s2 = _p19._2;
-      var r1 = A2($Graphics$Collage.moveY,-50,player(_p20));
-      var r2 = A2($Graphics$Collage.moveY,130,A2(opponent,_p21,"richard"));
+   var racers = function (_p18) {
+      var _p19 = _p18;
+      var _p23 = _p19._2;
+      var _p22 = _p19._1;
+      var _p20 = _p22;
+      var x1 = _p20._0;
+      var k1 = _p20._1;
+      var s1 = _p20._2;
+      var _p21 = _p23;
+      var x2 = _p21._0;
+      var k2 = _p21._1;
+      var s2 = _p21._2;
+      var r1 = A2($Graphics$Collage.moveY,-50,player(_p22));
+      var r2 = A2($Graphics$Collage.moveY,130,A2(opponent,_p23,_p19._0));
       var win_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("YOU WIN!")));
       var lose_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("YOU LOSE!")));
       var tie_bubble = $Graphics$Collage.text(A2($Text.height,80,$Text.fromString("IT\'S A TIE!")));
@@ -7501,116 +7543,126 @@ Elm.BhangraRace.make = function (_elm) {
                                                                                                                                                                                                     ,r1]);
    };
    var display_elements = F2(function (dims,st) {
-      var _p22 = st;
-      var gs = _p22._0;
-      var p1 = _p22._1;
-      var p2 = _p22._2;
-      var _p23 = gs;
-      switch (_p23.ctor)
-      {case "Dialog": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(dialog,_p23._0,dims)]);
-         case "Countdown": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(countdown_screen,_p23._0,dims)]);
+      var _p24 = st;
+      var gs = _p24._0;
+      var p1 = _p24._1;
+      var p2 = _p24._2;
+      var _p25 = gs;
+      switch (_p25.ctor)
+      {case "Dialog": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(dialog,_p25._0,dims)]);
+         case "Countdown": return _U.list([race_track(racers(st)),$Graphics$Element.show(st),A2(countdown_screen,_p25._0._0,dims)]);
          default: return _U.list([race_track(racers(st)),A2($Graphics$Element.flow,$Graphics$Element.down,_U.list([$Graphics$Element.show(st),resetButton]))]);}
    });
    var view = F2(function (dims,st) {    var elems = A2(display_elements,dims,st);return A2($Graphics$Element.flow,$Graphics$Element.outward,elems);});
    var Right = {ctor: "Right"};
    var Left = {ctor: "Left"};
-   var up_player_state = F2(function (x,_p24) {
-      var _p25 = _p24;
-      var _p28 = _p25._0;
-      var _p27 = _p25._2;
-      var _p26 = _p25._1;
-      return _U.cmp(_p28,end) > 0 ? !_U.eq(_p27,Lose) ? {ctor: "_Tuple3",_0: _p28,_1: _p26,_2: Win} : {ctor: "_Tuple3",_0: _p28,_1: _p26,_2: Lose} : !_U.eq(x,
-      _p26) && !_U.eq(_p27,Win) ? _U.eq(x,-1) ? {ctor: "_Tuple3",_0: _p28 + incr_amount,_1: x,_2: Left} : _U.eq(x,1) ? {ctor: "_Tuple3"
-                                                                                                                       ,_0: _p28 + incr_amount
-                                                                                                                       ,_1: x
-                                                                                                                       ,_2: Right} : {ctor: "_Tuple3"
-                                                                                                                                     ,_0: _p28
-                                                                                                                                     ,_1: _p26
-                                                                                                                                     ,_2: _p27} : {ctor: "_Tuple3"
-                                                                                                                                                  ,_0: _p28
-                                                                                                                                                  ,_1: _p26
-                                                                                                                                                  ,_2: _p27};
+   var up_player_state = F3(function (x,_p26,speed) {
+      var _p27 = _p26;
+      var _p30 = _p27._0;
+      var _p29 = _p27._2;
+      var _p28 = _p27._1;
+      return _U.cmp(_p30,end) > 0 ? !_U.eq(_p29,Lose) ? {ctor: "_Tuple3",_0: _p30,_1: _p28,_2: Win} : {ctor: "_Tuple3",_0: _p30,_1: _p28,_2: Lose} : !_U.eq(x,
+      _p28) && !_U.eq(_p29,Win) ? _U.eq(x,-1) ? {ctor: "_Tuple3",_0: _p30 + incr_amount * speed,_1: x,_2: Left} : _U.eq(x,1) ? {ctor: "_Tuple3"
+                                                                                                                               ,_0: _p30 + incr_amount * speed
+                                                                                                                               ,_1: x
+                                                                                                                               ,_2: Right} : {ctor: "_Tuple3"
+                                                                                                                                             ,_0: _p30
+                                                                                                                                             ,_1: _p28
+                                                                                                                                             ,_2: _p29} : {ctor: "_Tuple3"
+                                                                                                                                                          ,_0: _p30
+                                                                                                                                                          ,_1: _p28
+                                                                                                                                                          ,_2: _p29};
    });
    var Stall = {ctor: "Stall"};
    var initState = {ctor: "_Tuple3",_0: Dialog(0),_1: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall},_2: {ctor: "_Tuple3",_0: start,_1: 0,_2: Stall}};
-   var game_update = F2(function (up,_p29) {
-      var _p30 = _p29;
-      var _p38 = _p30._2;
-      var _p37 = _p30._1;
-      var _p36 = _p30._0;
-      var _p31 = _p37;
-      var x1 = _p31._0;
-      var k1 = _p31._1;
-      var s1 = _p31._2;
-      var _p32 = _p38;
-      var x2 = _p32._0;
-      var k2 = _p32._1;
-      var s2 = _p32._2;
-      var _p33 = up;
-      switch (_p33.ctor)
-      {case "KeyStroke": var _p34 = _p33._0;
+   var game_update = F3(function (up,_p31,opp_speed) {
+      var _p32 = _p31;
+      var _p40 = _p32._2;
+      var _p39 = _p32._1;
+      var _p38 = _p32._0;
+      var _p33 = _p39;
+      var x1 = _p33._0;
+      var k1 = _p33._1;
+      var s1 = _p33._2;
+      var _p34 = _p40;
+      var x2 = _p34._0;
+      var k2 = _p34._1;
+      var s2 = _p34._2;
+      var _p35 = up;
+      switch (_p35.ctor)
+      {case "KeyStroke": var _p36 = _p35._0;
            return _U.eq(s1,Win) && !_U.eq(s2,Win) ? {ctor: "_Tuple3"
-                                                    ,_0: _p36
-                                                    ,_1: A2(up_player_state,_p34,_p37)
+                                                    ,_0: _p38
+                                                    ,_1: A3(up_player_state,_p36,_p39,1)
                                                     ,_2: {ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose}} : _U.eq(s2,Win) && !_U.eq(s1,Win) ? {ctor: "_Tuple3"
-                                                                                                                                       ,_0: _p36
-                                                                                                                                       ,_1: A2(up_player_state,
-                                                                                                                                       _p34,
+                                                                                                                                       ,_0: _p38
+                                                                                                                                       ,_1: A3(up_player_state,
+                                                                                                                                       _p36,
                                                                                                                                        {ctor: "_Tuple3"
                                                                                                                                        ,_0: x1
                                                                                                                                        ,_1: k1
-                                                                                                                                       ,_2: Lose})
-                                                                                                                                       ,_2: _p38} : {ctor: "_Tuple3"
-                                                                                                                                                    ,_0: _p36
-                                                                                                                                                    ,_1: A2(up_player_state,
-                                                                                                                                                    _p34,
-                                                                                                                                                    _p37)
-                                                                                                                                                    ,_2: _p38};
-         case "NewTime": return _U.eq(k2,0) ? {ctor: "_Tuple3",_0: _p36,_1: _p37,_2: A2(up_player_state,1,_p38)} : _U.eq(s1,Win) && !_U.eq(s2,
-           Win) ? {ctor: "_Tuple3",_0: _p36,_1: _p37,_2: A2(up_player_state,k2 * -1,{ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose})} : _U.eq(s2,Win) && !_U.eq(s1,
-           Win) ? {ctor: "_Tuple3",_0: _p36,_1: {ctor: "_Tuple3",_0: x1,_1: k1,_2: Lose},_2: A2(up_player_state,k2 * -1,_p38)} : {ctor: "_Tuple3"
-                                                                                                                                 ,_0: _p36
-                                                                                                                                 ,_1: _p37
-                                                                                                                                 ,_2: A2(up_player_state,
-                                                                                                                                 k2 * -1,
-                                                                                                                                 _p38)};
-         case "Next": return _U.eq(_p33._0,-5627) ? initState : _U.crash("BhangraRace",
-           {start: {line: 126,column: 22},end: {line: 126,column: 33}})("game_update shouldn\'t have been called");
+                                                                                                                                       ,_2: Lose},
+                                                                                                                                       1)
+                                                                                                                                       ,_2: _p40} : {ctor: "_Tuple3"
+                                                                                                                                                    ,_0: _p38
+                                                                                                                                                    ,_1: A3(up_player_state,
+                                                                                                                                                    _p36,
+                                                                                                                                                    _p39,
+                                                                                                                                                    1)
+                                                                                                                                                    ,_2: _p40};
+         case "NewTime": return _U.eq(k2,0) ? {ctor: "_Tuple3",_0: _p38,_1: _p39,_2: A3(up_player_state,1,_p40,opp_speed)} : _U.eq(s1,Win) && !_U.eq(s2,
+           Win) ? {ctor: "_Tuple3",_0: _p38,_1: _p39,_2: A3(up_player_state,k2 * -1,{ctor: "_Tuple3",_0: x2,_1: k2,_2: Lose},opp_speed)} : _U.eq(s2,
+           Win) && !_U.eq(s1,Win) ? {ctor: "_Tuple3"
+                                    ,_0: _p38
+                                    ,_1: {ctor: "_Tuple3",_0: x1,_1: k1,_2: Lose}
+                                    ,_2: A3(up_player_state,k2 * -1,_p40,opp_speed)} : {ctor: "_Tuple3"
+                                                                                       ,_0: _p38
+                                                                                       ,_1: _p39
+                                                                                       ,_2: A3(up_player_state,k2 * -1,_p40,opp_speed)};
+         case "Next": return _U.eq(_p35._0,-5627) ? initState : _U.crash("BhangraRace",
+           {start: {line: 160,column: 22},end: {line: 160,column: 33}})("game_update shouldn\'t have been called");
          default: return _U.crashCase("BhangraRace",
-           {start: {line: 112,column: 5},end: {line: 127,column: 81}},
-           _p33)("game_update shouldn\'t have been called");}
+           {start: {line: 146,column: 5},end: {line: 161,column: 66}},
+           _p35)("game_update shoudln\'t have been called");}
    });
    var upstate = F2(function (up,st) {
-      var _p39 = st;
-      var gs = _p39._0;
-      var p1 = _p39._1;
-      var p2 = _p39._2;
-      var _p40 = {ctor: "_Tuple2",_0: gs,_1: up};
-      switch (_p40._0.ctor)
-      {case "Dialog": if (_p40._1.ctor === "Next") {
-                 var _p41 = _p40._0._0;
-                 var next = A2($Basics._op["%"],_p41 + _p40._1._0,num_prompts);
-                 return _U.cmp(_p41,num_prompts) > 0 ? _U.crash("BhangraRace",
-                 {start: {line: 147,column: 53},end: {line: 147,column: 64}})("error in calculations") : _U.eq(next,0) ? {ctor: "_Tuple3"
-                                                                                                                         ,_0: Countdown(0)
-                                                                                                                         ,_1: p1
-                                                                                                                         ,_2: p2} : {ctor: "_Tuple3"
-                                                                                                                                    ,_0: Dialog(next)
-                                                                                                                                    ,_1: p1
-                                                                                                                                    ,_2: p2};
+      var _p41 = st;
+      var gs = _p41._0;
+      var p1 = _p41._1;
+      var p2 = _p41._2;
+      var _p42 = {ctor: "_Tuple2",_0: gs,_1: up};
+      switch (_p42._0.ctor)
+      {case "Dialog": switch (_p42._1.ctor)
+           {case "Next": var _p43 = _p42._0._0;
+                var next = A2($Basics._op["%"],_p43 + _p42._1._0,num_prompts);
+                return _U.cmp(_p43,num_prompts) > 0 ? _U.crash("BhangraRace",
+                {start: {line: 172,column: 53},end: {line: 172,column: 64}})("error in calculations") : _U.eq(next,0) ? {ctor: "_Tuple3"
+                                                                                                                        ,_0: Countdown({ctor: "_Tuple2"
+                                                                                                                                       ,_0: 0
+                                                                                                                                       ,_1: {ctor: "_Tuple2"
+                                                                                                                                            ,_0: "blah"
+                                                                                                                                            ,_1: 0}})
+                                                                                                                        ,_1: p1
+                                                                                                                        ,_2: p2} : {ctor: "_Tuple3"
+                                                                                                                                   ,_0: Dialog(next)
+                                                                                                                                   ,_1: p1
+                                                                                                                                   ,_2: p2};
+              case "OppChoice": return {ctor: "_Tuple3",_0: Countdown({ctor: "_Tuple2",_0: 0,_1: _p42._1._0}),_1: p1,_2: p2};
+              default: return st;}
+         case "Countdown": if (_p42._1.ctor === "CountdownTimer") {
+                 var _p44 = _p42._0._0._1;
+                 var next = _p42._0._0._0 + 1;
+                 return _U.cmp(next,num_countdwn) > -1 ? {ctor: "_Tuple3",_0: Game(_p44),_1: p1,_2: p2} : {ctor: "_Tuple3"
+                                                                                                          ,_0: Countdown({ctor: "_Tuple2",_0: next,_1: _p44})
+                                                                                                          ,_1: p1
+                                                                                                          ,_2: p2};
               } else {
                  return st;
               }
-         case "Countdown": if (_p40._1.ctor === "CountdownTimer") {
-                 var next = _p40._0._0 + 1;
-                 return _U.cmp(next,num_countdwn) > -1 ? {ctor: "_Tuple3",_0: Game,_1: p1,_2: p2} : {ctor: "_Tuple3",_0: Countdown(next),_1: p1,_2: p2};
-              } else {
-                 return st;
-              }
-         default: if (_p40._1.ctor === "CountdownTimer") {
+         default: if (_p42._1.ctor === "CountdownTimer") {
                  return st;
               } else {
-                 return A2(game_update,up,st);
+                 return A3(game_update,up,st,_p42._0._0._1);
               }}
    });
    var main = A3($Signal.map2,view,$Window.dimensions,A3($Signal.foldp,upstate,initState,game_sig));
@@ -7624,6 +7676,7 @@ Elm.BhangraRace.make = function (_elm) {
                                     ,NewTime: NewTime
                                     ,Next: Next
                                     ,CountdownTimer: CountdownTimer
+                                    ,OppChoice: OppChoice
                                     ,Dialog: Dialog
                                     ,Countdown: Countdown
                                     ,Game: Game
@@ -7645,8 +7698,13 @@ Elm.BhangraRace.make = function (_elm) {
                                     ,initState: initState
                                     ,extractIndex: extractIndex
                                     ,nextBtn: nextBtn
+                                    ,opponentBtn: opponentBtn
                                     ,dialogButton: dialogButton
                                     ,resetButton: resetButton
+                                    ,richard: richard
+                                    ,christina: christina
+                                    ,mai: mai
+                                    ,sayri: sayri
                                     ,game_sig: game_sig
                                     ,up_player_state: up_player_state
                                     ,game_update: game_update
