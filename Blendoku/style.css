@@ -42,7 +42,7 @@ h1 {
 	font-family: 'Helvetica';
 	text-align: center;
     font-size: 55px;
-    color: white;
+    color: rgba(0, 0, 0, .7);
 }
 
 
@@ -71,8 +71,6 @@ h1 {
 
 body {
     background-color: #FDFDFD;
-    background-image: url(images/bg4.jpg);
-    /*background-image: url(images/loading-background.png);*/
     background-size: cover;
     background-repeat: no-repeat;
 }
