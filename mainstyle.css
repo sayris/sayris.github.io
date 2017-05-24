@@ -1,0 +1,66 @@
+body {
+	background-color: white;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+.header {
+	padding: 10px 0;
+	text-align: center;
+	color: #a9a9a9;
+}
+
+hr {
+	width: 10%;
+	border-top: 2px solid #a9a9a9;
+}
+
+a {
+	text-decoration: none;
+}
+
+h1 {
+	font-size: 65px;
+}
+
+.grid-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.display-box {
+	width: 300px;
+	height:200px;
+	margin: 15px;
+	color: white;
+	font-size: 20px;
+	text-align: center;
+	line-height: 200px;
+	font-size: 32px;
+}
+
+.bhangra {
+	background-color: #ec576b;
+}
+.bhangra:hover {
+	background-color: rgba(236, 87, 107, .3);	
+}
+
+.blendoku {
+	background-color: #4ec5c1;
+}
+
+.blendoku:hover {
+	background-color: rgba(78,197,193, .3);
+}
+
+.faceswap {
+	background-color: #e5e338;
+}
+
+.faceswap:hover {
+	background-color: rgba(229,227,56, .3);
+}
