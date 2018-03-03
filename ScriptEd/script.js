@@ -1,5 +1,9 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext('2d');
+let canvas;
+let ctx;
+$(document).ready(() => {
+	canvas = document.getElementById("canvas");
+	ctx = canvas.getContext('2d');
+})
 
 function reset() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
