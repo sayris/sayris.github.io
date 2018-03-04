@@ -1,3 +1,31 @@
 #canvas {
-	border: 1px solid black;
+	border: 2px solid rgb(72,77,86);
+	background-color: rgb(138,137,128);
+	background-image: url("https://static.pexels.com/photos/631477/pexels-photo-631477.jpeg");
+	background-size: cover;
+	margin: 5px auto;
+	display:block;
+}
+
+.buttonWrapper {
+	display: flex;
+	justify-content: center;
+}
+
+button {
+	margin: 0 15px;
+	background-color: rgb(138,137,128);
+	font-family: 'Open Sans', sans-serif;
+	color: white;
+	padding: 10px 15px;
+	border-radius: 3px;
+
+}
+
+h1{
+	text-align: center;
+}
+
+body {
+	font-family: 'Open Sans', sans-serif;
 }
