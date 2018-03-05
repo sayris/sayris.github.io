@@ -15,8 +15,9 @@ function drawRectangle(x, y, width, height, color) {
 }
 
 function drawCircle(x, y, radius, color) {
+	ctx.fillStyle = color;
 	ctx.arc(x, y, radius, 0,2*Math.PI);
-	ctx.fill(color);
+	ctx.fill();
 }
 
 function drawTriangle(x1, y1, x2, y2, x3, y3, color) {
